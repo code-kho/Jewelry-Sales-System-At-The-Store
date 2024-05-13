@@ -27,7 +27,6 @@ public class ProductWarranty {
     @Column(name = "valid_until")
     private Date validUntil;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH,CascadeType.DETACH})
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @OneToMany()
+    List<Product>
 }

@@ -54,28 +54,7 @@ public class Product {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {
-            CascadeType.DETACH,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH,
-            CascadeType.MERGE
-    })
-    List<BuyBack> buyBackList;
-
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY,cascade = {
-            CascadeType.DETACH,
-            CascadeType.REFRESH,
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    List<ProductWarranty> productWarrantyList;
-
-
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {
-            CascadeType.DETACH,
-            CascadeType.REFRESH,
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    List<>
+    @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinColumn(name = "product")
+    private Product product;
 }

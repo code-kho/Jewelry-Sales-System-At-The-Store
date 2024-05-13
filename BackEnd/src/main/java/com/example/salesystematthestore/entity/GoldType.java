@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,5 +25,11 @@ public class GoldType {
     @Column(name = "type_name")
     private String typeName;
 
+
+    @Column(name = "create_date")
+    private Date createDate;
+
+
+   private List<Product> productList;
 
 }
