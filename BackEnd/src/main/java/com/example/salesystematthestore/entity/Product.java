@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity()
 @Table(name = "product")
 @NoArgsConstructor
@@ -52,5 +54,28 @@ public class Product {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH,
+            CascadeType.MERGE
+    })
+    List<BuyBack> buyBackList;
 
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY,cascade = {
+            CascadeType.DETACH,
+            CascadeType.REFRESH,
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    List<ProductWarranty> productWarrantyList;
+
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH,
+            CascadeType.REFRESH,
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    List<>
 }
