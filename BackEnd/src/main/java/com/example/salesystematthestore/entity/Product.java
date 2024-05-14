@@ -54,7 +54,36 @@ public class Product {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REFRESH})
-    @JoinColumn(name = "product")
-    private Product product;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "buy_back_id")
+    private BuyBack buyBack;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "warranty_id")
+    private Warranty warranty;
+
+    @ManyToOne(cascade = {
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
+    })
+    @JoinColumn(name = "gold_id")
+    private GoldType goldType;
+
+
+    @ManyToOne(cascade = {
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
+    })
+    @JoinColumn(name = "type_id")
+    private ProductType productType;
+
+    @ManyToMany(fetch = FetchType.LAZY,cascade = {
+            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
+    })
+    @JoinTable(
+            name = "product_counter",
+            joinColumns = @JoinColumn(name ="product_id"),
+            inverseJoinColumns = @JoinColumn(name ="counter_id"),
+    )
+    private List<Counter> counterList;
+
+
 }

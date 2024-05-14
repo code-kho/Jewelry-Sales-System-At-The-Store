@@ -7,19 +7,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "product_warranty")
-public class ProductWarranty {
+
+
+public class Warranty {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "warranty_id")
-    private int warrantyId;
+    private int id;
 
     @Column(name = "terms")
     private String terms;
@@ -27,6 +30,11 @@ public class ProductWarranty {
     @Column(name = "valid_until")
     private Date validUntil;
 
-    @OneToMany()
-    List<Product>
+    @OneToMany(mappedBy = "warranty", fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH
+    })
+    private List<Product> products;
+
+
+
 }

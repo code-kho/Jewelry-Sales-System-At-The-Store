@@ -29,7 +29,9 @@ public class GoldType {
     @Column(name = "create_date")
     private Date createDate;
 
-
+   @OneToMany( mappedBy = "goldType",fetch = FetchType.LAZY,  cascade = {
+           CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH
+   })
    private List<Product> productList;
 
 }
