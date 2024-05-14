@@ -81,9 +81,15 @@ public class Product {
     @JoinTable(
             name = "product_counter",
             joinColumns = @JoinColumn(name ="product_id"),
-            inverseJoinColumns = @JoinColumn(name ="counter_id"),
+            inverseJoinColumns = @JoinColumn(name ="counter_id")
     )
     private List<Counter> counterList;
+
+
+    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY,cascade = {
+            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
+    })
+    private List<OrderItem> orderItemList;
 
 
 }
