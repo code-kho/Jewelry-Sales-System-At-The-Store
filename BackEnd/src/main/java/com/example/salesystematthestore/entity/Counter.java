@@ -2,6 +2,7 @@ package com.example.salesystematthestore.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.Order;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,13 +26,20 @@ public class Counter {
     @Column(name = "address")
     private String address;
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = {
-            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
     })
     @JoinTable(
             name = "product_counter",
-            joinColumns = @JoinColumn(name ="counter_id"),
-            inverseJoinColumns = @JoinColumn(name ="product_id")
+            joinColumns = @JoinColumn(name = "counter_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
     )
     private List<Product> products;
+
+
+    @OneToMany(mappedBy = "counter", fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
+    })
+    private List<OrderDetail> OrderDetail;
+
 }

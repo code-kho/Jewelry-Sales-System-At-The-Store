@@ -54,7 +54,7 @@ public class Product {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToOne
     @JoinColumn(name = "buy_back_id")
     private BuyBack buyBack;
 

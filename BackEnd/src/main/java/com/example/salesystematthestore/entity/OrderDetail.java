@@ -42,5 +42,33 @@ public class OrderDetail {
     })
     private List<OrderItem> orderItemList;
 
+    @ManyToOne(cascade = {
+            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
+    })
+    @JoinColumn(name = "counter_id")
+    private Counter counter;
 
+    @ManyToOne(cascade = {
+            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
+    })
+    @JoinColumn(name = "promotion_id")
+    private Promotion promotion;
+
+    @ManyToOne(cascade = {
+            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
+    })
+    @JoinColumn(name = "shipping_method_id")
+    private ShippingMethod shippingMethod;
+
+    @ManyToOne(cascade = {
+            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
+    })
+    @JoinColumn(name = "payment_id")
+    private PaymentMethod paymentMethod;
+
+    @ManyToOne(cascade = {
+            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
+    })
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 }

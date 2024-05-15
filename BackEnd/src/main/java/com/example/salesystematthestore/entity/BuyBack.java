@@ -29,12 +29,8 @@ public class BuyBack {
     @Column(name = "buy_back_price")
     private float buyBackPrice;
 
-    @OneToMany(mappedBy = "product", fetch =  FetchType.LAZY, cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.DETACH,
-            CascadeType.REFRESH
-    })
-    List<Product> productList;
+
+    @OneToOne(mappedBy = "buyBack")
+    private Product product;
 
 }
