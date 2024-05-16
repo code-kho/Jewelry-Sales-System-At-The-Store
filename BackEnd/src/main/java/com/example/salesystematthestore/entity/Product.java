@@ -1,16 +1,16 @@
 package com.example.salesystematthestore.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Entity()
 @Table(name = "product")
 @NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
 public class Product {
 
 
