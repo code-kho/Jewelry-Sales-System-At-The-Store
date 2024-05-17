@@ -91,5 +91,11 @@ public class Product {
     })
     private List<OrderItem> orderItemList;
 
+    @ManyToOne(cascade = {
+            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
+    })
+    @JoinColumn(name = "collection_id")
+    private Collection collection;
+
 
 }
