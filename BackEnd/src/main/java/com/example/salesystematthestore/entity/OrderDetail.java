@@ -60,11 +60,8 @@ public class OrderDetail {
     @JoinColumn(name = "shipping_method_id")
     private ShippingMethod shippingMethod;
 
-    @ManyToOne(cascade = {
-            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
-    })
-    @JoinColumn(name = "payment_id")
-    private PaymentMethod paymentMethod;
+    @OneToOne(mappedBy = "orderDetail")
+    private Payment payment;
 
     @ManyToOne(cascade = {
             CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH

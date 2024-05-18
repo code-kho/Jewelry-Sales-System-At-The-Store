@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentMethod {
+public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +25,7 @@ public class PaymentMethod {
     @Column(name = "payment_name")
     private String paymentName;
 
-    @OneToMany(mappedBy = "paymentMethod", fetch = FetchType.LAZY, cascade = {
-            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
-    })
-    private List<OrderDetail> orderDetailList;
+    @OneToOne()
+    @JoinColumn(name = "order_id")
+    private OrderDetail orderDetail;
 }
