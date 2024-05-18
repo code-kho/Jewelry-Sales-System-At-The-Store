@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -22,8 +23,17 @@ public class Payment {
     @Column(name = "payment_id")
     private int id;
 
-    @Column(name = "payment_name")
-    private String paymentName;
+    @Column(name = "pay_time")
+    private Date payTime;
+
+    @Column(name = "amout")
+    private double amount;
+
+    @Column(name = "payment_mode")
+    private String paymentMode;
+
+    @Column(name = "external_momo_transaction_code", nullable = true)
+    private String externalMomoTransactionCode;
 
     @OneToOne()
     @JoinColumn(name = "order_id")
