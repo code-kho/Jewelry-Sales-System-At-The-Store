@@ -1,2 +1,4 @@
-package com.example.salesystematthestore.entity;public class Test {
+package com.example.salesystematthestore.entity;
+
+public class Test {
 }
