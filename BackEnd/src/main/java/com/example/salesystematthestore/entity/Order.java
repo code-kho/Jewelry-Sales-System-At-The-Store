@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "order")
+@Table(name = "[order]")
 @Setter
 @Getter
 @NoArgsConstructor
