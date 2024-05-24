@@ -39,6 +39,6 @@ public class Counter {
     @OneToMany(mappedBy = "counter", fetch = FetchType.LAZY, cascade = {
             CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
     })
-    private List<OrderDetail> OrderDetail;
+    private List<Order> Order;
 
 }
