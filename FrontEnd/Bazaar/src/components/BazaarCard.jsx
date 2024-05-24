@@ -5,7 +5,7 @@ const BazaarCard = styled(({ hoverEffect, children, ...rest }) => (
   <Card {...rest}>{children}</Card>
 ))(({ theme, hoverEffect }) => ({
   overflow: "unset",
-  borderRadius: "8px",
+  borderRadius: "0px",
   transition: "all 250ms ease-in-out",
   "&:hover": {
     ...(hoverEffect && {

@@ -50,7 +50,7 @@ const SearchBox = () => {
           gap={0.5}
           height="100%"
           color="grey.700"
-          bgcolor="grey.100"
+          bgcolor="#FFFFFF"
           alignItems="center"
           component={TouchRipple}
         >
@@ -87,6 +87,7 @@ const SearchBox = () => {
             paddingRight: 0,
             borderRadius: 300,
             color: "grey.700",
+            backgroundColor: "#FFFFFF",
             overflow: "hidden",
             "&:hover .MuiOutlinedInput-notchedOutline": {
               borderColor: "primary.main",

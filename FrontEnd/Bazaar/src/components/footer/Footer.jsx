@@ -35,19 +35,7 @@ const Footer = () => {
           <Box py={10} overflow="hidden">
             <Grid container spacing={3}>
               <Grid item lg={4} md={6} sm={6} xs={12}>
-                <Link href="/">
-                  <a>
-                    <Image mb={2.5} src="/assets/images/logo.svg" alt="logo" />
-                  </a>
-                </Link>
-
-                <Paragraph mb={2.5} color="grey.500">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Auctor libero id et, in gravida. Sit diam duis mauris nulla
-                  cursus. Erat et lectus vel ut sollicitudin elit at amet.
-                </Paragraph>
-
-                <AppStore />
+                // logo fourgemsjywelry
               </Grid>
 
               <Grid item lg={2} md={6} sm={6} xs={12}>

@@ -5301,6 +5301,7 @@ export default [
       "/assets/images/products/Fashion/Clothes/1.SilverHighNeckSweater.png",
       "/assets/images/products/Fashion/Clothes/1.SilverHighNeckSweater.png",
       "/assets/images/products/Fashion/Clothes/1.SilverHighNeckSweater.png",
+      "/assets/images/products/Fashion/Clothes/1.SilverHighNeckSweater.png",
     ],
     categories: ["fashion"],
     status: null,

@@ -138,7 +138,7 @@ export const products = [
         instagram: null,
       },
     },
-    title: "Silver High Neck Sweater",
+    title: "222 High Neck Sweater",
     brand: null,
     price: 210,
     size: null,

@@ -13,8 +13,8 @@ import { layoutConstant } from "utils/constants"; // styled component
 const TopbarWrapper = styled(Box, {
   shouldForwardProp: (props) => props !== "bgColor",
 })(({ theme, bgColor }) => ({
-  fontSize: 12,
-  height: layoutConstant.topbarHeight,
+  fontSize: 15,
+  height: "60px",
   background: bgColor || theme.palette.secondary.main,
   color: theme.palette.secondary.contrastText,
   "& .topbarLeft": {

@@ -233,19 +233,19 @@ const navbarNavigations = [
   {
     megaMenu: true,
     megaMenuWithSub: false,
-    title: "Mega Menu",
+    title: "Counter",
     child: megaMenus,
   },
   {
     megaMenu: false,
     megaMenuWithSub: true,
-    title: "Full Screen Menu",
+    title: "Buy Back",
     child: categoriesMegaMenu,
   },
   {
     megaMenu: false,
     megaMenuWithSub: false,
-    title: "Pages",
+    title: "Import Goods",
     child: [
       {
         title: "Sale Page",
@@ -307,7 +307,7 @@ const navbarNavigations = [
   {
     megaMenu: false,
     megaMenuWithSub: false,
-    title: "User Account",
+    title: "Handle Accounting",
     child: [
       {
         title: "Orders",
@@ -370,7 +370,7 @@ const navbarNavigations = [
   {
     megaMenu: false,
     megaMenuWithSub: false,
-    title: "Vendor Account",
+    title: "Contact",
     child: [
       {
         title: "Dashboard",

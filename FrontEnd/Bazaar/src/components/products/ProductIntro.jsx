@@ -37,11 +37,12 @@ const ProductIntro = ({ product }) => {
     <Box width="100%">
       <Grid container spacing={3} justifyContent="space-around">
         <Grid item md={6} xs={12} alignItems="center">
-          <FlexBox justifyContent="center" mb={6}>
+          <FlexBox justifyContent="center" mb={2}>
             <LazyImage
               alt={title}
-              width={300}
-              height={300}
+              width={590}
+              height={420}
+              bgcolor="white"
               loading="eager"
               objectFit="contain"
               src={product.images[selectedImage]}
@@ -52,12 +53,11 @@ const ProductIntro = ({ product }) => {
             {images.map((url, ind) => (
               <FlexRowCenter
                 key={ind}
-                width={64}
-                height={64}
-                minWidth={64}
+                width={140}
+                height={140}
+                minWidth={100}
                 bgcolor="white"
                 border="1px solid"
-                borderRadius="10px"
                 ml={ind === 0 ? "auto" : 0}
                 style={{
                   cursor: "pointer",
@@ -80,13 +80,23 @@ const ProductIntro = ({ product }) => {
           </FlexBox>
         </Grid>
 
-        <Grid item md={6} xs={12} alignItems="center">
-          <H1 mb={2}>{title}</H1>
-
-          <FlexBox alignItems="center" mb={2}>
-            <Box>Brand:</Box>
-            <H6 ml={1}>Xiaomi</H6>
-          </FlexBox>
+        <Grid bgcolor="white" item md={6} xs={12} mt={3} alignItems="center">
+          <div style={{
+            display: "grid",
+            textAlign: "center",
+            paddingTop: 7,
+          }}><H1 mb={2}>{title}</H1></div>
+          <div style={{
+            fontFamily: "Comic Neue",
+            fontSize: "25px",
+          }}>
+            <FlexBox alignItems="center" mb={0}>
+              <Box>Brand:</Box>
+              <H2 ml={1}>Swarovski</H2>
+            </FlexBox>
+            <FlexBox alignItems="center" mb={2}>
+              <p>Octagon shape, White, Rose gold-tone plated</p>
+            </FlexBox>
 
           <FlexBox alignItems="center" mb={2}>
             <Box lineHeight="1">Rated:</Box>
@@ -161,6 +171,7 @@ const ProductIntro = ({ product }) => {
               </a>
             </Link>
           </FlexBox>
+          </div>
         </Grid>
       </Grid>
     </Box>

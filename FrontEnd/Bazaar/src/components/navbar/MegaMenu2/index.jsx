@@ -25,7 +25,7 @@ const MegaMenu2 = ({ title, menuList }) => {
   return (
     <Wrapper>
       <FlexRowCenter alignItems="flex-end" gap={0.3}>
-        {title}{" "}
+        <span style={{ color: "#FFFFFF"}}> {title}{" "} </span>
         <KeyboardArrowDown
           sx={{
             color: "grey.500",

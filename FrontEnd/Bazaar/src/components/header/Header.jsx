@@ -5,7 +5,7 @@ import Container from "@mui/material/Container";
 import { useTheme } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { KeyboardArrowDown, PersonOutline } from "@mui/icons-material";
+import { KeyboardArrowDown, PersonOutline, MonetizationOn } from "@mui/icons-material";
 import clsx from "clsx";
 import Image from "components/BazaarImage";
 import { FlexBox } from "components/flex-box";
@@ -25,7 +25,7 @@ export const HeaderWrapper = styled(Box)(({ theme }) => ({
   position: "relative",
   height: layoutConstant.headerHeight,
   transition: "height 250ms ease-in-out",
-  background: theme.palette.background.paper,
+  background: "#DD8EB8",
   [theme.breakpoints.down("sm")]: {
     height: layoutConstant.mobileHeaderHeight,
   },
@@ -84,7 +84,7 @@ const Header = ({ isFixed, className, searchBoxType = "type1" }) => {
           )}
         </FlexBox>
 
-        <FlexBox justifyContent="center" flex="1 1 0">
+        <FlexBox justifyContent="center" flex="1 1 0" >
           {searchBoxType === "type1" && <SearchBox />}
           {searchBoxType === "type2" && <GrocerySearchBox />}
         </FlexBox>
@@ -103,6 +103,26 @@ const Header = ({ isFixed, className, searchBoxType = "type1" }) => {
             p={1.25}
             bgcolor="grey.200"
             onClick={toggleDialog}
+            sx={{
+              '&:hover': {
+                backgroundColor: '#FFFFFF',
+              },
+            }}
+          >
+            <MonetizationOn />
+          </Box>
+
+          <Box
+              component={IconButton}
+              p={1.25}
+              ml={2.5}
+              bgcolor="grey.200"
+              onClick={toggleDialog}
+              sx={{
+                '&:hover': {
+                  backgroundColor: '#FFFFFF',
+                },
+              }}
           >
             <PersonOutline />
           </Box>
@@ -114,6 +134,11 @@ const Header = ({ isFixed, className, searchBoxType = "type1" }) => {
               bgcolor="grey.200"
               component={IconButton}
               onClick={toggleSidenav}
+              sx={{
+                '&:hover': {
+                  backgroundColor: '#FFFFFF',
+                },
+              }}
             >
               <ShoppingBagOutlined />
             </Box>

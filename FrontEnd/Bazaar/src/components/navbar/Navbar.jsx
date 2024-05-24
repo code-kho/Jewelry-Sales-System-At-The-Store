@@ -21,6 +21,7 @@ import navbarNavigations from "data/navbarNavigations"; // NavList props interfa
 const navLinkStyle = {
   cursor: "pointer",
   transition: "color 150ms ease-in-out",
+  color: "#FFFFFF",
   "&:hover": {
     color: "primary.main",
   },
@@ -54,6 +55,8 @@ const ParentNavItem = styled(Box)(({ theme }) => ({
 const NavBarWrapper = styled(BazaarCard)(({ theme, border }) => ({
   height: "60px",
   display: "block",
+  fontSize: "17px",
+  backgroundColor: "#984465",
   borderRadius: "0px",
   position: "relative",
   ...(border && {
@@ -73,6 +76,9 @@ const CategoryMenuButton = styled(Button)(({ theme }) => ({
   width: "278px",
   height: "40px",
   backgroundColor: theme.palette.grey[100],
+  "&:hover": {
+    backgroundColor: "#FFFFFF",
+  },
 }));
 const ChildNavsWrapper = styled(Box)(() => ({
   zIndex: 5,

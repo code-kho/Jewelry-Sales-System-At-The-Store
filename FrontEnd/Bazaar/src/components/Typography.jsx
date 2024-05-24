@@ -115,55 +115,81 @@ export const H4 = ({
   );
 };
 export const H5 = ({
-  children,
-  className,
-  ellipsis,
-  textTransform,
-  ...props
-}) => {
+                     children,
+                     className,
+                     ellipsis,
+                     textTransform,
+                     ...props
+                   }) => {
   return (
-    <StyledBox
-      textTransformStyle={textTransform}
-      ellipsis={ellipsis ? 1 : undefined}
-      className={clsx({
-        [className || ""]: true,
-      })}
-      component="h5"
-      mb={0}
-      mt={0}
-      fontSize="16px"
-      fontWeight="600"
-      lineHeight="1.5"
-      {...props}
-    >
-      {children}
-    </StyledBox>
+      <StyledBox
+          textTransformStyle={textTransform}
+          ellipsis={ellipsis ? 1 : undefined}
+          className={clsx({
+            [className || ""]: true,
+          })}
+          component="h5"
+          mb={0}
+          mt={0}
+          fontSize="16px"
+          fontWeight="600"
+          lineHeight="1.5"
+          {...props}
+      >
+        {children}
+      </StyledBox>
   );
 };
 export const H6 = ({
-  children,
-  className,
-  ellipsis,
-  textTransform,
-  ...props
-}) => {
+                     children,
+                     className,
+                     ellipsis,
+                     textTransform,
+                     ...props
+                   }) => {
   return (
-    <StyledBox
-      textTransformStyle={textTransform}
-      ellipsis={ellipsis ? 1 : undefined}
-      className={clsx({
-        [className || ""]: true,
-      })}
-      component="h6"
-      mb={0}
-      mt={0}
-      fontSize="14px"
-      fontWeight="600"
-      lineHeight="1.5"
-      {...props}
-    >
-      {children}
-    </StyledBox>
+      <StyledBox
+          textTransformStyle={textTransform}
+          ellipsis={ellipsis ? 1 : undefined}
+          className={clsx({
+            [className || ""]: true,
+          })}
+          component="h6"
+          mb={0}
+          mt={0}
+          fontSize="14px"
+          fontWeight="600"
+          lineHeight="1.5"
+          {...props}
+      >
+        {children}
+      </StyledBox>
+  );
+};
+export const H7 = ({
+                     children,
+                     className,
+                     ellipsis,
+                     textTransform,
+                     ...props
+                   }) => {
+  return (
+      <StyledBox
+          textTransformStyle={textTransform}
+          ellipsis={ellipsis ? 1 : undefined}
+          className={clsx({
+            [className || ""]: true,
+          })}
+          component="h7"
+          mb={0}
+          mt={0}
+          fontSize="14px"
+          fontWeight="600"
+          marginTop="20px"
+          {...props}
+      >
+        {children}
+      </StyledBox>
   );
 };
 export const Paragraph = ({
@@ -258,3 +284,4 @@ export const Tiny = ({
     </StyledBox>
   );
 };
+
