@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "payment_method")
@@ -35,7 +34,13 @@ public class Payment {
     @Column(name = "external_momo_transaction_code", nullable = true)
     private String externalMomoTransactionCode;
 
-    @OneToOne()
+    @Column(name = "image")
+    @Lob
+    private String image;
+
+    @ManyToOne(cascade = {
+            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
+    })
     @JoinColumn(name = "order_id")
-    private OrderDetail orderDetail;
+    private Order order;
 }

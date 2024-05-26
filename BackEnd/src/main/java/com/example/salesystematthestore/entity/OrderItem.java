@@ -29,7 +29,7 @@ public class OrderItem {
             CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
     })
     @JoinColumn(name = "product_id",insertable=false, updatable=false)
-    private OrderDetail orderDetail;
+    private Order order;
 
     @Column(name = "quantity")
     private int quantity;

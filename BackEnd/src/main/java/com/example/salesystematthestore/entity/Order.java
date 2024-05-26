@@ -10,12 +10,12 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "order_details")
+@Table(name = "[order]")
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDetail {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +37,7 @@ public class OrderDetail {
     @Column(name = "shipping_cost")
     private double shippingCost;
 
-    @OneToMany(mappedBy = "orderDetail", fetch = FetchType.LAZY,cascade = {
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY,cascade = {
             CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
     })
     private List<OrderItem> orderItemList;
@@ -48,24 +48,19 @@ public class OrderDetail {
     @JoinColumn(name = "counter_id")
     private Counter counter;
 
-    @ManyToOne(cascade = {
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = {
             CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
     })
-    @JoinColumn(name = "promotion_id")
-    private Promotion promotion;
-
-    @ManyToOne(cascade = {
-            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
-    })
-    @JoinColumn(name = "shipping_method_id")
-    private ShippingMethod shippingMethod;
-
-    @OneToOne(mappedBy = "orderDetail")
-    private Payment payment;
+            private List<Payment> paymentList;
 
     @ManyToOne(cascade = {
             CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
     })
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @OneToOne(mappedBy = "order")
+    private Warranty warranty;
+
 }

@@ -58,10 +58,6 @@ public class Product {
     @JoinColumn(name = "buy_back_id")
     private BuyBack buyBack;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "warranty_id")
-    private Warranty warranty;
-
     @ManyToOne(cascade = {
             CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
     })

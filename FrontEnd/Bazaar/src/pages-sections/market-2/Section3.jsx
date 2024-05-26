@@ -46,9 +46,7 @@ const AdTitle1 = styled(H3)(({ theme }) => ({
             display: "none",
         },
     },
-})); // ===========================================================
-
-// ===========================================================
+})); 
 const Section3 = ({ categories }) => {
     return (
         <Container
@@ -100,6 +98,7 @@ const Section3 = ({ categories }) => {
                                     }}
                                 >
                                     your loving Jewelry
+
                                 </Span>
                             </Span>
                         </Paragraph>

@@ -12,12 +12,20 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "user")
-public class User {
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private int id;
+
+ an
+    @Column(name = "full_name")
+    private String fullName;
+
+    @Column(name = "fullname")
+    private String fullname;
+ main
 
     @Column(name = "username")
     private String username;
@@ -42,4 +50,18 @@ public class User {
     })
     @JoinColumn(name = "role_id")
     private Role role;
+
+ an
+    @ManyToOne(cascade = {
+            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
+    })
+    @JoinColumn(name = "couter_id")
+
+
+    @ManyToOne(cascade = {
+            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
+    })
+    @JoinColumn(name = "counter_id")
+ main
+    private Counter counter;
 }

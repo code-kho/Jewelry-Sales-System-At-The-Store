@@ -10,6 +10,7 @@ import { carouselStyled } from "components/carousel/CarouselStyled";
 
 // ======================================================================
 const Section4 = ({ products }) => {
+
     const width = useWindowSize();
     const [visibleSlides, setVisibleSlides] = useState(4);
     useEffect(() => {
