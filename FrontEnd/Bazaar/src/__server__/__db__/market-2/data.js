@@ -48,7 +48,7 @@ export const categories = [
   },
   {
     id: "c1a775f6-7bc5-4722-9c2e-841cae78b93c",
-    name: "Earings",
+    name: "Earrings",
     icon: null,
     image: "/assets/images/categories/2.png",
     slug: "sports",

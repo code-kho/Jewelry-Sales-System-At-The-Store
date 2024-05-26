@@ -34,9 +34,17 @@ const GoldPage = (props) => {
     const { frequentlyBought, relatedProducts, product } = props;
     const router = useRouter();
     const [selectedOption, setSelectedOption] = useState(0);
-
     const handleOptionClick = (_, value) => setSelectedOption(value); // Show a loading state when the fallback is rendered
-
+    const goldData = [
+        { kind: '24K Gold', usdPrice: 76.3956, vndPrice: 1940000 },
+        { kind: '22K Gold', usdPrice: 69.9916, vndPrice: 1940000 },
+        { kind: '21K Gold', usdPrice: 66.8102, vndPrice: 1940000 },
+        { kind: '20K Gold', usdPrice: 63.6287, vndPrice: 1940000 },
+        { kind: '18K Gold', usdPrice: 57.2659, vndPrice: 1940000 },
+        { kind: '16K Gold', usdPrice: 50.903, vndPrice: 1940000 },
+        { kind: '14K Gold', usdPrice: 44.5401, vndPrice: 1940000 },
+        { kind: '10K Gold', usdPrice: 31.8144, vndPrice: 1940000 },
+    ];
     if (router.isFallback) {
         return <h1>Loading...</h1>;
     }
@@ -48,13 +56,64 @@ const GoldPage = (props) => {
                     // mt: 0,
                 }}
             >
+                <div style={{
+                    display: "grid",
+                    textAlign: "center",
+                    paddingBottom: "1.5rem",
+                }}>
+                    <H1 fontSize={40}> Gold and Currency Price </H1>
+                    <H2 fontSize={32}> Update at ... </H2>
 
+                </div>
 
-        <div>
-            <table></table>
-        </div>
+                <div className="container">
+                    <table className="gold-table">
+                        <thead>
+                        <tr>
+                            <th>Kind of Gold</th>
+                            <th>Price (USD/Gram)</th>
+                            <th>Price (VND/Gram)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {goldData.map((row, index) => (
+                            <tr key={index}>
+                                <td>{row.kind}</td>
+                                <td>{row.usdPrice}</td>
+                                <td>{row.vndPrice}</td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                    <style jsx>{`
+                        .container {
+                            margin: 20px;
+                            font-family: "Comic Neue";
+                            font-size: 28px;
+                        }
 
+                        .gold-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            background-color: #ffffff;
+                        }
 
+                        .gold-table th, .gold-table td {
+                            border: 1px solid #000;
+                            padding: 8px;
+                            text-align: center;
+                            color: #D4AF37;
+                            //font-weight: bold;
+                        }
+
+                        .gold-table th {
+                            background-color: #BADDF4;
+                            color: #102E46;
+                        }
+                    `}</style>
+                </div>
+
+                {relatedProducts && <RelatedProducts productsData={relatedProducts}/>}
 
                 <div style={{
                     display: "grid",
@@ -66,6 +125,7 @@ const GoldPage = (props) => {
             </Container>
         </ShopLayout1>
     );
+
 };
 
 

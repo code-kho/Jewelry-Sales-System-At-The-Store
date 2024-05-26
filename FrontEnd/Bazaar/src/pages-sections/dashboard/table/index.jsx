@@ -59,43 +59,36 @@ const DataListTable = ({ dataList, tableHeading, type }) => {
           />
           {/* recent purchase table body */}
           {recentPurchase && (
-            <TableBody >
+            <TableBody>
               {filteredList.map((row, index) => {
-                const { id, amount, name, product } = row;
+                const { id, amount, payment, product } = row;
                 return (
-                  <StyledTableRow  key={index}>
-                    <StyledTableCell align="left" >{id}</StyledTableCell>
-                    <StyledTableCell align="left" sx={{
-                      pl: 1,
-                      pr: 1,
-                    }}>{name}</StyledTableCell>
+                  <StyledTableRow key={index}>
+                    <StyledTableCell align="left">{id}</StyledTableCell>
+                    <StyledTableCell align="left">{product}</StyledTableCell>
 
-                    <StyledTableCell align="left" sx={{
-                      pl: 1,
-                      pr: 1,
-                    }}>
-                      {product}
-                      {/*<StatusWrapper*/}
-                      {/*  gap={1}*/}
-                      {/*  alignItems="center"*/}
-                      {/*  payment={payment === "Pending" ? 1 : 0}*/}
-                      {/*>*/}
-                      {/*  <Box>{payment}</Box>*/}
-                      {/*  {payment === "Pending" && (*/}
-                      {/*    <Reload*/}
-                      {/*      sx={{*/}
-                      {/*        fontSize: 13,*/}
-                      {/*      }}*/}
-                      {/*    />*/}
-                      {/*  )}*/}
-                      {/*  {payment !== "Pending" && (*/}
-                      {/*    <Done*/}
-                      {/*      sx={{*/}
-                      {/*        fontSize: 13,*/}
-                      {/*      }}*/}
-                      {/*    />*/}
-                      {/*  )}*/}
-                      {/*</StatusWrapper>*/}
+                    <StyledTableCell align="left">
+                      <StatusWrapper
+                        gap={1}
+                        alignItems="center"
+                        payment={payment === "Pending" ? 1 : 0}
+                      >
+                        <Box>{payment}</Box>
+                        {payment === "Pending" && (
+                          <Reload
+                            sx={{
+                              fontSize: 13,
+                            }}
+                          />
+                        )}
+                        {payment !== "Pending" && (
+                          <Done
+                            sx={{
+                              fontSize: 13,
+                            }}
+                          />
+                        )}
+                      </StatusWrapper>
                     </StyledTableCell>
 
                     <StyledTableCell align="center">
