@@ -19,6 +19,9 @@ public class Users {
     @Column(name = "user_id")
     private int id;
 
+    @Column(name = "fullname")
+    private String fullname;
+
     @Column(name = "username")
     private String username;
 
@@ -42,4 +45,11 @@ public class Users {
     })
     @JoinColumn(name = "role_id")
     private Role role;
+
+
+    @ManyToOne(cascade = {
+            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
+    })
+    @JoinColumn(name = "counter_id")
+    private Counter counter;
 }

@@ -18,14 +18,15 @@ public class JwtTokenHelper {
     public String generateToken(Users users){
         SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(key));
         String token = Jwts.builder()
-                .setIssuer("ATDStore")
+                .setIssuer("FourGemsStore")
                 .setSubject("JWT Token")
                 .claim("username",users.getUsername())
-                //.claim("role", users.getRoles().getRoleName())
-               // .claim("name", users.getFullname())
+                .claim("role", users.getRole().getName())
+                .claim("name", users.getFullname())
                 .claim("address", users.getAddress())
                 .claim("id", users.getId())
                 .claim("phoneNumber", users.getPhoneNumber())
+                .claim("couter", users.getCounter().getAddress())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date().getTime())+30000000))
                 .signWith(secretKey).compact();
