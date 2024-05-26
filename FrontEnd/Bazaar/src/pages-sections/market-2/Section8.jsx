@@ -1,59 +1,47 @@
 import { useEffect, useState } from "react";
-import { Box, Container } from "@mui/material";
-import { H2 } from "components/Typography";
+import { Container } from "@mui/material";
 import useWindowSize from "hooks/useWindowSize";
-import BazaarImage from "components/BazaarImage";
+import { FlexBetween } from "components/flex-box";
 import Carousel from "components/carousel/Carousel";
-import { FlexRowCenter } from "components/flex-box";
+import NavLink3 from "components/nav-link/NavLink3";
+import { H2 } from "components/Typography";
+import ProductCard20 from "components/product-cards/ProductCard20";
+import { carouselStyled } from "components/carousel/CarouselStyled";
 
-// ==========================================================
-const Section8 = ({ brands }) => {
+// ======================================================================
+const Section4 = ({ products }) => {
   const width = useWindowSize();
-  const [visibleSlides, setVisibleSlides] = useState(6);
+  const [visibleSlides, setVisibleSlides] = useState(4);
   useEffect(() => {
-    if (width < 650) setVisibleSlides(2);
-    else if (width < 800) setVisibleSlides(3);
-    else if (width < 1024) setVisibleSlides(4);
-    else setVisibleSlides(5);
+    if (width < 426) setVisibleSlides(1);
+    else if (width < 650) setVisibleSlides(2);
+    else if (width < 1024) setVisibleSlides(3);
+    else if (width < 1200) setVisibleSlides(4);
+    else setVisibleSlides(4);
   }, [width]);
   return (
-    <Container
-      sx={{
-        my: 8,
-      }}
-    >
-      <H2 fontSize={20} mb={3}>
-        Featured Brands
-      </H2>
-
-      <Box padding={4} bgcolor="white">
-        <Carousel
-          autoPlay
-          showArrow={false}
-          totalSlides={brands.length}
-          visibleSlides={visibleSlides}
+      <Container
           sx={{
-            ":hover": {
-              cursor: "grab",
-            },
+            py: 8,
+            mt: -11,
           }}
+      >
+        <FlexBetween mb={3}>
+          <H2 fontSize={30}>Chokers</H2>
+          <NavLink3 fontSize={30} text="More Products" href="#" hoverColor="dark.main" />
+        </FlexBetween>
+
+        <Carousel
+            totalSlides={products.length}
+            visibleSlides={visibleSlides}
+            sx={carouselStyled}
         >
-          {brands.map(({ id, image }) => (
-            <FlexRowCenter maxWidth={110} height="100%" margin="auto" key={id}>
-              <BazaarImage
-                alt="brand"
-                width="100%"
-                src={image}
-                sx={{
-                  filter: "grayscale(1)",
-                }}
-              />
-            </FlexRowCenter>
+          {products.map((product) => (
+              <ProductCard20 product={product} key={product.id} />
           ))}
         </Carousel>
-      </Box>
-    </Container>
+      </Container>
   );
 };
 
-export default Section8;
+export default Section4;
