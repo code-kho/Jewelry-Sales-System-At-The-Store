@@ -41,4 +41,9 @@ public class Counter {
     })
     private List<Order> Order;
 
+    @OneToMany(mappedBy = "counter", fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
+    })
+    private List<Users> usersList;
+
 }
