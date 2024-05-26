@@ -7,7 +7,7 @@ const ProductDescription = () => {
     <Box>
       <H3 mb={2}>Specification:</H3>
       <Box
-      fontFamily="Comic Neue"
+      fontFamily="Ubuntu"
       >
         Brand: Beats <br />
         Model: S450 <br />

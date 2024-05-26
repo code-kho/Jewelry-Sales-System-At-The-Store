@@ -12,15 +12,18 @@ import Section7 from "pages-sections/market-2/Section7";
 import Section8 from "pages-sections/market-2/Section8";
 import Section9 from "pages-sections/market-2/Section9";
 import ShopLayout1 from "components/layouts/ShopLayout1";
-import api from "utils/__api__/market-2"; // =======================================================
-
+import api from "utils/__api__/market-2";
+import {useRouter} from "next/router"; // =======================================================
+import { H1 } from "components/Typography";
 // =======================================================
 const Market = (props) => {
   const theme = useTheme();
+  const router = useRouter();
+
   return (
     <ShopLayout1 topbarBgColor={theme.palette.grey[900]}>
       <SEO title="Market v2" />
-      <Box bgcolor="#F6F6F6">
+      <Box bgcolor="#FFFFFF">
         {/* HERO SLIDER AND GRID */}
         <Section1 carouselData={props.mainCarouselData} />
 
@@ -34,32 +37,38 @@ const Market = (props) => {
         <Section4 products={props.products} />
 
         {/* TOP OFFER BANNERS */}
-        <Offers />
+        {/*<Offers />*/}
 
         {/* PRODUCT ROW WITH ELECTRONICS CATEGORY LIST */}
-        <Section5 data={props.electronicsProducts} />
+        <Section5 products={props.products} />
 
-        {/* OFFER BANNER */}
-        <Section6 />
+        {/*/!* OFFER BANNER *!/*/}
+        <Section6 products={props.products}/>
 
-        {/* PRODUCT ROW WITH MEN'S FASHION CATEFORY LIST */}
-        <Section5 data={props.menFashionProducts} />
+        {/*/!* PRODUCT ROW WITH MEN'S FASHION CATEFORY LIST *!/*/}
+        {/*<Section5 data={props.menFashionProducts} />*/}
 
-        {/* OFFER BANNER */}
-        <Section7 />
+        {/*/!* OFFER BANNER *!/*/}
+        <Section7 products={props.products}/>
 
-        {/* PRODUCT ROW WITH WOMEN'S FASHION CATEFORY LIST */}
-        <Section5 data={props.womenFashionProducts} />
+        {/*/!* PRODUCT ROW WITH WOMEN'S FASHION CATEFORY LIST *!/*/}
+        {/*<Section5 data={props.womenFashionProducts} />*/}
 
-        {/*  FEATURED BRANDS */}
-        <Section8 brands={props.brands} />
+        {/*/!*  FEATURED BRANDS *!/*/}
+        <Section8 products={props.products} />
 
         {/* SELECTED PRODUCTS */}
-        <Section9 />
+        <Section9 products={props.products}/>
+        <div style={{
+          display: "grid",
+          textAlign: "center",
+          paddingBottom: "1.5rem",
+        }}>
+          <H1> Four Gems Jewelry </H1>
+        </div>
       </Box>
-
       {/* SETTINGS IS USED ONLY FOR DEMO, YOU CAN REMOVE THIS */}
-      <Setting />
+      <Setting/>
     </ShopLayout1>
   );
 };

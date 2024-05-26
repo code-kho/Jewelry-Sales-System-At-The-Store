@@ -42,17 +42,17 @@ const Analytics = () => {
   const [selectType, setSelectType] = useState("yearly");
   const series = [
     {
-      name: "Sales",
+      name: "Income",
       data: [
-        15000, 45000, 12000, 50000, 75000, 13000, 30000, 99000, 75000, 90000,
-        55000, 15000,
+        15000, 45000, 12000, 50000, 75000, 0, 0, 0, 0, 0,
+        0, 0,
       ],
     },
     {
-      name: "Expense",
+      name: "Profit",
       data: [
-        1500, 48000, 19000, 59000, 25000, 9000, 36000, 9000, 79000, 70000,
-        57000, 5000,
+        1500, 48000, 19000, 59000, 25000, 0, 0, 0, 0, 0,
+        0, 0,
       ],
     },
   ];
@@ -64,16 +64,8 @@ const Analytics = () => {
     >
       <FlexBetween>
         <H5>Analytics</H5>
+        <H5>Yearly</H5>
 
-        <StyledSelect
-          value={selectType}
-          IconComponent={() => <KeyboardArrowDown />}
-          onChange={(e) => setSelectType(e.target.value)}
-        >
-          <MenuItem value="yearly">Yearly</MenuItem>
-          <MenuItem value="monthly">Monthly</MenuItem>
-          <MenuItem value="Weekily">Weekily</MenuItem>
-        </StyledSelect>
       </FlexBetween>
 
       <ReactApexChart

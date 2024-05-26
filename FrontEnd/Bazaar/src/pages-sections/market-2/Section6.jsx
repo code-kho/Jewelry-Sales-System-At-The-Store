@@ -1,84 +1,47 @@
-import { Box, Container, Divider, Grid, styled } from "@mui/material";
-import { H4, Paragraph, Span } from "components/Typography";
-import { currency } from "lib"; // custom styled components
+import { useEffect, useState } from "react";
+import { Container } from "@mui/material";
+import useWindowSize from "hooks/useWindowSize";
+import { FlexBetween } from "components/flex-box";
+import Carousel from "components/carousel/Carousel";
+import NavLink3 from "components/nav-link/NavLink3";
+import { H2 } from "components/Typography";
+import ProductCard20 from "components/product-cards/ProductCard20";
+import { carouselStyled } from "components/carousel/CarouselStyled";
 
-const BannerBox = styled(Box)(({ theme, img }) => ({
-  padding: 32,
-  overflow: "hidden",
-  borderRadius: "3px",
-  backgroundSize: "cover",
-  backgroundRepeat: "no-repeat",
-  backgroundImage: `url(${img})`,
-  ...(theme.direction === "rtl" && {
-    textAlign: "right",
-    "& > .MuiDivider-root": {
-      marginLeft: "auto",
-    },
-  }),
-}));
-
-const Section6 = () => {
+// ======================================================================
+const Section4 = ({ products }) => {
+  const width = useWindowSize();
+  const [visibleSlides, setVisibleSlides] = useState(4);
+  useEffect(() => {
+    if (width < 426) setVisibleSlides(1);
+    else if (width < 650) setVisibleSlides(2);
+    else if (width < 1024) setVisibleSlides(3);
+    else if (width < 1200) setVisibleSlides(4);
+    else setVisibleSlides(4);
+  }, [width]);
   return (
-    <Container
-      sx={{
-        my: 8,
-      }}
-    >
-      <Grid container spacing={3}>
-        <Grid item md={6} xs={12}>
-          <BannerBox img="/assets/images/banners/banner-21.jpg">
-            <H4>Final Reduction</H4>
+      <Container
+          sx={{
+            py: 8,
+            mt: -11,
+          }}
+      >
+        <FlexBetween mb={3}>
+          <H2 fontSize={30}>Rings</H2>
+          <NavLink3 fontSize={30} text="More Products" href="#" hoverColor="dark.main" />
+        </FlexBetween>
 
-            <H4 fontSize={27} fontWeight={700}>
-              Sale up to 20% Off
-            </H4>
-
-            <Divider
-              sx={{
-                borderColor: "dark.main",
-                borderWidth: 1,
-                width: 60,
-                my: 1,
-              }}
-            />
-
-            <Paragraph fontSize={16}>
-              Only From{" "}
-              <Span fontWeight={700} color="primary.main" fontSize={21}>
-                {currency(270)}
-              </Span>
-            </Paragraph>
-          </BannerBox>
-        </Grid>
-
-        <Grid item md={6} xs={12}>
-          <BannerBox img="/assets/images/banners/banner-22.jpg">
-            <H4 color="white">Weekend Sale</H4>
-
-            <H4 fontSize={27} fontWeight={700} color="white">
-              Fine Smart Speaker
-            </H4>
-
-            <Divider
-              sx={{
-                borderColor: "white",
-                borderWidth: 1,
-                width: 60,
-                my: 1,
-              }}
-            />
-
-            <Paragraph fontSize={16} color="white">
-              Starting at{" "}
-              <Span fontWeight={700} color="primary.main" fontSize={21}>
-                {currency(185)}
-              </Span>
-            </Paragraph>
-          </BannerBox>
-        </Grid>
-      </Grid>
-    </Container>
+        <Carousel
+            totalSlides={products.length}
+            visibleSlides={visibleSlides}
+            sx={carouselStyled}
+        >
+          {products.map((product) => (
+              <ProductCard20 product={product} key={product.id} />
+          ))}
+        </Carousel>
+      </Container>
   );
 };
 
-export default Section6;
+export default Section4;

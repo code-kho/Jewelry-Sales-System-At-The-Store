@@ -1,4 +1,4 @@
-import { Box, Card, Stack, Table, TableContainer } from "@mui/material";
+import { Button, Box, Card, Stack, Table, TableContainer } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import SearchArea from "components/dashboard/SearchArea";
 import TableHeader from "components/data-table/TableHeader";
@@ -9,6 +9,8 @@ import useMuiTable from "hooks/useMuiTable";
 import Scrollbar from "components/Scrollbar";
 import { ProductRow } from "pages-sections/admin";
 import api from "utils/__api__/dashboard";
+import { useRouter } from 'next/router';
+
 // TABLE HEADING DATA LIST
 const tableHeading = [
   {
@@ -50,7 +52,13 @@ ProductList.getLayout = function getLayout(page) {
 // =============================================================================
 export default function ProductList(props) {
   const { products } = props; // RESHAPE THE PRODUCT LIST BASED TABLE HEAD CELL ID
-
+  const router = useRouter()
+  const hadleNav = () => {
+    router.push('/admin/products/create')
+  }
+  const hadleNav1 = () => {
+    router.push('/admin/categories')
+  }
   const filteredProducts = products.map((item) => ({
     id: item.id,
     name: item.title,
@@ -72,51 +80,56 @@ export default function ProductList(props) {
     listData: filteredProducts,
   });
   return (
-    <Box py={4}>
-      <H3 mb={2}>Product List</H3>
+      <Box py={4}>
+        <H3 mb={2}>Product List</H3>
 
-      <SearchArea
-        handleSearch={() => {}}
-        buttonText="Add Product"
-        handleBtnClick={() => {}}
-        searchPlaceholder="Search Product..."
-      />
-
-      <Card>
-        <Scrollbar autoHide={false}>
-          <TableContainer
-            sx={{
-              minWidth: 900,
+        <SearchArea
+            handleSearch={() => {
             }}
-          >
-            <Table>
-              <TableHeader
-                order={order}
-                hideSelectBtn
-                orderBy={orderBy}
-                heading={tableHeading}
-                rowCount={products.length}
-                numSelected={selected.length}
-                onRequestSort={handleRequestSort}
-              />
+            buttonText="Add Product"
+            handleBtnClick={hadleNav}
+            searchPlaceholder="Search Product..."
+        />
+        <Card>
+          <Scrollbar autoHide={false}>
+            <TableContainer
+                sx={{
+                  minWidth: 900,
+                }}
+            >
+              <Table>
+                <TableHeader
+                    order={order}
+                    hideSelectBtn
+                    orderBy={orderBy}
+                    heading={tableHeading}
+                    rowCount={products.length}
+                    numSelected={selected.length}
+                    onRequestSort={handleRequestSort}
+                />
 
-              <TableBody>
-                {filteredList.map((product, index) => (
-                  <ProductRow product={product} key={index} />
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Scrollbar>
+                <TableBody>
+                  {filteredList.map((product, index) => (
+                      <ProductRow product={product} key={index}/>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Button size="small" color="info" variant="outlined" sx={{
+              ml: 123,
+              mt: 3,
+            }} onClick={hadleNav1}>
+              All Categories</Button>
+          </Scrollbar>
 
-        <Stack alignItems="center" my={4}>
-          <TablePagination
-            onChange={handleChangePage}
-            count={Math.ceil(products.length / rowsPerPage)}
-          />
-        </Stack>
-      </Card>
-    </Box>
+          <Stack alignItems="center" my={4}>
+            <TablePagination
+                onChange={handleChangePage}
+                count={Math.ceil(products.length / rowsPerPage)}
+            />
+          </Stack>
+        </Card>
+      </Box>
   );
 }
 export const getStaticProps = async () => {

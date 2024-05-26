@@ -3,34 +3,44 @@ export const mainCarouselData = [
   {
     id: 1,
     title: "Lifestyle collection",
-    category: "Men",
+    category: "Spring/Summer 2024",
     discount: 30,
-    imgUrl: "/assets/images/banners/banner-15.jpg",
-    description: "Get Free Shipping on orders over $99.00",
+    imgUrl: "/assets/images/banners/rose.png",
+    description: "Embrace the art of self-expression",
     buttonText: "Shop Now",
     buttonLink: "#",
   },
   {
     id: 2,
-    title: "Lifestyle collection",
-    category: "Women",
+    title: "test",
+    category: "Memory Day Sale",
     discount: 35,
-    imgUrl: "/assets/images/banners/banner-25.jpg",
-    description: "Get Free Shipping on orders over $99.00",
+    imgUrl: "/assets/images/banners/lisa.jpeg",
+    description: "Your jewelry introduces you before you speak",
     buttonText: "Shop Now",
     buttonLink: "#",
   },
+  // {
+  //   id: 3,
+  //   title: "test",
+  //   category: "Memory Day Sale",
+  //   discount: 35,
+  //   imgUrl: "/assets/images/banners/lisa.jpeg",
+  //   description: "Your jewelry introduces you before you speak",
+  //   buttonText: "Shop Now",
+  //   buttonLink: "#",
+  // },
 ]; // categories
 
 export const categories = [
   {
     id: "51cc79e6-c0d8-40e6-b9a5-a3a0c5931242",
-    name: "Toys",
+    name: "Necklaces",
     icon: null,
-    image: "/assets/images/categories/cat-1.jpg",
+    image: "/assets/images/categories/1.png",
     slug: "toys",
     parent: [],
-    description: null,
+    description: [],
     for: {
       demo: "market-2",
       type: "top-categories",
@@ -38,9 +48,9 @@ export const categories = [
   },
   {
     id: "c1a775f6-7bc5-4722-9c2e-841cae78b93c",
-    name: "Sports",
+    name: "Earings",
     icon: null,
-    image: "/assets/images/categories/cat-2.jpg",
+    image: "/assets/images/categories/2.png",
     slug: "sports",
     parent: [],
     description: null,
@@ -51,9 +61,9 @@ export const categories = [
   },
   {
     id: "dc829abb-9667-4d59-ad2b-5ef455202188",
-    name: "Gaming",
+    name: "Bracelets",
     icon: null,
-    image: "/assets/images/categories/cat-3.jpg",
+    image: "/assets/images/categories/3.png",
     slug: "gaming",
     parent: [],
     description: null,
@@ -64,9 +74,9 @@ export const categories = [
   },
   {
     id: "9c35917b-c0c6-4583-9145-6285b50b49ad",
-    name: "Furniture",
+    name: "Rings",
     icon: null,
-    image: "/assets/images/categories/cat-4.jpg",
+    image: "/assets/images/categories/4.png",
     slug: "furniture",
     parent: [],
     description: null,
@@ -77,9 +87,9 @@ export const categories = [
   },
   {
     id: "e13157eb-e9c5-4a24-a59b-98382b7eb3ea",
-    name: "Fashion",
+    name: "Chokers",
     icon: null,
-    image: "/assets/images/categories/cat-5.jpg",
+    image: "/assets/images/categories/5.png",
     slug: "fashion",
     parent: [],
     description: null,
@@ -90,9 +100,9 @@ export const categories = [
   },
   {
     id: "c71a65bd-5c01-444e-82fe-3ef09462aff6",
-    name: "Cameras",
+    name: "Sets",
     icon: null,
-    image: "/assets/images/categories/cat-6.jpg",
+    image: "/assets/images/categories/6.png",
     slug: "cameras",
     parent: [],
     description: null,
@@ -115,7 +125,7 @@ export const products = [
         email: "Clementina_Raynor@yahoo.com",
         phone: "821.333.9362 x9878",
         avatar:
-          "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1006.jpg",
+            "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1006.jpg",
         password: "673_HVvWUdYguFe",
         dateOfBirth: "2003-06-14T15:18:27.382Z",
         verified: true,
@@ -138,14 +148,14 @@ export const products = [
         instagram: null,
       },
     },
-    title: "222 High Neck Sweater",
+    title: "Silver High Neck Sweater",
     brand: null,
     price: 210,
     size: null,
     colors: [],
     discount: 0,
     thumbnail:
-      "/assets/images/products/Fashion/Clothes/1.SilverHighNeckSweater.png",
+        "/assets/images/products/Fashion/Clothes/1.SilverHighNeckSweater.png",
     images: [
       "/assets/images/products/Fashion/Clothes/1.SilverHighNeckSweater.png",
       "/assets/images/products/Fashion/Clothes/1.SilverHighNeckSweater.png",
@@ -169,7 +179,7 @@ export const products = [
         email: "Clementina_Raynor@yahoo.com",
         phone: "821.333.9362 x9878",
         avatar:
-          "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1006.jpg",
+            "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1006.jpg",
         password: "673_HVvWUdYguFe",
         dateOfBirth: "2003-06-14T15:18:27.382Z",
         verified: true,
@@ -199,7 +209,7 @@ export const products = [
     colors: [],
     discount: 0,
     thumbnail:
-      "/assets/images/products/Fashion/Clothes/21.YellowCasualSweater.png",
+        "/assets/images/products/Fashion/Clothes/21.YellowCasualSweater.png",
     images: [
       "/assets/images/products/Fashion/Clothes/21.YellowCasualSweater.png",
       "/assets/images/products/Fashion/Clothes/21.YellowCasualSweater.png",
@@ -223,7 +233,7 @@ export const products = [
         email: "Clementina_Raynor@yahoo.com",
         phone: "821.333.9362 x9878",
         avatar:
-          "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1006.jpg",
+            "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1006.jpg",
         password: "673_HVvWUdYguFe",
         dateOfBirth: "2003-06-14T15:18:27.382Z",
         verified: true,
@@ -276,7 +286,7 @@ export const products = [
         email: "Clementina_Raynor@yahoo.com",
         phone: "821.333.9362 x9878",
         avatar:
-          "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1006.jpg",
+            "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1006.jpg",
         password: "673_HVvWUdYguFe",
         dateOfBirth: "2003-06-14T15:18:27.382Z",
         verified: true,
@@ -306,7 +316,7 @@ export const products = [
     colors: [],
     discount: 0,
     thumbnail:
-      "/assets/images/products/Fashion/Clothes/19.BlackWhiteSweater.png",
+        "/assets/images/products/Fashion/Clothes/19.BlackWhiteSweater.png",
     images: [
       "/assets/images/products/Fashion/Clothes/19.BlackWhiteSweater.png",
       "/assets/images/products/Fashion/Clothes/19.BlackWhiteSweater.png",
@@ -330,7 +340,7 @@ export const products = [
         email: "Fausto.Schowalter@gmail.com",
         phone: "859-699-8461 x50403",
         avatar:
-          "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1048.jpg",
+            "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1048.jpg",
         password: "1qfhl8ZZ88W6ain",
         dateOfBirth: "1974-02-27T05:00:31.895Z",
         verified: true,
@@ -360,7 +370,7 @@ export const products = [
     colors: [],
     discount: 0,
     thumbnail:
-      "/assets/images/products/Fashion/Clothes/20.GrayOvercoatWomen.png",
+        "/assets/images/products/Fashion/Clothes/20.GrayOvercoatWomen.png",
     images: [
       "/assets/images/products/Fashion/Clothes/20.GrayOvercoatWomen.png",
       "/assets/images/products/Fashion/Clothes/20.GrayOvercoatWomen.png",
@@ -384,7 +394,7 @@ export const products = [
         email: "Marlin63@gmail.com",
         phone: "(700) 338-5159 x24398",
         avatar:
-          "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1124.jpg",
+            "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1124.jpg",
         password: "GwaFEehjyCfdvxR",
         dateOfBirth: "1967-07-25T08:37:16.955Z",
         verified: true,
@@ -414,7 +424,7 @@ export const products = [
     colors: [],
     discount: 0,
     thumbnail:
-      "/assets/images/products/Fashion/Clothes/24.OliveCasualSweater.png",
+        "/assets/images/products/Fashion/Clothes/24.OliveCasualSweater.png",
     images: [
       "/assets/images/products/Fashion/Clothes/24.OliveCasualSweater.png",
       "/assets/images/products/Fashion/Clothes/24.OliveCasualSweater.png",
@@ -438,7 +448,7 @@ export const products = [
         email: "Clementina_Raynor@yahoo.com",
         phone: "821.333.9362 x9878",
         avatar:
-          "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1006.jpg",
+            "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/1006.jpg",
         password: "673_HVvWUdYguFe",
         dateOfBirth: "2003-06-14T15:18:27.382Z",
         verified: true,
@@ -491,7 +501,7 @@ export const products = [
         email: "Junius.Farrell@gmail.com",
         phone: "558.717.4898 x4537",
         avatar:
-          "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/520.jpg",
+            "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/520.jpg",
         password: "IszXJOR5PSVUckz",
         dateOfBirth: "1989-09-12T14:49:00.812Z",
         verified: true,
@@ -539,19 +549,19 @@ export const serviceList = [
   {
     id: "ee272e30-0309-4e8a-966c-f63410c58289",
     icon: "Truck",
-    title: "Fast Delivery",
-    description: "Start from $10",
+    title: "Free Delivery",
+    description: "Start from $100",
   },
   {
     id: "1f30c35b-5b76-42c0-822f-83ecbfb64869",
     icon: "MoneyGuarantee",
     title: "Money Guarantee",
-    description: "7 Days Back",
+    description: "1 Days Back",
   },
   {
     id: "a4c3968e-93ba-444b-a68f-2e6dd9a5eb1a",
     icon: "AlarmClock",
-    title: "365 Days",
+    title: "7 Days",
     description: "For free return",
   },
   {
