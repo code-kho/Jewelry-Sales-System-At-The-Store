@@ -66,7 +66,7 @@ const StyledTabList = styled(TabList)(({ theme }) => ({
     color: theme.palette.info.main,
   },
   "& .MuiTabs-indicator": {
-    backgroundColor: theme.palette.info.main,
+    backgroundColor: "#DD8EB8",
   },
 }));
 const StyledTab = styled(Tab)(() => ({
@@ -107,7 +107,9 @@ const NotificationsPopover = () => {
   return (
     <ClickAwayListener onClickAway={handleClose}>
       <Box>
-        <IconButton onClick={handleClick}>
+        <IconButton onClick={handleClick} sx={{
+          bgcolor: "#FFFFFF",
+        }}>
           <Badge color="secondary" variant="dot" badgeContent={1}>
             <Notifications
               sx={{
@@ -216,7 +218,6 @@ function ListItem(props) {
   return (
     <ListItemWrapper p={2} gap={2} alignItems="center">
       <Icon color="info" />
-
       <Box>
         <H6 fontSize={13}>{title}</H6>
         <Paragraph fontSize={11}>
