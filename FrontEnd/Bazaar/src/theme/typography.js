@@ -1,12 +1,12 @@
 export const fontSize = 14;
 export const fontFamily = [
   "Playball",
-  "Comic Neue",
+  "Ubuntu",
 ].join(",");
 export const typography = {
   fontSize,
   fontFamily,
-  htmlFontSize: 16,
+  htmlFontSize: 12,
   body1: {
     fontSize,
   },

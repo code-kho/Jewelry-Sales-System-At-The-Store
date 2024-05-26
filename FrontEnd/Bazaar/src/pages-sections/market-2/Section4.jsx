@@ -17,29 +17,30 @@ const Section4 = ({ products }) => {
     else if (width < 650) setVisibleSlides(2);
     else if (width < 1024) setVisibleSlides(3);
     else if (width < 1200) setVisibleSlides(4);
-    else setVisibleSlides(5);
+    else setVisibleSlides(4);
   }, [width]);
   return (
-    <Container
-      sx={{
-        py: 8,
-      }}
-    >
-      <FlexBetween mb={3}>
-        <H2 fontSize={20}>Deals Of The Day</H2>
-        <NavLink3 text="More Products" href="#" hoverColor="dark.main" />
-      </FlexBetween>
-
-      <Carousel
-        totalSlides={products.length}
-        visibleSlides={visibleSlides}
-        sx={carouselStyled}
+      <Container
+          sx={{
+            py: 4,
+            mt: 2,
+          }}
       >
-        {products.map((product) => (
-          <ProductCard20 product={product} key={product.id} />
-        ))}
-      </Carousel>
-    </Container>
+        <FlexBetween mb={3}>
+          <H2 fontSize={30}>Deals Of The Day</H2>
+          <NavLink3 fontSize={30} text="More Products" href="#" hoverColor="dark.main" />
+        </FlexBetween>
+
+        <Carousel
+            totalSlides={products.length}
+            visibleSlides={visibleSlides}
+            sx={carouselStyled}
+        >
+          {products.map((product) => (
+              <ProductCard20 product={product} key={product.id} />
+          ))}
+        </Carousel>
+      </Container>
   );
 };
 

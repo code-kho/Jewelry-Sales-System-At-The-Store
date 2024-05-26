@@ -82,7 +82,7 @@ const MegaMenu = ({ title, menuList }) => {
                   },
                 }}
               >
-                {category.map((item) => {
+                {category?.map((item) => {
                   return (
                     <List key={item.title}>
                       <H6 mb={0.5} pl={4}>

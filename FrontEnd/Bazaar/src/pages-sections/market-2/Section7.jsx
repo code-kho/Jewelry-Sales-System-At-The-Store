@@ -1,53 +1,47 @@
-import { Box, Container, styled } from "@mui/material";
-import WhiteButton from "components/WhiteButton";
-import { H3, Paragraph, Span } from "components/Typography";
-const BannerWrapper = styled(Box)(({ theme }) => ({
-  gap: "5rem",
-  padding: "2rem",
-  display: "flex",
-  flexWrap: "wrap",
-  overflow: "hidden",
-  borderRadius: "3px",
-  alignItems: "center",
-  backgroundSize: "cover",
-  justifyContent: "flex-end",
-  backgroundPosition: "center left",
-  backgroundRepeat: "no-repeat",
-  backgroundImage: `url(/assets/images/banners/long-banner.jpg)`,
-  [theme.breakpoints.down("md")]: {
-    gap: "1rem",
-    flexDirection: "column",
-    justifyContent: "center",
-  },
-}));
+import { useEffect, useState } from "react";
+import { Container } from "@mui/material";
+import useWindowSize from "hooks/useWindowSize";
+import { FlexBetween } from "components/flex-box";
+import Carousel from "components/carousel/Carousel";
+import NavLink3 from "components/nav-link/NavLink3";
+import { H2 } from "components/Typography";
+import ProductCard20 from "components/product-cards/ProductCard20";
+import { carouselStyled } from "components/carousel/CarouselStyled";
 
-const Section7 = () => {
+// ======================================================================
+const Section4 = ({ products }) => {
+  const width = useWindowSize();
+  const [visibleSlides, setVisibleSlides] = useState(4);
+  useEffect(() => {
+    if (width < 426) setVisibleSlides(1);
+    else if (width < 650) setVisibleSlides(2);
+    else if (width < 1024) setVisibleSlides(3);
+    else if (width < 1200) setVisibleSlides(4);
+    else setVisibleSlides(4);
+  }, [width]);
   return (
-    <Container
-      sx={{
-        my: 8,
-      }}
-    >
-      <BannerWrapper>
-        <Box textAlign="center">
-          <H3
-            fontSize={{
-              sm: 36,
-              xs: 28,
-            }}
-            lineHeight={1}
-          >
-            GIFT <Span color="primary.main">50% OFF</Span> PERFECT STYLES
-          </H3>
-          <Paragraph fontSize={16}>
-            Only until the end of this week. Terms and conditions apply
-          </Paragraph>
-        </Box>
+      <Container
+          sx={{
+            py: 8,
+            mt: -11,
+          }}
+      >
+        <FlexBetween mb={3}>
+          <H2 fontSize={30}>Earings</H2>
+          <NavLink3 fontSize={30} text="More Products" href="#" hoverColor="dark.main" />
+        </FlexBetween>
 
-        <WhiteButton size="large">Discover Now</WhiteButton>
-      </BannerWrapper>
-    </Container>
+        <Carousel
+            totalSlides={products.length}
+            visibleSlides={visibleSlides}
+            sx={carouselStyled}
+        >
+          {products.map((product) => (
+              <ProductCard20 product={product} key={product.id} />
+          ))}
+        </Carousel>
+      </Container>
   );
 };
 
-export default Section7;
+export default Section4;

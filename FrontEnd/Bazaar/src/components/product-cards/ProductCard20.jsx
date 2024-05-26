@@ -11,9 +11,11 @@ import { useAppContext } from "contexts/AppContext";
 import ProductViewDialog from "components/products/ProductViewDialog";
 // custom styled components
 const Card = styled(Box)(({ theme }) => ({
+  fontFamily: "Ubuntu",
   borderRadius: "3px",
   transition: "all 0.3s",
   backgroundColor: theme.palette.common.white,
+  // backgroundColor: "red",
   border: `1px solid ${theme.palette.grey[100]}`,
   ":hover": {
     "& .product-actions": {

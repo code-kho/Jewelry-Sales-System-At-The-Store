@@ -66,7 +66,7 @@ const ProductDetails = (props) => {
           </StyledTabs>
           <Box mb={6}
                margin='0 10rem'
-               fontFamily='Comic Neue'
+               fontFamily='Ubuntu'
                color='black'
           >
             {selectedOption === 0 && <ProductDescription />}
