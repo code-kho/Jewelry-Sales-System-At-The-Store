@@ -1,7 +1,6 @@
 package com.example.salesystematthestore.entity;
 
 
-import com.example.salesystematthestore.payload.request.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,9 +41,9 @@ public class Counter {
     })
     private List<Order> Order;
 
-
     @OneToMany(mappedBy = "counter", fetch = FetchType.LAZY, cascade = {
             CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
     })
     private List<Users> usersList;
+
 }
