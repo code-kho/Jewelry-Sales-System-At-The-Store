@@ -1,5 +1,6 @@
 import categoriesMegaMenu from "./categoriesMegaMenu"; // MEGAMENU DATA
 
+
 const megaMenus = [
   [
     {
@@ -179,198 +180,165 @@ const navbarNavigations = [
     title: "Home",
     megaMenu: false,
     megaMenuWithSub: false,
-    child: [
-      {
-        title: "Market 1",
-        url: "/market-1",
-      },
-      {
-        title: "Market 2",
-        url: "/market-2",
-      },
-      {
-        title: "Furniture",
-        url: "/furniture-shop",
-      },
-      {
-        title: "Grocery 1",
-        url: "/grocery1",
-      },
-      {
-        title: "Grocery 2",
-        url: "/grocery2",
-      },
-      {
-        title: "Grocery 3",
-        url: "/grocery3",
-      },
-      {
-        title: "Health and Beauty",
-        url: "/healthbeauty-shop",
-      },
-      {
-        title: "Fashion 1",
-        url: "/fashion-shop-1",
-      },
-      {
-        title: "Fashion 2",
-        url: "/fashion-shop-2",
-      },
-      {
-        title: "Fashion 3",
-        url: "/fashion-shop-3",
-      },
-      {
-        title: "Gift Store",
-        url: "/gift-shop",
-      },
-      {
-        title: "Gadget",
-        url: "/gadget-shop",
-      },
-    ],
+    url:"/",
+    // child: [
+      // {
+      //   title: "Market 1",
+      //   url: "/market-1",
+      // },
+      // {
+      //   title: "Market 2",
+      //   url: "/market-2",
+      // },
+      // {
+      //   title: "Furniture",
+      //   url: "/furniture-shop",
+      // },
+      // {
+      //   title: "Grocery 1",
+      //   url: "/grocery1",
+      // },
+      // {
+      //   title: "Grocery 2",
+      //   url: "/grocery2",
+      // },
+      // {
+      //   title: "Grocery 3",
+      //   url: "/grocery3",
+      // },
+      // {
+      //   title: "Health and Beauty",
+      //   url: "/healthbeauty-shop",
+      // },
+      // {
+      //   title: "Fashion 1",
+      //   url: "/fashion-shop-1",
+      // },
+      // {
+      //   title: "Fashion 2",
+      //   url: "/fashion-shop-2",
+      // },
+      // {
+      //   title: "Fashion 3",
+      //   url: "/fashion-shop-3",
+      // },
+      // {
+      //   title: "Gift Store",
+      //   url: "/gift-shop",
+      // },
+      // {
+      //   title: "Gadget",
+      //   url: "/gadget-shop",
+      // },
+    // ],
   },
   {
-    megaMenu: true,
+    megaMenu: false,
     megaMenuWithSub: false,
     title: "Counter",
-    child: megaMenus,
-  },
-  {
-    megaMenu: false,
-    megaMenuWithSub: true,
-    title: "Buy Back",
-    child: categoriesMegaMenu,
+    // child: megaMenus,
+    child:[
+        {
+      title: "Counter 1",
+      url: "/counter-1",
+      },
+      {
+      title: "Counter 2",
+      url: "/counter-2",
+      }
+    ]
   },
   {
     megaMenu: false,
     megaMenuWithSub: false,
-    title: "Import Goods",
-    child: [
-      {
-        title: "Sale Page",
-        child: [
-          {
-            title: "Version 1",
-            url: "/sale-page-1",
-          },
-          {
-            title: "Version 2",
-            url: "/sale-page-2",
-          },
-        ],
-      },
-      {
-        title: "Vendor",
-        child: [
-          {
-            title: "All vendors",
-            url: "/shops",
-          },
-          {
-            title: "Vendor store",
-            url: "/shops/34324",
-          },
-        ],
-      },
-      {
-        title: "Shop",
-        child: [
-          {
-            title: "Search product",
-            url: "/product/search/mobile phone",
-          },
-          {
-            title: "Single product",
-            url: "/product/34324321",
-          },
-          {
-            title: "Cart",
-            url: "/cart",
-          },
-          {
-            title: "Checkout",
-            url: "/checkout",
-          },
-          {
-            title: "Alternative Checkout",
-            url: "/checkout-alternative",
-          },
-          {
-            title: "Order confirmation",
-            url: "/order-confirmation",
-          },
-        ],
-      },
-    ],
+    title: "Buy Back",
+    url: "/buy-back"
+    // child: categoriesMegaMenu,
+  },
+  {
+    megaMenu: false,
+    megaMenuWithSub: false,
+    title: "Rotate Goods",
+    url: "/rotate-goods",
+    // child:[
+    //   {
+    //     title: "Import Goods",
+    //     url: "/import-goods",
+    //   },
+    //   {
+    //     title: "Rotate Goods",
+    //     url: "/route-goods",
+    //   }
+    // ],
   },
   {
     megaMenu: false,
     megaMenuWithSub: false,
     title: "Handle Accounting",
-    child: [
-      {
-        title: "Orders",
-        child: [
-          {
-            title: "Order List",
-            url: "/orders",
-          },
-          {
-            title: "Order Details",
-            url: "/orders/5452423",
-          },
-        ],
-      },
-      {
-        title: "Profile",
-        child: [
-          {
-            title: "View Profile",
-            url: "/profile",
-          },
-          {
-            title: "Edit Profile",
-            url: "/profile/edit",
-          },
-        ],
-      },
-      {
-        title: "Address",
-        child: [
-          {
-            title: "Address List",
-            url: "/address",
-          },
-          {
-            title: "Add Address",
-            url: "/address/512474",
-          },
-        ],
-      },
-      {
-        title: "Support tickets",
-        child: [
-          {
-            title: "All tickets",
-            url: "/support-tickets",
-          },
-          {
-            title: "Ticket details",
-            url: "/support-tickets/512474",
-          },
-        ],
-      },
-      {
-        title: "Wishlist",
-        url: "/wish-list",
-      },
-    ],
+    url:"/handle-accounting",
+    // child: [
+    //   {
+    //     title: "Orders",
+    //     child: [
+    //       {
+    //         title: "Order List",
+    //         url: "/orders",
+    //       },
+    //       {
+    //         title: "Order Details",
+    //         url: "/orders/5452423",
+    //       },
+    //     ],
+    //   },
+    //   {
+    //     title: "Profile",
+    //     child: [
+    //       {
+    //         title: "View Profile",
+    //         url: "/profile",
+    //       },
+    //       {
+    //         title: "Edit Profile",
+    //         url: "/profile/edit",
+    //       },
+    //     ],
+    //   },
+    //   {
+    //     title: "Address",
+    //     child: [
+    //       {
+    //         title: "Address List",
+    //         url: "/address",
+    //       },
+    //       {
+    //         title: "Add Address",
+    //         url: "/address/512474",
+    //       },
+    //     ],
+    //   },
+    //   {
+    //     title: "Support tickets",
+    //     child: [
+    //       {
+    //         title: "All tickets",
+    //         url: "/support-tickets",
+    //       },
+    //       {
+    //         title: "Ticket details",
+    //         url: "/support-tickets/512474",
+    //       },
+    //     ],
+    //   },
+    //   {
+    //     title: "Wishlist",
+    //     url: "/wish-list",
+    //   },
+    // ],
   },
   {
     megaMenu: false,
     megaMenuWithSub: false,
-    title: "Contact",
+    title: "Report",
     child: [
       {
         title: "Dashboard",

@@ -128,16 +128,16 @@ const Login = () => {
 
       <SocialButtons />
 
-      <FlexRowCenter mt="1.25rem">
-        <Box>Don&apos;t have account?</Box>
-        <Link href="/signup" passHref legacyBehavior>
-          <a>
-            <H6 ml={1} borderBottom="1px solid" borderColor="grey.900">
-              Sign Up
-            </H6>
-          </a>
-        </Link>
-      </FlexRowCenter>
+      {/*<FlexRowCenter mt="1.25rem">*/}
+      {/*  <Box>Don&apos;t have account?</Box>*/}
+      {/*  <Link href="/signup" passHref legacyBehavior>*/}
+      {/*    <a>*/}
+      {/*      <H6 ml={1} borderBottom="1px solid" borderColor="grey.900">*/}
+      {/*        Sign Up*/}
+      {/*      </H6>*/}
+      {/*    </a>*/}
+      {/*  </Link>*/}
+      {/*</FlexRowCenter>*/}
 
       <FlexBox
         justifyContent="center"
@@ -149,7 +149,7 @@ const Login = () => {
         Forgot your password?
         <Link href="/reset-password" passHref legacyBehavior>
           <a>
-            <H6 ml={1} borderBottom="1px solid" borderColor="grey.900">
+            <H6 ml={1} mt={0.3} borderBottom="1px solid" borderColor="grey.900">
               Reset It
             </H6>
           </a>
