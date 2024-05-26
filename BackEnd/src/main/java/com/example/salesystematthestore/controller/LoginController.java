@@ -3,6 +3,7 @@ package com.example.salesystematthestore.controller;
 import com.example.salesystematthestore.payload.ResponseData;
 import com.example.salesystematthestore.repository.UserRepository;
 import com.example.salesystematthestore.service.imp.LoginServiceImp;
+import com.example.salesystematthestore.utils.JwtTokenHelper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Encoders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class LoginController {
     @Autowired
     LoginServiceImp loginServiceImp;
 
+    @Autowired
+    JwtTokenHelper jwtTokenHelper;
+
 
     @Autowired
     UserRepository usersRepository;
@@ -29,9 +33,14 @@ public class LoginController {
         ResponseData responseData = new ResponseData();
         boolean checkLogin = loginServiceImp.checkLogin(username,password);
         String token;
-        SecretKey key = Jwts.SIG.HS256.key().build();
-        String secretString = Encoders.BASE64.encode(key.getEncoded());
-        System.out.println(secretString);
+
+        if(checkLogin){
+            token = jwtTokenHelper.generateToken(usersRepository.findByUsername(username));
+            responseData.setData(token);
+        } else{
+            responseData.setData("");
+        }
+
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 

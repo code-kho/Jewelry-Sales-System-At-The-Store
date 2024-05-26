@@ -32,9 +32,7 @@ public class CustomFilterSecurity {
                 .sessionManagement((session)->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(request ->{
-                    request.requestMatchers("/users/user/**","/users/updateBasicInfo","/users/updateSecurityInfo","/order/getorder","/order/oderdetail","/order/makeorder").hasAnyAuthority("ADMIN","USER");
-                    request.requestMatchers("/login/**","/product/**").permitAll();
-                    request.requestMatchers("/users/admin/**", "/order/admin/**","product/admin/**").hasAuthority("ADMIN");
+                    request.requestMatchers("/users/user/**").hasAnyAuthority("ADMIN","USER");
                 });
         http.addFilterBefore(jwtCustom, UsernamePasswordAuthenticationFilter.class);
         return http.build();

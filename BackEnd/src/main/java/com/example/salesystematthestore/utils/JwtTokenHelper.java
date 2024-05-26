@@ -15,37 +15,36 @@ public class JwtTokenHelper {
     @Value("${jwt.secretkey}")
     private String key;
 
-    public String generateToken(Users users){
+    public String generateToken(Users users) {
         SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(key));
         String token = Jwts.builder()
-                .setIssuer("FourGemsStore")
+                .setIssuer("ATDStore")
                 .setSubject("JWT Token")
-                .claim("username",users.getUsername())
+                .claim("username", users.getUsername())
                 .claim("role", users.getRole().getName())
-                .claim("name", users.getFullname())
+                .claim("name", users.getFullName())
                 .claim("address", users.getAddress())
                 .claim("id", users.getId())
+                .claim("couterAddress",users.getCounter().getAddress())
                 .claim("phoneNumber", users.getPhoneNumber())
-                .claim("couter", users.getCounter().getAddress())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date().getTime())+30000000))
+                .setExpiration(new Date((new Date().getTime()) + 30000000))
                 .signWith(secretKey).compact();
         return token;
     }
 
-    public boolean verifyToken(String token){
+    public boolean verifyToken(String token) {
         SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(key));
-        try{
+        try {
             Jwts.parser()
                     .verifyWith(secretKey)
                     .build()
                     .parseSignedClaims(token);
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
-
 
 
 }
