@@ -32,6 +32,8 @@ const Wrapper = styled(Box)(({ theme }) => ({
 // =============================================================
 const CategoryMenuItem = (props) => {
   const { href, title, caret, children, ...rest } = props;
+  console.log(rest)
+
   const { settings } = useSettings();
   return (
     <Wrapper>

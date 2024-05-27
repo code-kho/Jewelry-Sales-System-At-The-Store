@@ -10,13 +10,12 @@ import Toggle from "components/icons/Toggle";
 import AccountPopover from "./popovers/AccountPopover";
 import { FlexBox, FlexRowCenter } from "components/flex-box";
 import NotificationsPopover from "./popovers/NoficationPopover"; // custom styled components
-import { H3 } from "components/Typography";
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   zIndex: 11,
   paddingTop: "1rem",
   paddingBottom: "1rem",
-  backgroundColor: "#DD8EB8",
+  backgroundColor: "#ffffff",
   boxShadow: theme.shadows[2],
   color: theme.palette.text.primary,
 }));
@@ -47,9 +46,9 @@ const CustomButton = styled(Button)(({ theme }) => ({
   },
 }));
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  width: 500,
+  width: 200,
   padding: "5px 10px",
-  borderRadius: "50px",
+  borderRadius: "8px",
   color: theme.palette.grey[500],
   backgroundColor: theme.palette.grey[100],
   [theme.breakpoints.down("md")]: {
@@ -84,9 +83,9 @@ const DashboardNavbar = ({ handleDrawerToggle }) => {
             Browse Website
           </CustomButton> */}
 
-          <Box flexGrow={1} sx={{}}/>
+          <Box flexGrow={1} />
 
-          <FlexBox alignItems="center" gap={4}>
+          <FlexBox alignItems="center" gap={2}>
             <StyledInputBase
               placeholder="Search anything..."
               startAdornment={
@@ -98,9 +97,9 @@ const DashboardNavbar = ({ handleDrawerToggle }) => {
                 />
               }
             />
-            <AccountPopover />
-            <H3>Hello Manager</H3>
+
             <NotificationsPopover />
+            <AccountPopover />
           </FlexBox>
         </StyledToolBar>
       </Container>

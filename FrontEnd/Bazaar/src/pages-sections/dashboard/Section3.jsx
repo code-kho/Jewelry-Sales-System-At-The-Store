@@ -17,17 +17,17 @@ const Section3 = () => {
       data: [7600, 8500, 10100, 9800, 8700, 1050, 9100],
     },
   ];
-  const totalOrderseries1 = [
+  const totalOrderseries = [
     {
       name: "Weekly",
-      data: [4000, 8500, 10100, 9800, 8700, 1050, 9100],
+      data: [7600, 8500, 10100, 9800, 8700, 1050, 9100],
     },
   ];
   return (
     <Box>
       <Grid container spacing={3}>
         {/* WEEKLY SALE CHART */}
-        <Grid item xl={3} lg={6} md={6} xs={12}>
+        <Grid item xl={3} lg={3} md={6} xs={12}>
           <Card2
             title="Weekly Sales"
             percentage="25.25%"
@@ -43,48 +43,48 @@ const Section3 = () => {
         </Grid>
 
         {/* PRODUCT SHARE CHART */}
-        {/*<Grid item xl={3} lg={3} md={6} xs={12}>*/}
-        {/*  <Card2 title="Product Share" percentage="10.25%" amount="39.56%">*/}
-        {/*    <ReactApexChart*/}
-        {/*      height={130}*/}
-        {/*      series={[75]}*/}
-        {/*      type="radialBar"*/}
-        {/*      options={options.productShareChartOptions(theme)}*/}
-        {/*    />*/}
-        {/*  </Card2>*/}
-        {/*</Grid>*/}
+        <Grid item xl={3} lg={3} md={6} xs={12}>
+          <Card2 title="Product Share" percentage="10.25%" amount="39.56%">
+            <ReactApexChart
+              height={130}
+              series={[75]}
+              type="radialBar"
+              options={options.productShareChartOptions(theme)}
+            />
+          </Card2>
+        </Grid>
 
         {/* TOTAL ORDERS CHART */}
-        <Grid item xl={3} lg={6} md={6} xs={12}>
+        <Grid item xl={3} lg={3} md={6} xs={12}>
           <Card2
             title="Total Order"
             percentage="2.65%"
-            amount={currency(3060, 0)}
+            amount={currency(12260, 0)}
           >
             <ReactApexChart
-                type="bar"
-                height={100}
-                series={totalOrderseries1}
-                options={options.weeklyChartOptions(theme)}
+              type="area"
+              height={80}
+              series={totalOrderseries}
+              options={options.totalOrderChartOptions(theme)}
             />
           </Card2>
         </Grid>
 
         {/* MARKET SHARE CHART */}
-        {/*<Grid item xl={3} lg={3} md={6} xs={12}>*/}
-        {/*  <Card2*/}
-        {/*    title="Market Share"*/}
-        {/*    percentage="2.65%"*/}
-        {/*    amount={currency(14260, 0)}*/}
-        {/*  >*/}
-        {/*    <ReactApexChart*/}
-        {/*      height={130}*/}
-        {/*      type="radialBar"*/}
-        {/*      series={[44, 55, 67]}*/}
-        {/*      options={options.marketShareChartOptions(theme)}*/}
-        {/*    />*/}
-        {/*  </Card2>*/}
-        {/*</Grid>*/}
+        <Grid item xl={3} lg={3} md={6} xs={12}>
+          <Card2
+            title="Market Share"
+            percentage="2.65%"
+            amount={currency(14260, 0)}
+          >
+            <ReactApexChart
+              height={130}
+              type="radialBar"
+              series={[44, 55, 67]}
+              options={options.marketShareChartOptions(theme)}
+            />
+          </Card2>
+        </Grid>
       </Grid>
     </Box>
   );

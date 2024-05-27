@@ -1,7 +1,7 @@
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { Card } from "@mui/material";
 import { FlexBetween, FlexBox } from "components/flex-box";
-import { H1, H2, H3, H4, Paragraph } from "components/Typography";
+import { H3, H6, Paragraph } from "components/Typography";
 import React from "react"; // ========================================================
 
 // ========================================================
@@ -11,40 +11,24 @@ const Card1 = (props) => {
     <Card
       sx={{
         p: 2,
-        height: "100%",
-        display: "flex",
-        position: "relative",
-        flexDirection: "column",
-        justifyContent: "center",
-        pb: 5,
       }}
     >
-      <H1 mb={2} color="grey.600">
+      <H6 mb={1} color="grey.600">
         {title}
-      </H1>
-        <H2>Today</H2>
+      </H6>
       <H3 mb={0.3}>{amount1}</H3>
 
-      <FlexBetween sx={{
-          mb: 2,
-      }}>
-        <H4 fontWeight={500} color="grey.500">
+      <FlexBetween>
+        <Paragraph fontWeight={500} color="grey.500">
           {amount2}
-        </H4>
+        </Paragraph>
 
         <FlexBox alignItems="center" color={color}>
           {status === "up" && <ArrowDropUp />}
           {status === "down" && <ArrowDropDown />}
-          <H4 fontSize={12}>{percentage}</H4>
+          <Paragraph fontSize={12}>{percentage}</Paragraph>
         </FlexBox>
       </FlexBetween>
-
-        <H2>Yesterday</H2>
-        <FlexBetween>
-            <H3>
-                {amount2}
-            </H3>
-        </FlexBetween>
     </Card>
   );
 }; // set default props for status and color
