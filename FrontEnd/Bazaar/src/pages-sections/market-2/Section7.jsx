@@ -27,7 +27,7 @@ const Section4 = ({ products }) => {
           }}
       >
         <FlexBetween mb={3}>
-          <H2 fontSize={30}>Earings</H2>
+          <H2 fontSize={30}>Earrings</H2>
           <NavLink3 fontSize={30} text="More Products" href="#" hoverColor="dark.main" />
         </FlexBetween>
 
