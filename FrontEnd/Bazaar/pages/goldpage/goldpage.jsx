@@ -13,7 +13,9 @@ import {
     getFrequentlyBought,
     getRelatedProducts,
 } from "utils/__api__/related-products";
-import api from "utils/__api__/products"; // styled component
+import api from "utils/__api__/products";
+import goldPriceTable from "./gold-price-table";
+import GoldPriceTable from "./gold-price-table"; // styled component
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
     minHeight: 0,
@@ -122,6 +124,8 @@ const GoldPage = (props) => {
                 }}>
                     <H1> Four Gems Jewelry </H1>
                 </div>
+
+                <GoldPriceTable/>
             </Container>
         </ShopLayout1>
     );
