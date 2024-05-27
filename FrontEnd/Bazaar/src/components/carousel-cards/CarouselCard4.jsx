@@ -3,7 +3,7 @@ import { Box, styled, Button } from "@mui/material";
 import { H1, H4, Paragraph, Span } from "components/Typography"; // custom styled components
 
 const CardWrapper = styled(Box)(({ theme, img, mode }) => ({
-  minHeight: 500,
+  minHeight: 810,
   display: "flex",
   alignItems: "center",
   backgroundSize: "cover",
@@ -44,6 +44,7 @@ const CarouselCard4 = ({
       <Box
         pl={{
           md: 10,
+
         }}
       >
         <H4

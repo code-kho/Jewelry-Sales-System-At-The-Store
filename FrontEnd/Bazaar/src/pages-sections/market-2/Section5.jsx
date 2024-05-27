@@ -1,85 +1,47 @@
 import { useEffect, useState } from "react";
-import { Card, Container, Grid, List, ListItem, styled } from "@mui/material";
-import { H3 } from "components/Typography";
+import { Container } from "@mui/material";
 import useWindowSize from "hooks/useWindowSize";
+import { FlexBetween } from "components/flex-box";
 import Carousel from "components/carousel/Carousel";
 import NavLink3 from "components/nav-link/NavLink3";
+import { H2 } from "components/Typography";
 import ProductCard20 from "components/product-cards/ProductCard20";
 import { carouselStyled } from "components/carousel/CarouselStyled";
-const StyledListItem = styled(ListItem)(({ theme }) => ({
-  fontSize: 13,
-  fontWeight: 500,
-  cursor: "pointer",
-  padding: "10px 0 0 0",
-  transition: "all 0.3s",
-  ":hover": {
-    color: theme.palette.primary.main,
-  },
-})); // ======================================================================
 
 // ======================================================================
-const Section5 = ({ data }) => {
-  const width = useWindowSize();
-  const [visibleSlides, setVisibleSlides] = useState(4);
-  useEffect(() => {
-    if (width < 426) setVisibleSlides(1);
-    else if (width < 650) setVisibleSlides(2);
-    else if (width < 1200) setVisibleSlides(3);
-    else setVisibleSlides(4);
-  }, [width]);
-  if (!data) return null;
-  return (
-    <Container>
-      <Grid container spacing={3}>
-        <Grid item md={3} xs={12}>
-          <Card
-            elevation={0}
+const Section4 = ({ products }) => {
+    const width = useWindowSize();
+    const [visibleSlides, setVisibleSlides] = useState(4);
+    useEffect(() => {
+        if (width < 426) setVisibleSlides(1);
+        else if (width < 650) setVisibleSlides(2);
+        else if (width < 1024) setVisibleSlides(3);
+        else if (width < 1200) setVisibleSlides(4);
+        else setVisibleSlides(4);
+    }, [width]);
+    return (
+        <Container
             sx={{
-              px: 4,
-              height: "100%",
-              py: 2,
-              borderRadius: "3px",
-              border: 0,
+                py: 8,
+                mt: -8,
             }}
-          >
-            {/* MAIN CATEGORY NAME/TITLE */}
-            <H3>{data.category.title}</H3>
+        >
+            <FlexBetween mb={3}>
+                <H2 fontSize={30}>Necklaces</H2>
+                <NavLink3 fontSize={30} text="More Products" href="#" hoverColor="dark.main" />
+            </FlexBetween>
 
-            {/* SUB CATEGORY LIST */}
-            <List
-              sx={{
-                mb: 2,
-              }}
+            <Carousel
+                totalSlides={products.length}
+                visibleSlides={visibleSlides}
+                sx={carouselStyled}
             >
-              {data.category.children.map((item) => (
-                <StyledListItem key={item}>{item}</StyledListItem>
-              ))}
-            </List>
-
-            <NavLink3
-              href="#"
-              text="Browse All"
-              color="dark.main"
-              hoverColor="dark.main"
-            />
-          </Card>
-        </Grid>
-
-        {/* CATEGORY BASED PRODUCTS CAROUSEL */}
-        <Grid item md={9} xs={12}>
-          <Carousel
-            totalSlides={data.products.length}
-            visibleSlides={visibleSlides}
-            sx={carouselStyled}
-          >
-            {data.products.map((product) => (
-              <ProductCard20 product={product} key={product.id} />
-            ))}
-          </Carousel>
-        </Grid>
-      </Grid>
-    </Container>
-  );
+                {products.map((product) => (
+                    <ProductCard20 product={product} key={product.id} />
+                ))}
+            </Carousel>
+        </Container>
+    );
 };
 
-export default Section5;
+export default Section4;

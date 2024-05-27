@@ -34,7 +34,7 @@ const Market = (props) => {
         <Section4 products={props.products} />
 
         {/* TOP OFFER BANNERS */}
-        <Offers />
+        {/*<Offers />*/}
 
         {/* PRODUCT ROW WITH ELECTRONICS CATEGORY LIST */}
         <Section5 data={props.electronicsProducts} />
@@ -46,7 +46,7 @@ const Market = (props) => {
         <Section5 data={props.menFashionProducts} />
 
         {/* OFFER BANNER */}
-        <Section7 />
+        {/*<Section7 />*/}
 
         {/* PRODUCT ROW WITH WOMEN'S FASHION CATEFORY LIST */}
         <Section5 data={props.womenFashionProducts} />

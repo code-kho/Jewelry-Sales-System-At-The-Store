@@ -87,13 +87,13 @@ const ProductIntro = ({ product }) => {
             paddingTop: 7,
           }}><H1 mb={2}>{title}</H1></div>
           <div style={{
-            fontFamily: "Comic Neue",
+            fontFamily: "Ubuntu",
             fontSize: "25px",
           }}>
-            <FlexBox alignItems="center" mb={0}>
-              <Box>Brand:</Box>
-              <H2 ml={1}>Swarovski</H2>
-            </FlexBox>
+            {/*<FlexBox alignItems="center" mb={0}>*/}
+            {/*  <Box>Brand:</Box>*/}
+            {/*  <H2 ml={1}>Swarovski</H2>*/}
+            {/*</FlexBox>*/}
             <FlexBox alignItems="center" mb={2}>
               <p>Octagon shape, White, Rose gold-tone plated</p>
             </FlexBox>

@@ -113,13 +113,12 @@ const SearchBox = () => {
 
 const categories = [
   "All Categories",
-  "Car",
-  "Clothes",
-  "Electronics",
-  "Laptop",
-  "Desktop",
-  "Camera",
-  "Toys",
+  "Necklaces",
+  "Rings",
+  "Earrings",
+  "Chokers",
+  "Bracelets",
+
 ];
 const dummySearchResult = [
   "Macbook Air 13",

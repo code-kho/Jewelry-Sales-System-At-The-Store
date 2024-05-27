@@ -66,7 +66,7 @@ const ProductDetails = (props) => {
           </StyledTabs>
           <Box mb={6}
                margin='0 10rem'
-               fontFamily='Comic Neue'
+               fontFamily='Ubuntu'
                color='black'
           >
             {selectedOption === 0 && <ProductDescription />}
@@ -76,6 +76,7 @@ const ProductDetails = (props) => {
         </div>
 
         {relatedProducts && <RelatedProducts productsData={relatedProducts} />}
+
         <div style={{
           display: "grid",
           textAlign: "center",

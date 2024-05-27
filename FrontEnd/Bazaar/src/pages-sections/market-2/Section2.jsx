@@ -38,30 +38,31 @@ const ServiceItem = styled(FlexRowCenter)(({ theme }) => ({
 // ===========================================================
 const Section2 = ({ serviceList }) => {
   return (
-    <Container
-      sx={{
-        mt: "2rem",
-      }}
-    >
-      <StyledFlexBox>
-        {serviceList.map((item, ind) => {
-          const Icon = appIcons[item.icon];
-          return (
-            <ServiceItem flexGrow={1} gap={2} key={ind}>
-              <Icon
-                sx={{
-                  fontSize: 40,
-                }}
-              />
-              <Box>
-                <H4 lineHeight={1.3}>{item.title}</H4>
-                <Span color="grey.600">{item.description}</Span>
-              </Box>
-            </ServiceItem>
-          );
-        })}
-      </StyledFlexBox>
-    </Container>
+      // <Container
+      //     sx={{
+      //       mt: "2rem",
+      //     }}
+      // >
+
+        <StyledFlexBox>
+          {serviceList.map((item, ind) => {
+            const Icon = appIcons[item.icon];
+            return (
+                <ServiceItem flexGrow={1} gap={2} key={ind}>
+                  <Icon
+                      sx={{
+                        fontSize: 40,
+                      }}
+                  />
+                  <Box>
+                    <H4 lineHeight={1.3}>{item.title}</H4>
+                    <Span color="grey.600">{item.description}</Span>
+                  </Box>
+                </ServiceItem>
+            );
+          })}
+        </StyledFlexBox>
+      // </Container>
   );
 };
 
