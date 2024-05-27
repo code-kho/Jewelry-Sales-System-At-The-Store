@@ -6,7 +6,7 @@ import BannerCard3 from "components/banners/BannerCard3";
 import CarouselCard4 from "components/carousel-cards/CarouselCard4";
 
 // ======================================================
-const Section1 = ({ carouselData }) => {
+const Section1 = ({carouselData}) => {
   // custom css
   const carouselStyles = {
     overflow: "hidden",

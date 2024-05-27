@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const GoldPriceTable = () => {
+const GoldPriceTable = (props) => {
+    const {setGoldType, goldType} = props
     const [goldPrice, setGoldPrice] = useState(null);
     const [error, setError] = useState(null);
-
     useEffect(() => {
         const fetchGoldPrice = async () => {
             try {
@@ -15,7 +15,8 @@ const GoldPriceTable = () => {
                 });
                 console.log(response.data); // Ghi log dữ liệu phản hồi vào console
                 if (response.data && response.data.price) { // Kiểm tra nếu có thuộc tính 'price'
-                    setGoldPrice(response.data.price);
+                    setGoldType(response.data);
+                    setGoldPrice(response.data.currency);
                 } else {
                     setError('Không thể lấy giá vàng.');
                 }
@@ -31,8 +32,9 @@ const GoldPriceTable = () => {
     return (
         <div>
             <h2>Giá vàng theo thời gian thực</h2>
-            {goldPrice ? ( // Hiển thị giá nếu có
-                <p>Giá: ${goldPrice}</p>
+            {/*conditional rendering*/}
+            {goldType ? ( // Hiển thị giá nếu có
+                <p>Giá: ${goldType.price}</p>
             ) : (
                 <p>{error || 'Đang tải...'}</p> // Hiển thị lỗi hoặc thông báo đang tải
             )}
