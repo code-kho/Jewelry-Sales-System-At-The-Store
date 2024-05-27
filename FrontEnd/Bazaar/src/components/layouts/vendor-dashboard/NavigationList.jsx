@@ -50,7 +50,7 @@ export const navigations = [
     ],
   },
   {
-    name: "Customers",
+    name: "Users Account",
     icon: duotone.Customers,
     path: "/admin/customers",
   },

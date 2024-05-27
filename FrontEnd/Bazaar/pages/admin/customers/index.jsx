@@ -8,7 +8,8 @@ import TablePagination from "components/data-table/TablePagination";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import useMuiTable from "hooks/useMuiTable";
 import { CustomerRow } from "pages-sections/admin";
-import api from "utils/__api__/dashboard"; // table column list
+import api from "utils/__api__/dashboard";
+import { useRouter } from 'next/router';
 
 const tableHeading = [
   {
@@ -41,14 +42,19 @@ const tableHeading = [
     label: "Action",
     align: "center",
   },
-]; // =============================================================================
+];
 
 CustomerList.getLayout = function getLayout(page) {
   return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
-}; // =============================================================================
+};
 
-// =============================================================================
 export default function CustomerList({ customers }) {
+  const router = useRouter(); // useRouter should be called inside the component
+
+  const handleNav = () => {
+    router.push('/admin/users/create');
+  };
+
   const {
     order,
     orderBy,
@@ -60,54 +66,56 @@ export default function CustomerList({ customers }) {
   } = useMuiTable({
     listData: customers,
   });
+
   return (
-    <Box py={4}>
-      <H3 mb={2}>Customers</H3>
+      <Box py={4}>
+        <H3 mb={2}>Customers</H3>
 
-      <SearchArea
-        handleSearch={() => {}}
-        buttonText="Add Customer"
-        handleBtnClick={() => {}}
-        searchPlaceholder="Search Customer..."
-      />
+        <SearchArea
+            handleSearch={() => {}}
+            buttonText="Add User"
+            handleBtnClick={handleNav} // use handleNav function
+            searchPlaceholder="Search User..."
+        />
 
-      <Card>
-        <Scrollbar>
-          <TableContainer
-            sx={{
-              minWidth: 900,
-            }}
-          >
-            <Table>
-              <TableHeader
-                order={order}
-                hideSelectBtn
-                orderBy={orderBy}
-                heading={tableHeading}
-                numSelected={selected.length}
-                rowCount={filteredList.length}
-                onRequestSort={handleRequestSort}
-              />
+        <Card>
+          <Scrollbar>
+            <TableContainer
+                sx={{
+                  minWidth: 900,
+                }}
+            >
+              <Table>
+                <TableHeader
+                    order={order}
+                    hideSelectBtn
+                    orderBy={orderBy}
+                    heading={tableHeading}
+                    numSelected={selected.length}
+                    rowCount={filteredList.length}
+                    onRequestSort={handleRequestSort}
+                />
 
-              <TableBody>
-                {filteredList.map((customer) => (
-                  <CustomerRow customer={customer} key={customer.id} />
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Scrollbar>
+                <TableBody>
+                  {filteredList.map((customer) => (
+                      <CustomerRow customer={customer} key={customer.id} />
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Scrollbar>
 
-        <Stack alignItems="center" my={4}>
-          <TablePagination
-            onChange={handleChangePage}
-            count={Math.ceil(filteredList.length / rowsPerPage)}
-          />
-        </Stack>
-      </Card>
-    </Box>
+          <Stack alignItems="center" my={4}>
+            <TablePagination
+                onChange={handleChangePage}
+                count={Math.ceil(filteredList.length / rowsPerPage)}
+            />
+          </Stack>
+        </Card>
+      </Box>
   );
 }
+
 export const getStaticProps = async () => {
   const customers = await api.customers();
   return {

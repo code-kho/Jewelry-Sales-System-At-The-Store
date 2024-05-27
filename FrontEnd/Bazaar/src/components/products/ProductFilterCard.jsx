@@ -90,23 +90,23 @@ const ProductFilterCard = () => {
       />
 
       {/* BRAND VARIANT FILTER */}
-      <H6 mb={2}>Brands</H6>
-      {brandList.map((item) => (
-        <FormControlLabel
-          key={item}
-          sx={{
-            display: "flex",
-          }}
-          label={<Span color="inherit">{item}</Span>}
-          control={<Checkbox size="small" color="secondary" />}
-        />
-      ))}
+      {/*<H6 mb={2}>Brands</H6>*/}
+      {/*{brandList.map((item) => (*/}
+      {/*  <FormControlLabel*/}
+      {/*    key={item}*/}
+      {/*    sx={{*/}
+      {/*      display: "flex",*/}
+      {/*    }}*/}
+      {/*    label={<Span color="inherit">{item}</Span>}*/}
+      {/*    control={<Checkbox size="small" color="secondary" />}*/}
+      {/*  />*/}
+      {/*))}*/}
 
-      <Divider
-        sx={{
-          my: 3,
-        }}
-      />
+      {/*<Divider*/}
+      {/*  sx={{*/}
+      {/*    my: 3,*/}
+      {/*  }}*/}
+      {/*/>*/}
 
       {otherOptions.map((item) => (
         <FormControlLabel
@@ -145,22 +145,22 @@ const ProductFilterCard = () => {
       />
 
       {/* COLORS VARIANT FILTER */}
-      <H6 mb={2}>Colors</H6>
-      <FlexBox mb={2} flexWrap="wrap" gap={1}>
-        {colorList.map((item) => (
-          <Box
-            key={item}
-            flexShrink={0}
-            sx={{
-              width: 25,
-              height: 25,
-              bgcolor: item,
-              cursor: "pointer",
-              borderRadius: "50%",
-            }}
-          />
-        ))}
-      </FlexBox>
+      {/*<H6 mb={2}>Colors</H6>*/}
+      {/*<FlexBox mb={2} flexWrap="wrap" gap={1}>*/}
+      {/*  {colorList.map((item) => (*/}
+      {/*    <Box*/}
+      {/*      key={item}*/}
+      {/*      flexShrink={0}*/}
+      {/*      sx={{*/}
+      {/*        width: 25,*/}
+      {/*        height: 25,*/}
+      {/*        bgcolor: item,*/}
+      {/*        cursor: "pointer",*/}
+      {/*        borderRadius: "50%",*/}
+      {/*      }}*/}
+      {/*    />*/}
+      {/*  ))}*/}
+      {/*</FlexBox>*/}
     </Card>
   );
 };
@@ -180,14 +180,14 @@ const categroyList = [
     title: "Hair Preparations",
   },
 ];
-const brandList = ["Maccs", "Karts", "Baars", "Bukks", "Luasis"];
+// const brandList = ["Maccs", "Karts", "Baars", "Bukks", "Luasis"];
 const otherOptions = ["On Sale", "In Stock", "Featured"];
-const colorList = [
-  "#1C1C1C",
-  "#FF7A7A",
-  "#FFC672",
-  "#84FFB5",
-  "#70F6FF",
-  "#6B7AFF",
-];
+// const colorList = [
+//   "#1C1C1C",
+//   "#FF7A7A",
+//   "#FFC672",
+//   "#84FFB5",
+//   "#70F6FF",
+//   "#6B7AFF",
+// ];
 export default ProductFilterCard;
