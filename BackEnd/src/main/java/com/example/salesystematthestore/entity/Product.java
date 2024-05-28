@@ -71,15 +71,8 @@ public class Product {
     @JoinColumn(name = "type_id")
     private ProductType productType;
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = {
-            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
-    })
-    @JoinTable(
-            name = "product_counter",
-            joinColumns = @JoinColumn(name ="product_id"),
-            inverseJoinColumns = @JoinColumn(name ="counter_id")
-    )
-    private List<Counter> counterList;
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    private List<ProductCounter> productCounterList;
 
 
     @OneToMany(mappedBy = "product",fetch = FetchType.LAZY,cascade = {

@@ -25,21 +25,9 @@ public class Counter {
     @Column(name = "address")
     private String address;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {
-            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
-    })
-    @JoinTable(
-            name = "product_counter",
-            joinColumns = @JoinColumn(name = "counter_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<Product> products;
 
-
-    @OneToMany(mappedBy = "counter", fetch = FetchType.LAZY, cascade = {
-            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
-    })
-    private List<Order> Order;
+    @OneToMany(mappedBy = "counter", fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    private List<ProductCounter> productCounterList;
 
     @OneToMany(mappedBy = "counter", fetch = FetchType.LAZY, cascade = {
             CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
