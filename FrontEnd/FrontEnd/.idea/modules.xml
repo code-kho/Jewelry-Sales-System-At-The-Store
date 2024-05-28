@@ -1,0 +1,18 @@
+<<<<<<<< HEAD:FrontEnd/FrontEnd/.idea/modules.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/FrontEnd.iml" filepath="$PROJECT_DIR$/.idea/FrontEnd.iml" />
+    </modules>
+  </component>
+========
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Bazaar.iml" filepath="$PROJECT_DIR$/.idea/Bazaar.iml" />
+    </modules>
+  </component>
+>>>>>>>> main:FrontEnd/Bazaar/.idea/modules.xml
+</project>
