@@ -57,4 +57,47 @@ public class OrderService implements OrderServiceImp {
         return dates;
     }
 
+
+    public Integer getNumberOfOrderByDate(int counterId, String startDate, String endDate) {
+
+        int totalOfNumber = 0;
+
+        List<Order> orders = new ArrayList<>();
+
+        List<Order> orderList = orderRepository.findByCounterId(counterId);
+
+        List<String> dates = getDatesInRange(startDate, endDate);
+
+        for(String date:dates){
+            for(Order order: orderList){
+                if(order.getOrderDate().toString().split(" ")[0].equals(date)){
+                    totalOfNumber++;
+                }
+            }
+        }
+
+        return totalOfNumber;
+    }
+
+    @Override
+    public Integer getNumberOfItemByDate(int counterId, String startDate, String endDate) {
+        int totalOfItem = 0;
+
+        List<Order> orders = new ArrayList<>();
+
+        List<Order> orderList = orderRepository.findByCounterId(counterId);
+
+        List<String> dates = getDatesInRange(startDate, endDate);
+
+        for(String date:dates){
+            for(Order order: orderList){
+                if(order.getOrderDate().toString().split(" ")[0].equals(date)){
+                    totalOfItem+= order.getOrderItemList().size();
+                }
+            }
+        }
+
+        return totalOfItem;
+    }
+
 }

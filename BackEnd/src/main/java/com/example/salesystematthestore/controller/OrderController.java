@@ -25,7 +25,7 @@ public class OrderController {
     OrderServiceImp orderServiceImp;
 
 
-    @GetMapping("/getbydate")
+    @GetMapping("/get-money-by-date")
     public ResponseEntity<?> getOrder(@RequestParam int countId, @RequestParam String startDate, @RequestParam String endDate ){
 
         Double totalMoney = orderServiceImp.getTotalMoneyByDate(countId, startDate,endDate);
@@ -35,4 +35,30 @@ public class OrderController {
 
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
+
+    @GetMapping("/get-number-order-by-date")
+    public ResponseEntity<?> getNumberOfOrderByDate(@RequestParam int countId, @RequestParam String startDate, @RequestParam String endDate ){
+
+        int numberOfOrder = orderServiceImp.getNumberOfOrderByDate(countId, startDate,endDate);
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(numberOfOrder);
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/get-number-item-by-date")
+    public ResponseEntity<?> getNumberOfItemByDate(@RequestParam int countId, @RequestParam String startDate, @RequestParam String endDate ){
+
+        int numberOfItem = orderServiceImp.getNumberOfItemByDate(countId, startDate,endDate);
+
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(numberOfItem);
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+
 }
