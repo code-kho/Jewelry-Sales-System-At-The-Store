@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -51,4 +53,10 @@ public class Users {
     })
     @JoinColumn(name = "couter_id")
     private Counter counter;
+
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
+    })
+    private List<Order> Order;
 }
