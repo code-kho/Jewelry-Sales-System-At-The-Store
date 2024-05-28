@@ -17,6 +17,8 @@ import api from "utils/__api__/market-2"; // ===================================
 // =======================================================
 const Market = (props) => {
   const theme = useTheme();
+  // destructuring js
+  const {brands} = props
   return (
     <ShopLayout1 topbarBgColor={theme.palette.grey[900]}>
       <SEO title="Market v2" />
@@ -52,7 +54,7 @@ const Market = (props) => {
         <Section5 data={props.womenFashionProducts} />
 
         {/*  FEATURED BRANDS */}
-        <Section8 brands={props.brands} />
+        <Section8 brands={brands} />
 
         {/* SELECTED PRODUCTS */}
         <Section9 />
