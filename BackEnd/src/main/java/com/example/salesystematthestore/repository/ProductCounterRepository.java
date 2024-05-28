@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductCounterRepository extends JpaRepository<ProductCounter, KeyProductCouter> {
-    ProductCounter findByKeyProductCouter_ProductId(int productId);
 
 
 }
