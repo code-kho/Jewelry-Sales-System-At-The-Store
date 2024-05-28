@@ -19,22 +19,22 @@ const SocialButtons = (props) => {
         </FlexBox>
       </Box>
 
-      {/*<Button*/}
-      {/*  className="facebookButton"*/}
-      {/*  size="medium"*/}
-      {/*  fullWidth*/}
-      {/*  sx={{*/}
-      {/*    height: 44,*/}
-      {/*  }}*/}
-      {/*>*/}
-      {/*  <Image*/}
-      {/*    src="/assets/images/icons/facebook-filled-white.svg"*/}
-      {/*    alt="facebook"*/}
-      {/*  />*/}
-      {/*  <Box fontSize="12px" ml={1}>*/}
-      {/*    Continue with Facebook*/}
-      {/*  </Box>*/}
-      {/*</Button>*/}
+      <Button
+        className="facebookButton"
+        size="medium"
+        fullWidth
+        sx={{
+          height: 44,
+        }}
+      >
+        <Image
+          src="/assets/images/icons/facebook-filled-white.svg"
+          alt="facebook"
+        />
+        <Box fontSize="12px" ml={1}>
+          Continue with Facebook
+        </Box>
+      </Button>
 
       <Button
         className="googleButton"
@@ -45,7 +45,7 @@ const SocialButtons = (props) => {
         }}
       >
         <Image src="/assets/images/icons/google-1.svg" alt="facebook" />
-        <Box fontSize="20px" ml={1} >
+        <Box fontSize="12px" ml={1}>
           Continue with Google
         </Box>
       </Button>

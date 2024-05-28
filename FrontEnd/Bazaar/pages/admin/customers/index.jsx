@@ -69,7 +69,7 @@ export default function CustomerList({ customers }) {
 
   return (
       <Box py={4}>
-        <H3 mb={2}>Customers</H3>
+        <H3 mb={2}>Users</H3>
 
         <SearchArea
             handleSearch={() => {}}

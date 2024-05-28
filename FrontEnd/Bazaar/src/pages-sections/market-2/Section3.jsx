@@ -99,7 +99,7 @@ const Section3 = ({ categories }) => {
                                         whiteSpace: "nowrap",
                                     }}
                                 >
-                                    your loving Jewelry
+                                    your loving electronics
                                 </Span>
                             </Span>
                         </Paragraph>

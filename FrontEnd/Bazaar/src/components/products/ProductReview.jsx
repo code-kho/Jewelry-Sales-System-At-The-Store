@@ -32,55 +32,55 @@ const ProductReview = () => {
         <ProductComment {...item} key={ind} />
       ))}
 
-      {/*<H2 fontWeight="600" mt={7} mb={2.5}>*/}
-      {/*  Write a Review for this product*/}
-      {/*</H2>*/}
+      <H2 fontWeight="600" mt={7} mb={2.5}>
+        Write a Review for this product
+      </H2>
 
-      {/*<form onSubmit={handleSubmit}>*/}
-      {/*  <Box mb={2.5}>*/}
-      {/*    <FlexBox mb={1.5} gap={0.5}>*/}
-      {/*      <H5 color="grey.700">Your Rating</H5>*/}
-      {/*      <H5 color="error.main">*</H5>*/}
-      {/*    </FlexBox>*/}
+      <form onSubmit={handleSubmit}>
+        <Box mb={2.5}>
+          <FlexBox mb={1.5} gap={0.5}>
+            <H5 color="grey.700">Your Rating</H5>
+            <H5 color="error.main">*</H5>
+          </FlexBox>
 
-      {/*    <Rating*/}
-      {/*      color="warn"*/}
-      {/*      size="medium"*/}
-      {/*      value={values.rating}*/}
-      {/*      onChange={(_, value) => setFieldValue("rating", value)}*/}
-      {/*    />*/}
-      {/*  </Box>*/}
+          <Rating
+            color="warn"
+            size="medium"
+            value={values.rating}
+            onChange={(_, value) => setFieldValue("rating", value)}
+          />
+        </Box>
 
-      {/*  <Box mb={3}>*/}
-      {/*    <FlexBox mb={1.5} gap={0.5}>*/}
-      {/*      <H5 color="grey.700">Your Review</H5>*/}
-      {/*      <H5 color="error.main">*</H5>*/}
-      {/*    </FlexBox>*/}
+        <Box mb={3}>
+          <FlexBox mb={1.5} gap={0.5}>
+            <H5 color="grey.700">Your Review</H5>
+            <H5 color="error.main">*</H5>
+          </FlexBox>
 
-      {/*    <TextField*/}
-      {/*      rows={8}*/}
-      {/*      multiline*/}
-      {/*      fullWidth*/}
-      {/*      name="comment"*/}
-      {/*      variant="outlined"*/}
-      {/*      onBlur={handleBlur}*/}
-      {/*      value={values.comment}*/}
-      {/*      onChange={handleChange}*/}
-      {/*      placeholder="Write a review here..."*/}
-      {/*      error={!!touched.comment && !!errors.comment}*/}
-      {/*      helperText={touched.comment && errors.comment}*/}
-      {/*    />*/}
-      {/*  </Box>*/}
+          <TextField
+            rows={8}
+            multiline
+            fullWidth
+            name="comment"
+            variant="outlined"
+            onBlur={handleBlur}
+            value={values.comment}
+            onChange={handleChange}
+            placeholder="Write a review here..."
+            error={!!touched.comment && !!errors.comment}
+            helperText={touched.comment && errors.comment}
+          />
+        </Box>
 
-      {/*  <Button*/}
-      {/*    variant="contained"*/}
-      {/*    color="primary"*/}
-      {/*    type="submit"*/}
-      {/*    disabled={!(dirty && isValid)}*/}
-      {/*  >*/}
-      {/*    Submit*/}
-      {/*  </Button>*/}
-      {/*</form>*/}
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          disabled={!(dirty && isValid)}
+        >
+          Submit
+        </Button>
+      </form>
     </Box>
   );
 };

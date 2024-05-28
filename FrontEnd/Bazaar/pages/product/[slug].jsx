@@ -76,7 +76,6 @@ const ProductDetails = (props) => {
         </div>
 
         {relatedProducts && <RelatedProducts productsData={relatedProducts} />}
-
         <div style={{
           display: "grid",
           textAlign: "center",

@@ -30,7 +30,7 @@ const StyledTableRow = styled(TableRow)(() => ({
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   color: theme.palette.grey[600],
   "& .MuiSvgIcon-root": {
-    fontSize: 25,
+    fontSize: 19,
   },
   ":hover": {
     color: theme.palette.info.main,
