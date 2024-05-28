@@ -10,8 +10,6 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order,Integer> {
 
-    List<Order> findByOrderDate(Date orderDate);
-
-    List<Order> findByCounterId(int counterId);
+    List<Order> findByUser_Counter_Id(int id);
 
 }

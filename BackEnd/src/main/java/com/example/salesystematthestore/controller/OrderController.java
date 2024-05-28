@@ -26,9 +26,9 @@ public class OrderController {
 
 
     @GetMapping("/get-money-by-date")
-    public ResponseEntity<?> getOrder(@RequestParam int countId, @RequestParam String startDate, @RequestParam String endDate ){
+    public ResponseEntity<?> getOrder(@RequestParam int userId, @RequestParam int countId, @RequestParam String startDate, @RequestParam String endDate) {
 
-        Double totalMoney = orderServiceImp.getTotalMoneyByDate(countId, startDate,endDate);
+        Double totalMoney = orderServiceImp.getTotalMoneyByDate(countId, startDate, endDate);
         ResponseData responseData = new ResponseData();
 
         responseData.setData(totalMoney);
@@ -37,9 +37,9 @@ public class OrderController {
     }
 
     @GetMapping("/get-number-order-by-date")
-    public ResponseEntity<?> getNumberOfOrderByDate(@RequestParam int countId, @RequestParam String startDate, @RequestParam String endDate ){
+    public ResponseEntity<?> getNumberOfOrderByDate(@RequestParam int userId, @RequestParam int countId, @RequestParam String startDate, @RequestParam String endDate) {
 
-        int numberOfOrder = orderServiceImp.getNumberOfOrderByDate(countId, startDate,endDate);
+        int numberOfOrder = orderServiceImp.getNumberOfOrderByDate(countId, startDate, endDate);
         ResponseData responseData = new ResponseData();
 
         responseData.setData(numberOfOrder);
@@ -49,9 +49,9 @@ public class OrderController {
 
 
     @GetMapping("/get-number-item-by-date")
-    public ResponseEntity<?> getNumberOfItemByDate(@RequestParam int countId, @RequestParam String startDate, @RequestParam String endDate ){
+    public ResponseEntity<?> getNumberOfItemByDate(@RequestParam int userId, @RequestParam int countId, @RequestParam String startDate, @RequestParam String endDate) {
 
-        int numberOfItem = orderServiceImp.getNumberOfItemByDate(countId, startDate,endDate);
+        int numberOfItem = orderServiceImp.getNumberOfItemByDate(countId, startDate, endDate);
 
         ResponseData responseData = new ResponseData();
 

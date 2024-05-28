@@ -1,7 +1,9 @@
 package com.example.salesystematthestore.service;
 
 import com.example.salesystematthestore.entity.Order;
+import com.example.salesystematthestore.entity.Users;
 import com.example.salesystematthestore.repository.OrderRepository;
+import com.example.salesystematthestore.repository.UserRepository;
 import com.example.salesystematthestore.service.imp.OrderServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,12 +20,16 @@ public class OrderService implements OrderServiceImp {
     @Autowired
     OrderRepository orderRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     @Override
     public Double getTotalMoneyByDate(int counterId, String startDate, String endDate) {
 
+
         double totalMoney = 0;
 
-        List<Order> orderList = orderRepository.findByCounterId(counterId);
+        List<Order> orderList = orderRepository.findByUser_Counter_Id(counterId);
 
         List<String> dates = getDatesInRange(startDate, endDate);
 
@@ -62,11 +68,9 @@ public class OrderService implements OrderServiceImp {
 
         int totalOfNumber = 0;
 
-        List<Order> orders = new ArrayList<>();
-
-        List<Order> orderList = orderRepository.findByCounterId(counterId);
-
         List<String> dates = getDatesInRange(startDate, endDate);
+
+        List<Order> orderList = orderRepository.findByUser_Counter_Id(counterId);
 
         for(String date:dates){
             for(Order order: orderList){
@@ -81,11 +85,10 @@ public class OrderService implements OrderServiceImp {
 
     @Override
     public Integer getNumberOfItemByDate(int counterId, String startDate, String endDate) {
+
         int totalOfItem = 0;
 
-        List<Order> orders = new ArrayList<>();
-
-        List<Order> orderList = orderRepository.findByCounterId(counterId);
+        List<Order> orderList = orderRepository.findByUser_Counter_Id(counterId);
 
         List<String> dates = getDatesInRange(startDate, endDate);
 
@@ -99,5 +102,6 @@ public class OrderService implements OrderServiceImp {
 
         return totalOfItem;
     }
+
 
 }
