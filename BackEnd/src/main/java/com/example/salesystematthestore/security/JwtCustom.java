@@ -45,7 +45,7 @@ public class JwtCustom extends OncePerRequestFilter {
                 String username = String.valueOf(claims.get("username"));
                 String role = String.valueOf(claims.get("role"));
                 ArrayList<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-                grantedAuthorities.add(new SimpleGrantedAuthority(role));
+                grantedAuthorities.add(new SimpleGrantedAuthority(role.toUpperCase()));
                 Authentication usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username,"", grantedAuthorities);
                 SecurityContext securityContext = SecurityContextHolder.getContext();
                 securityContext.setAuthentication(usernamePasswordAuthenticationToken);

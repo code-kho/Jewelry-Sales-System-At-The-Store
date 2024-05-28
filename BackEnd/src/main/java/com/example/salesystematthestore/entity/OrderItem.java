@@ -28,7 +28,7 @@ public class OrderItem {
     @ManyToOne(cascade = {
             CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
     })
-    @JoinColumn(name = "product_id",insertable=false, updatable=false)
+    @JoinColumn(name = "order_id",insertable=false, updatable=false)
     private Order order;
 
     @Column(name = "quantity")

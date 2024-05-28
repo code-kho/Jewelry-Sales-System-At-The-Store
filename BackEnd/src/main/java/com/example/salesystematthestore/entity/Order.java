@@ -1,20 +1,15 @@
 package com.example.salesystematthestore.entity;
 
+import com.example.salesystematthestore.payload.request.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "[order]")
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class Order {
 
     @Id
@@ -45,8 +40,8 @@ public class Order {
     @ManyToOne(cascade = {
             CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
     })
-    @JoinColumn(name = "counter_id")
-    private Counter counter;
+    @JoinColumn(name = "user_id")
+    private Users user;
 
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = {
