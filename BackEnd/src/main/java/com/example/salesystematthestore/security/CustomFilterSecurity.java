@@ -32,7 +32,7 @@ public class CustomFilterSecurity {
                 .sessionManagement((session)->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(request ->{
-                    request.requestMatchers("/login/**").permitAll();
+                    request.requestMatchers("/user/signin/**").permitAll();
                     request.anyRequest().hasAnyAuthority("ADMIN","MANAGER");
                 });
         http.addFilterBefore(jwtCustom, UsernamePasswordAuthenticationFilter.class);

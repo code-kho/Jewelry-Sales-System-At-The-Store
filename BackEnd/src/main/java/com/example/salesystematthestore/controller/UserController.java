@@ -1,21 +1,22 @@
 package com.example.salesystematthestore.controller;
 
+
 import com.example.salesystematthestore.payload.ResponseData;
 import com.example.salesystematthestore.repository.UserRepository;
 import com.example.salesystematthestore.service.imp.LoginServiceImp;
+import com.example.salesystematthestore.service.imp.UserServiceImp;
 import com.example.salesystematthestore.utils.JwtTokenHelper;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Encoders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.crypto.SecretKey;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/login")
-public class LoginController {
+@RequestMapping("/user")
+public class UserController {
 
     @Autowired
     LoginServiceImp loginServiceImp;
@@ -26,6 +27,19 @@ public class LoginController {
 
     @Autowired
     UserRepository usersRepository;
+
+    @Autowired
+    UserServiceImp userServiceImp;
+
+    @PostMapping("/get-user-information")
+    public ResponseEntity getUserInformation(@RequestParam int userId){
+
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(userServiceImp.getUserInformation(userId));
+
+        return new ResponseEntity(responseData, HttpStatus.OK);
+    }
 
 
     @PostMapping("/signin")

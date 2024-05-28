@@ -64,5 +64,12 @@ public class ProductService implements ProductServiceImp {
         return result;
     }
 
+    @Override
+    public List<ProductDTO> getProductByCategory(int categoryId) {
+
+
+        return List.of();
+    }
+
 
 }

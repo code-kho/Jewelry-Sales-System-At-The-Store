@@ -7,4 +7,7 @@ public interface ProductServiceImp {
 
     List<ProductDTO> getProductOutOfStock(int counterId);
 
+    List<ProductDTO> getProductByCategory(int categoryId);
+
+
 }
