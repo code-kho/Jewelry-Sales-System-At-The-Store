@@ -18,5 +18,4 @@ public class KeyProductCouter implements Serializable {
     private int couterId;
 
 
-
 }

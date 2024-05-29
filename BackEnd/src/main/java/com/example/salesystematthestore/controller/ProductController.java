@@ -28,4 +28,25 @@ public class ProductController {
 
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
+
+    @GetMapping("/show-product")
+    public ResponseEntity<?> showProduct(@RequestParam int countId,@RequestParam int pageSize, @RequestParam int page,@RequestParam String sortKeyword,@RequestParam String sortType, @RequestParam String categoryName, @RequestParam String searchKeyword){
+
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(productServiceImp.showProduct(countId, pageSize, page, sortKeyword, sortType, categoryName, searchKeyword));
+
+        return new ResponseEntity<>(responseData,HttpStatus.OK);
+    }
+
+    @GetMapping("/get-product-type")
+    public ResponseEntity<?> showProductType(){
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(productServiceImp.getProductType());
+
+        return new ResponseEntity<>(responseData,HttpStatus.OK);
+    }
+
+
 }
