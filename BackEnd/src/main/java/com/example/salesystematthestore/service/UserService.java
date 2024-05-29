@@ -8,6 +8,8 @@ import com.example.salesystematthestore.service.imp.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class UserService implements UserServiceImp {
 
@@ -42,5 +44,9 @@ public class UserService implements UserServiceImp {
         userDTO.setRevenue(revenue);
 
         return userDTO;
+    }
+
+    private String makeCode(){
+        return UUID.randomUUID().toString();
     }
 }
