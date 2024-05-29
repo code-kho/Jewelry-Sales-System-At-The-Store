@@ -14,4 +14,7 @@ public interface UserRepository extends JpaRepository<Users, Integer> {
 
     Users findById(int userId);
 
+    List<Users> findByCounter_Id(int id);
+
+
 }
