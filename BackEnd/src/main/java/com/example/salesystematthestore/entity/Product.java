@@ -26,6 +26,9 @@ public class Product {
     @Column(name = "name")
     private String productName;
 
+    @Column(name = "ratio_price")
+    private double ratioPrice;
+
     @Column(name = "weight")
     private float weight;
 

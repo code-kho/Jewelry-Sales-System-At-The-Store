@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/order")
@@ -60,5 +61,28 @@ public class OrderController {
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
+    @GetMapping("/get-money-each-day")
+    public ResponseEntity<?> getMoneyEachDay(@RequestParam int countId, @RequestParam String startDate, @RequestParam String endDate) {
+
+        HashMap<String,Double> result = orderServiceImp.getArrayMoneyByDate(countId, startDate, endDate);
+
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(result);
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-profit-each-day")
+    public ResponseEntity<?> getProfitEachDay(@RequestParam int countId, @RequestParam String startDate, @RequestParam String endDate) {
+
+        HashMap<String,Double> result = orderServiceImp.getArrayProfitByDate(countId, startDate, endDate);
+
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(result);
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
 
 }

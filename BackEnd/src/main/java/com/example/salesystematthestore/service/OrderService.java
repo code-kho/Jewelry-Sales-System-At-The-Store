@@ -1,6 +1,7 @@
 package com.example.salesystematthestore.service;
 
 import com.example.salesystematthestore.entity.Order;
+import com.example.salesystematthestore.entity.OrderItem;
 import com.example.salesystematthestore.entity.Users;
 import com.example.salesystematthestore.repository.OrderRepository;
 import com.example.salesystematthestore.repository.UserRepository;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -42,6 +44,59 @@ public class OrderService implements OrderServiceImp {
         }
 
         return totalMoney;
+    }
+
+    @Override
+    public HashMap<String, Double> getArrayMoneyByDate(int counterId, String startDate, String endDate) {
+
+        HashMap<String, Double> result = new HashMap<>();
+
+        List<Order> orderList = orderRepository.findByUser_Counter_Id(counterId);
+
+        List<String> dates = getDatesInRange(startDate, endDate);
+
+        for(String date:dates){
+            double totalMoney = 0;
+
+            for(Order order: orderList){
+                if(order.getOrderDate().toString().split(" ")[0].equals(date)){
+                    totalMoney += order.getTotalPrice();
+                }
+            }
+            result.put(date,totalMoney);
+
+        }
+
+        return result;
+    }
+
+    @Override
+    public HashMap<String, Double> getArrayProfitByDate(int counterId, String startDate, String endDate) {
+
+        HashMap<String, Double> result = new HashMap<>();
+
+        List<Order> orderList = orderRepository.findByUser_Counter_Id(counterId);
+
+        List<String> dates = getDatesInRange(startDate, endDate);
+
+        for(String date:dates){
+            double totalMoney = 0;
+
+            for(Order order: orderList){
+                if(order.getOrderDate().toString().split(" ")[0].equals(date)){
+                    for(OrderItem orderItem : order.getOrderItemList()){
+                        double price = (orderItem.getPrice()-(orderItem.getPrice()/orderItem.getProduct().getRatioPrice()))*orderItem.getQuantity();
+
+                        totalMoney+=price;
+
+                    }
+                }
+            }
+            result.put(date,totalMoney);
+
+        }
+
+        return null;
     }
 
 
