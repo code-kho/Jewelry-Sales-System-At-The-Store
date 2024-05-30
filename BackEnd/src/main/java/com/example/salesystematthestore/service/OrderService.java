@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class OrderService implements OrderServiceImp {
@@ -156,6 +153,108 @@ public class OrderService implements OrderServiceImp {
         }
 
         return totalOfItem;
+    }
+
+    public HashMap<String, Integer> getNumberOfOrderEachDate(int counterId, String startDate, String endDate) {
+
+        HashMap<String, Integer> result = new HashMap<>();
+        int totalOfNumber = 0;
+
+        List<String> dates = getDatesInRange(startDate, endDate);
+
+        List<Order> orderList = orderRepository.findByUser_Counter_Id(counterId);
+
+        for(String date:dates){
+            int numberOfOrder = 0;
+
+            for(Order order: orderList){
+                if(order.getOrderDate().toString().split(" ")[0].equals(date)){
+                    numberOfOrder++;
+                }
+            }
+            result.put(date, numberOfOrder);
+        }
+
+        return result;
+    }
+
+    public String getMonthStartDate(int year, int month) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month - 1, 1);
+
+        int firstDay = calendar.get(Calendar.DAY_OF_MONTH);
+        int firstMonth = calendar.get(Calendar.MONTH) + 1;
+        int firstYear = calendar.get(Calendar.YEAR);
+        String startDate = String.format("%04d-%02d-%02d", firstYear, firstMonth, firstDay);
+
+        return startDate;
+    }
+
+    public String getMonthEndDate(int year, int month) {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(year, month, 0);
+        int lastDay = calendar.get(Calendar.DAY_OF_MONTH);
+        int lastMonth = calendar.get(Calendar.MONTH) + 1;
+        int lastYear = calendar.get(Calendar.YEAR);
+        String endDate = String.format("%04d-%02d-%02d", lastYear, lastMonth, lastDay);
+
+        return endDate;
+    }
+
+    public HashMap<Integer, Double> getTotalMoneyEachMonth(int counterId, int year) {
+
+        HashMap<Integer, Double> result = new HashMap<>();
+
+
+        for(int i = 1; i<13; i++){
+
+            String startDate = getMonthStartDate(year,i);
+
+            String endDate = getMonthEndDate(year,i);
+
+
+            result.put(i, getTotalMoneyByDate(counterId,startDate,endDate));
+
+        }
+
+        return result;
+    }
+
+    public HashMap<Integer, Double> getProfitEachMonth(int counterId, int year) {
+
+        HashMap<Integer, Double> result = new HashMap<>();
+
+
+        for(int i = 1; i<13; i++){
+
+            double totalMoney = 0;
+
+            String startDate = getMonthStartDate(year,i);
+            String endDate = getMonthEndDate(year,i);
+
+            List<String> dates = getDatesInRange(startDate,endDate);
+            List<Order> orderList = orderRepository.findByUser_Counter_Id(counterId);
+
+            for(String date:dates){
+
+                for(Order order: orderList){
+                    if(order.getOrderDate().toString().split(" ")[0].equals(date)){
+                        for(OrderItem orderItem : order.getOrderItemList()){
+
+                            double price = (orderItem.getPrice()/orderItem.getProduct().getRatioPrice())*orderItem.getQuantity();
+                            totalMoney+=price;
+
+                        }
+                    }
+                }
+            }
+
+            result.put(i, totalMoney);
+
+        }
+
+        return result;
     }
 
 

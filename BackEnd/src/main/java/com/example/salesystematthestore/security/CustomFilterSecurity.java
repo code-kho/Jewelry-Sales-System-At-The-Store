@@ -33,8 +33,9 @@ public class CustomFilterSecurity {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(request ->{
                     request.requestMatchers("/user/signin/**").permitAll();
-                    request.requestMatchers("user/get-info-by-token").hasAnyAuthority("ADMIN","MANAGER","STAFF");
-                    request.requestMatchers("user/get-staff-list").hasAnyAuthority("ADMIN","MANAGER");
+                    request.requestMatchers("/product/show-product").hasAnyAuthority("ADMIN","MANAGER","STAFF");
+                    request.requestMatchers("/user/get-info-by-token").hasAnyAuthority("ADMIN","MANAGER","STAFF");
+                    request.requestMatchers("/user/get-staff-list").hasAnyAuthority("ADMIN","MANAGER");
                     request.anyRequest().hasAnyAuthority("ADMIN","MANAGER");
                 });
         http.addFilterBefore(jwtCustom, UsernamePasswordAuthenticationFilter.class);

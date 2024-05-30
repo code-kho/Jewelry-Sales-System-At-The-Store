@@ -16,4 +16,10 @@ public interface OrderServiceImp {
 
     HashMap<String, Double> getArrayProfitByDate(int counterId, String startDate, String endDate);
 
+    HashMap<String, Integer> getNumberOfOrderEachDate(int counterId, String startDate, String endDate);
+
+    HashMap<Integer, Double> getTotalMoneyEachMonth(int counterId, int year);
+
+    HashMap<Integer, Double> getProfitEachMonth(int counterId, int year);
+
 }

@@ -85,4 +85,34 @@ public class OrderController {
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
+    @GetMapping("/get-total-order-each-day")
+    public ResponseEntity<?> getTotalOrderEachDay(@RequestParam int countId, @RequestParam String startDate, @RequestParam String endDate) {
+
+        HashMap<String,Integer> result = orderServiceImp.getNumberOfOrderEachDate(countId, startDate, endDate);
+
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(result);
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/total-money-each-month")
+    public ResponseEntity<?> getTotalMoneyEachMonth(@RequestParam int countId, @RequestParam int year){
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(orderServiceImp.getTotalMoneyEachMonth(countId,year));
+
+        return new ResponseEntity<>(responseData,HttpStatus.OK);
+    }
+
+    @GetMapping("/total-profit-each-month")
+    public ResponseEntity<?> getTotalProfitEachMonth(@RequestParam int countId, @RequestParam int year){
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(orderServiceImp.getProfitEachMonth(countId,year));
+
+        return new ResponseEntity<>(responseData,HttpStatus.OK);
+    }
 }

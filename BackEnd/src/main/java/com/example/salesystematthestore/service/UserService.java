@@ -109,4 +109,10 @@ public class UserService implements UserServiceImp {
     private String makeCode() {
         return UUID.randomUUID().toString();
     }
+
+    @Override
+    public List<UserDTO> topFiveKPI(int counterId) {
+        List<Users> userList = userRepository.findByCounter_Id(counterId);
+        return List.of();
+    }
 }
