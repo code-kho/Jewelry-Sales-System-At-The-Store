@@ -59,4 +59,10 @@ public class Users {
             CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
     })
     private List<Order> Order;
+
+    @ManyToOne(cascade = {
+            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
+    })
+    @JoinColumn(name = "status_id")
+    private UserStatus userStatus;
 }

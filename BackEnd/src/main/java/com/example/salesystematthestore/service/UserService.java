@@ -212,5 +212,19 @@ public class UserService implements UserServiceImp {
         return result;
     }
 
+    @Override
+    public boolean deleteUser(int userId) {
+
+        boolean result = true;
+
+        try {
+            userRepository.deleteById(userId);
+        }catch (Exception e){
+            result = false;
+        }
+
+        return result;
+    }
+
 
 }

@@ -58,4 +58,8 @@ public class Order {
     @OneToOne(mappedBy = "order")
     private Warranty warranty;
 
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.REFRESH,CascadeType.PERSIST,CascadeType.MERGE})
+    @JoinColumn(name = "status_id")
+    private OrderStatus orderStatus;
+
 }
