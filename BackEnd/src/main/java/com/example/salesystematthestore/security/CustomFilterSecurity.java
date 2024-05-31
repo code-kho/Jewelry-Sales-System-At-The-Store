@@ -34,6 +34,7 @@ public class CustomFilterSecurity {
             request.requestMatchers("/user/get-info-by-token").hasAnyAuthority("ADMIN", "MANAGER", "STAFF");
             request.requestMatchers("/user/get-staff-list").hasAnyAuthority("ADMIN", "MANAGER");
             request.requestMatchers("/user/signup/**").hasAnyAuthority("ADMIN");
+            request.requestMatchers("/user/update/**").hasAnyAuthority("ADMIN");
             request.anyRequest().hasAnyAuthority("ADMIN", "MANAGER");
         });
         http.addFilterBefore(jwtCustom, UsernamePasswordAuthenticationFilter.class);

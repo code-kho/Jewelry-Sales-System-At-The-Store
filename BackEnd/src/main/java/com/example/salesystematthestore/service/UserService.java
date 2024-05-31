@@ -161,23 +161,50 @@ public class UserService implements UserServiceImp {
         return new ArrayList<>(userDTOList.subList(0, 5));
     }
 
+    private void transferAndSave(Users userInput,User user){
+
+        Users userAdd;
+        if(userInput == null){
+            userAdd = new Users();
+        } else{
+            userAdd = userRepository.findById(userInput.getId());
+        }
+
+
+        userAdd.setFullName(user.getName());
+        userAdd.setUsername(user.getUserName());
+        userAdd.setEmail(user.getEmail());
+        userAdd.setPassword(encodePasword.encode(user.getPassword()));
+        userAdd.setAddress(user.getAddress());
+        userAdd.setPhoneNumber(user.getPhoneNumber());
+        userAdd.setLoginCode("");
+        userAdd.setRole(roleRepository.findById(user.getRoleId()));
+        userAdd.setCounter(counterRepository.findById(user.getCounterId()));
+
+        userRepository.save(userAdd);
+    }
+
     @Override
     public boolean addUser(User user) {
         boolean result = true;
 
         try {
-            Users userAdd = new Users();
-            userAdd.setFullName(user.getName());
-            userAdd.setUsername(user.getUserName());
-            userAdd.setEmail(user.getEmail());
-            userAdd.setPassword(encodePasword.encode(user.getPassword()));
-            userAdd.setAddress(user.getAddress());
-            userAdd.setPhoneNumber(user.getPhoneNumber());
-            userAdd.setLoginCode("");
-            userAdd.setRole(roleRepository.findById(user.getRoleId()));
-            userAdd.setCounter(counterRepository.findById(user.getCounterId()));
+            transferAndSave(null, user);
+        } catch (Exception e){
+            result = false;
+        }
 
-            userRepository.save(userAdd);
+        return result;
+    }
+
+    @Override
+    public boolean updateUser(User user, int userId) {
+        boolean result = true;
+
+        try{
+            Users users = userRepository.findById(userId);
+
+            transferAndSave(users, user);
         } catch (Exception e){
             result = false;
         }

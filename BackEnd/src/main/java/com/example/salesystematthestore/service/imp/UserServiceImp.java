@@ -18,7 +18,7 @@ public interface UserServiceImp {
 
      boolean addUser(User user);
 
-     boolean updateUser(User user);
+     boolean updateUser(User user, int userId);
 
     
 }

@@ -105,5 +105,36 @@ public class UserController {
     }
 
 
+    @PostMapping("/update")
+    public ResponseEntity<?> update(@RequestBody User user){
+        ResponseData responseData = new ResponseData();
+
+        if(userRepository.existsById(user.getId())){
+            if(userRepository.existsByEmail(user.getEmail())){
+                if(!userRepository.findById(user.getId()).getEmail().equals(user.getEmail())){
+                    responseData.setDesc("This email doesn't available for update");
+                } else{
+                    responseData.setData(userServiceImp.updateUser(user, user.getId()));
+                    responseData.setDesc("Success");
+                }
+            }else if(userRepository.existsByUsername(user.getUserName())){
+                if(!userRepository.findById(user.getId()).getUsername().equals(user.getUserName())){
+                    responseData.setDesc("This username doesn't available for update");
+                } else{
+                    responseData.setData(userServiceImp.updateUser(user, user.getId()));
+                    responseData.setDesc("Success");
+                }
+            } else {
+                responseData.setData(userServiceImp.updateUser(user, user.getId()));
+                responseData.setDesc("Success");
+            }
+        } else{
+            responseData.setDesc("This user doesn't exist");
+        }
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+
+
 
 }
