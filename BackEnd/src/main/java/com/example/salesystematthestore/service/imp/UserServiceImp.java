@@ -1,13 +1,26 @@
 package com.example.salesystematthestore.service.imp;
 
+import com.example.salesystematthestore.dto.UserDTO;
+import com.example.salesystematthestore.entity.Users;
 import com.example.salesystematthestore.payload.request.User;
+
+import java.util.List;
 
 public interface UserServiceImp {
 
-    String UpdateUserInfomation(int id, String name, String address, String phoneNumber);
+     UserDTO getUserInformation(int userId);
 
-    String UpdateUserSecurity(String oldPassword,String newPassword, String oldUsername, String newUsername);
+     UserDTO getUserInformationByToken(String token);
 
-    boolean createUsers(User user);
+     List<UserDTO> getStaffList(int counterId);
 
+     List<UserDTO> topFiveKPI(int counterId);
+
+     boolean addUser(User user);
+
+     boolean updateUser(User user, int userId);
+
+     boolean deleteUser(int userId);
+
+    
 }

@@ -1,5 +1,6 @@
 package com.example.salesystematthestore.entity;
 
+import com.example.salesystematthestore.payload.request.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -39,8 +40,8 @@ public class Order {
     @ManyToOne(cascade = {
             CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
     })
-    @JoinColumn(name = "counter_id")
-    private Counter counter;
+    @JoinColumn(name = "user_id")
+    private Users user;
 
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = {
@@ -56,5 +57,9 @@ public class Order {
 
     @OneToOne(mappedBy = "order")
     private Warranty warranty;
+
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.REFRESH,CascadeType.PERSIST,CascadeType.MERGE})
+    @JoinColumn(name = "status_id")
+    private OrderStatus orderStatus;
 
 }
