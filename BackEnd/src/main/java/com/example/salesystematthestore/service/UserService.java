@@ -3,6 +3,9 @@ package com.example.salesystematthestore.service;
 import com.example.salesystematthestore.dto.UserDTO;
 import com.example.salesystematthestore.entity.Order;
 import com.example.salesystematthestore.entity.Users;
+import com.example.salesystematthestore.payload.request.User;
+import com.example.salesystematthestore.repository.CounterRepository;
+import com.example.salesystematthestore.repository.RoleRepository;
 import com.example.salesystematthestore.repository.UserRepository;
 import com.example.salesystematthestore.service.imp.UserServiceImp;
 import com.example.salesystematthestore.utils.JwtTokenHelper;
@@ -12,12 +15,11 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserService implements UserServiceImp {
@@ -31,6 +33,15 @@ public class UserService implements UserServiceImp {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
+
+    @Autowired
+    PasswordEncoder encodePasword;
+
+    @Autowired
+    private CounterRepository counterRepository;
 
     @Override
     public UserDTO getUserInformation(int userId) {
@@ -112,7 +123,67 @@ public class UserService implements UserServiceImp {
 
     @Override
     public List<UserDTO> topFiveKPI(int counterId) {
+
         List<Users> userList = userRepository.findByCounter_Id(counterId);
-        return List.of();
+
+        List<UserDTO> userDTOList = new ArrayList<>();
+
+        for (Users user : userList) {
+            if (user.getRole().getName().equals("staff")) {
+                UserDTO userDTO = new UserDTO();
+
+                double revenue = 0;
+
+                for (Order order : user.getOrder()) {
+                    revenue += order.getTotalPrice();
+                }
+
+                userDTO.setId(user.getId());
+                userDTO.setFullName(user.getFullName());
+                userDTO.setUsername(user.getUsername());
+                userDTO.setAddress(user.getAddress());
+                userDTO.setPhoneNumber(user.getPhoneNumber());
+                userDTO.setRevenue(revenue);
+                userDTO.setRoleName(user.getRole().getName());
+
+
+                userDTOList.add(userDTO);
+            }
+        }
+
+        Collections.sort(userDTOList, new Comparator<UserDTO>() {
+            @Override
+            public int compare(UserDTO o1, UserDTO o2) {
+                return -Double.compare(o1.getRevenue(), o2.getRevenue());
+            }
+        });
+
+        return new ArrayList<>(userDTOList.subList(0, 5));
     }
+
+    @Override
+    public boolean addUser(User user) {
+        boolean result = true;
+
+        try {
+            Users userAdd = new Users();
+            userAdd.setFullName(user.getName());
+            userAdd.setUsername(user.getUserName());
+            userAdd.setEmail(user.getEmail());
+            userAdd.setPassword(encodePasword.encode(user.getPassword()));
+            userAdd.setAddress(user.getAddress());
+            userAdd.setPhoneNumber(user.getPhoneNumber());
+            userAdd.setLoginCode("");
+            userAdd.setRole(roleRepository.findById(user.getRoleId()));
+            userAdd.setCounter(counterRepository.findById(user.getCounterId()));
+
+            userRepository.save(userAdd);
+        } catch (Exception e){
+            result = false;
+        }
+
+        return result;
+    }
+
+
 }

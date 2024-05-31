@@ -8,12 +8,17 @@ import java.util.List;
 
 public interface UserServiceImp {
 
-    public UserDTO getUserInformation(int userId);
+     UserDTO getUserInformation(int userId);
 
-    public UserDTO getUserInformationByToken(String token);
+     UserDTO getUserInformationByToken(String token);
 
-    public List<UserDTO> getStaffList(int counterId);
+     List<UserDTO> getStaffList(int counterId);
 
-    public List<UserDTO> topFiveKPI(int counterId);
+     List<UserDTO> topFiveKPI(int counterId);
+
+     boolean addUser(User user);
+
+     boolean updateUser(User user);
+
     
 }

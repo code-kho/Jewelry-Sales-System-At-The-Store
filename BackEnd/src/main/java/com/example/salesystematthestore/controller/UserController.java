@@ -2,6 +2,7 @@ package com.example.salesystematthestore.controller;
 
 
 import com.example.salesystematthestore.payload.ResponseData;
+import com.example.salesystematthestore.payload.request.User;
 import com.example.salesystematthestore.repository.UserRepository;
 import com.example.salesystematthestore.service.imp.LoginServiceImp;
 import com.example.salesystematthestore.service.imp.UserServiceImp;
@@ -27,6 +28,8 @@ public class UserController {
 
     @Autowired
     UserServiceImp userServiceImp;
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/get-user-information")
     public ResponseEntity getUserInformation(@RequestParam int userId) {
@@ -71,6 +74,32 @@ public class UserController {
         ResponseData responseData = new ResponseData();
 
         responseData.setData(userServiceImp.getStaffList(countId));
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-top-5")
+    public ResponseEntity<?> getTopFiveKPI(@RequestParam int countId) {
+
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(userServiceImp.topFiveKPI(countId));
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> signup(@RequestBody User user){
+        ResponseData responseData = new ResponseData();
+
+        if(userRepository.existsByEmail(user.getEmail())){
+            responseData.setDesc("This email already have exist in system");
+        } else if(userRepository.existsByUsername(user.getUserName())){
+            responseData.setDesc("This username already have exist in system");
+        } else{
+            responseData.setData(userServiceImp.addUser(user));
+            responseData.setDesc("Success");
+        }
 
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }

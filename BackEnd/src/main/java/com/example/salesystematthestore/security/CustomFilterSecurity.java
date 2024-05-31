@@ -28,16 +28,14 @@ public class CustomFilterSecurity {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors(Customizer.withDefaults())
-                .sessionManagement((session)->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(request ->{
-                    request.requestMatchers("/user/signin/**").permitAll();
-                    request.requestMatchers("/product/show-product").hasAnyAuthority("ADMIN","MANAGER","STAFF");
-                    request.requestMatchers("/user/get-info-by-token").hasAnyAuthority("ADMIN","MANAGER","STAFF");
-                    request.requestMatchers("/user/get-staff-list").hasAnyAuthority("ADMIN","MANAGER");
-                    request.anyRequest().hasAnyAuthority("ADMIN","MANAGER");
-                });
+        http.cors(Customizer.withDefaults()).sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).csrf(csrf -> csrf.disable()).authorizeHttpRequests(request -> {
+            request.requestMatchers("/user/signin/**").permitAll();
+            request.requestMatchers("/product/show-product").hasAnyAuthority("ADMIN", "MANAGER", "STAFF");
+            request.requestMatchers("/user/get-info-by-token").hasAnyAuthority("ADMIN", "MANAGER", "STAFF");
+            request.requestMatchers("/user/get-staff-list").hasAnyAuthority("ADMIN", "MANAGER");
+            request.requestMatchers("/user/signup/**").hasAnyAuthority("ADMIN");
+            request.anyRequest().hasAnyAuthority("ADMIN", "MANAGER");
+        });
         http.addFilterBefore(jwtCustom, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
@@ -54,7 +52,7 @@ public class CustomFilterSecurity {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

@@ -44,9 +44,9 @@ public class OrderService implements OrderServiceImp {
     }
 
     @Override
-    public HashMap<String, Double> getArrayMoneyByDate(int counterId, String startDate, String endDate) {
+    public LinkedHashMap<String, Double> getArrayMoneyByDate(int counterId, String startDate, String endDate) {
 
-        HashMap<String, Double> result = new HashMap<>();
+        LinkedHashMap<String, Double> result = new LinkedHashMap<>();
 
         List<Order> orderList = orderRepository.findByUser_Counter_Id(counterId);
 
@@ -68,9 +68,9 @@ public class OrderService implements OrderServiceImp {
     }
 
     @Override
-    public HashMap<String, Double> getArrayProfitByDate(int counterId, String startDate, String endDate) {
+    public LinkedHashMap<String, Double> getArrayProfitByDate(int counterId, String startDate, String endDate) {
 
-        HashMap<String, Double> result = new HashMap<>();
+        LinkedHashMap<String, Double> result = new LinkedHashMap<>();
 
         List<Order> orderList = orderRepository.findByUser_Counter_Id(counterId);
 
@@ -155,9 +155,9 @@ public class OrderService implements OrderServiceImp {
         return totalOfItem;
     }
 
-    public HashMap<String, Integer> getNumberOfOrderEachDate(int counterId, String startDate, String endDate) {
+    public LinkedHashMap<String, Integer> getNumberOfOrderEachDate(int counterId, String startDate, String endDate) {
 
-        HashMap<String, Integer> result = new HashMap<>();
+        LinkedHashMap<String, Integer> result = new LinkedHashMap<>();
         int totalOfNumber = 0;
 
         List<String> dates = getDatesInRange(startDate, endDate);
@@ -202,9 +202,9 @@ public class OrderService implements OrderServiceImp {
         return endDate;
     }
 
-    public HashMap<Integer, Double> getTotalMoneyEachMonth(int counterId, int year) {
+    public LinkedHashMap<Integer, Double> getTotalMoneyEachMonth(int counterId, int year) {
 
-        HashMap<Integer, Double> result = new HashMap<>();
+        LinkedHashMap<Integer, Double> result = new LinkedHashMap<>();
 
 
         for(int i = 1; i<13; i++){
@@ -221,9 +221,9 @@ public class OrderService implements OrderServiceImp {
         return result;
     }
 
-    public HashMap<Integer, Double> getProfitEachMonth(int counterId, int year) {
+    public LinkedHashMap<Integer, Double> getProfitEachMonth(int counterId, int year) {
 
-        HashMap<Integer, Double> result = new HashMap<>();
+        LinkedHashMap<Integer, Double> result = new LinkedHashMap<>();
 
 
         for(int i = 1; i<13; i++){
