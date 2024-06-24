@@ -10,5 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface ProductCounterRepository extends JpaRepository<ProductCounter, KeyProductCouter> {
     ProductCounter findByKeyProductCouter(KeyProductCouter keyProductCouter);
 
+    boolean existsByKeyProductCouter(KeyProductCouter keyProductCouter);
+
 
 }

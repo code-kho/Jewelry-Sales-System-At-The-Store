@@ -27,8 +27,9 @@ public class JwtTokenHelper {
                 .claim("id", users.getId())
                 .claim("couterAddress",users.getCounter().getAddress())
                 .claim("phoneNumber", users.getPhoneNumber())
+                .claim("counterId", users.getCounter().getId())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date().getTime()) + 30000000))
+                .setExpiration(new Date((new Date().getTime()) + 300000000))
                 .signWith(secretKey).compact();
         return token;
     }

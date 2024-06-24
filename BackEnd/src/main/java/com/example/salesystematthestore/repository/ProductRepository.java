@@ -13,8 +13,17 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product,Integer> {
     Page<Product> findByProductNameContainsAndProductCounterList_Counter_Id(String productName, int id, Pageable pageable);
 
+    Page<Product> findByProductNameContains(String productName, Pageable pageable);
+
+    List<Product> findByProductNameContains(String productName);
 
     Page<Product> findByProductCounterList_Counter_Id(int id, Pageable pageable);
 
+    Product findByProductId(int productId);
 
+    boolean existsByProductId(int productId);
+
+    List<Product> findByProductIdOrProductNameContains(int productId, String productName);
+
+    Product findByBarCode(String barCode);
 }

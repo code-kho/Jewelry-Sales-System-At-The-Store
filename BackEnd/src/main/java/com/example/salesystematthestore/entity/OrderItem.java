@@ -36,4 +36,7 @@ public class OrderItem {
 
     @Column(name = "price")
     private double price;
+
+    @Column(name = "avalible_buy_back")
+    private int avalibleBuyBack;
 }

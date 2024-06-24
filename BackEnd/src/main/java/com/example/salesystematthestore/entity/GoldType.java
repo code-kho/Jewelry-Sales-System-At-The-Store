@@ -25,13 +25,15 @@ public class GoldType {
     @Column(name = "type_name")
     private String typeName;
 
+    @Column(name = "update_date")
+    private Date updateDate;
 
-    @Column(name = "create_date")
-    private Date createDate;
+    @Column(name = "price")
+    private double price;
 
-   @OneToMany( mappedBy = "goldType",fetch = FetchType.LAZY,  cascade = {
-           CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH
-   })
-   private List<Product> productList;
+    @OneToMany(mappedBy = "goldType", fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH
+    })
+    private List<Product> productList;
 
 }

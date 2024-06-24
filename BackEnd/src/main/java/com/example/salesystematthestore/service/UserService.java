@@ -1,12 +1,12 @@
 package com.example.salesystematthestore.service;
 
 import com.example.salesystematthestore.dto.UserDTO;
+import com.example.salesystematthestore.entity.BuyBack;
 import com.example.salesystematthestore.entity.Order;
+import com.example.salesystematthestore.entity.Role;
 import com.example.salesystematthestore.entity.Users;
 import com.example.salesystematthestore.payload.request.User;
-import com.example.salesystematthestore.repository.CounterRepository;
-import com.example.salesystematthestore.repository.RoleRepository;
-import com.example.salesystematthestore.repository.UserRepository;
+import com.example.salesystematthestore.repository.*;
 import com.example.salesystematthestore.service.imp.UserServiceImp;
 import com.example.salesystematthestore.utils.JwtTokenHelper;
 import io.jsonwebtoken.Claims;
@@ -41,7 +41,12 @@ public class UserService implements UserServiceImp {
     PasswordEncoder encodePasword;
 
     @Autowired
+    BuyBackRepository buyBackRepository;
+
+    @Autowired
     private CounterRepository counterRepository;
+    @Autowired
+    private OrderRepository orderRepository;
 
     @Override
     public UserDTO getUserInformation(int userId) {
@@ -61,14 +66,70 @@ public class UserService implements UserServiceImp {
         }
 
         userDTO.setId(user.getId());
+        userDTO.setEmail(user.getEmail());
         userDTO.setFullName(user.getFullName());
         userDTO.setUsername(user.getUsername());
         userDTO.setAddress(user.getAddress());
         userDTO.setPhoneNumber(user.getPhoneNumber());
         userDTO.setRevenue(revenue);
+        userDTO.setRoleName(user.getRole().getName());
+        userDTO.setRoleId(user.getRole().getId());
+        
+        userDTO.setCounterId(user.getCounter().getId());
 
         return userDTO;
     }
+
+    @Override
+    public List<UserDTO> getAllUser() {
+
+        List<Users> usersList = userRepository.findAll();
+
+        List<UserDTO> result = new ArrayList<>();
+
+        for(Users user: usersList){
+            UserDTO userDTO = getUserInformation(user.getId());
+
+            result.add(userDTO);
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<UserDTO> getUserByName(String name) {
+
+        List<Users> usersList = userRepository.findByFullNameContains(name);
+
+        List<UserDTO> result = new ArrayList<>();
+
+        for(Users user: usersList){
+            UserDTO userDTO = getUserInformation(user.getId());
+
+            result.add(userDTO);
+        }
+
+        return result;
+    }
+
+
+
+    @Override
+    public List<UserDTO> getUserByEmail(String email) {
+
+        List<Users> usersList = userRepository.findByEmailContains(email);
+
+        List<UserDTO> result = new ArrayList<>();
+
+        for(Users user: usersList){
+            UserDTO userDTO = getUserInformation(user.getId());
+
+            result.add(userDTO);
+        }
+
+        return result;
+    }
+
 
     @Override
     public UserDTO getUserInformationByToken(String token) {
@@ -212,13 +273,44 @@ public class UserService implements UserServiceImp {
         return result;
     }
 
+    private void transferOrder(Users userSend, Users userReceived){
+
+        if(!userSend.getOrder().isEmpty()){
+            for(Order order: userSend.getOrder()){
+                order.setUser(userReceived);
+                orderRepository.save(order);
+            }
+        }
+    }
+
+    private void transferBuyBack(Users userSend, Users userReceived){
+
+        if(!userSend.getBuyBackList().isEmpty()){
+            for(BuyBack buyBack: userSend.getBuyBackList()){
+                buyBack.setUsers(userReceived);
+                buyBackRepository.save(buyBack);
+            }
+        }
+    }
+
     @Override
     public boolean deleteUser(int userId) {
 
         boolean result = true;
 
+        Users userSend =userRepository.findById(userId);
+
+        if(userSend.getRole().getId()==1){
+            int countId = userSend.getCounter().getId();
+
+            Users userReceived = userRepository.findByCounter_IdAndRole_Id(countId, 2);
+
+            transferOrder(userSend, userReceived);
+            transferBuyBack(userSend, userReceived);
+        }
+
         try {
-            userRepository.deleteById(userId);
+            userRepository.delete(userSend);
         }catch (Exception e){
             result = false;
         }

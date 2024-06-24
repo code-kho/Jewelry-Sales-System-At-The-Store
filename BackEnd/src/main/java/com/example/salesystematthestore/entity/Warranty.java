@@ -8,8 +8,6 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "product_warranty")
-
-
 public class Warranty {
 
     @Id
@@ -18,14 +16,11 @@ public class Warranty {
     private int id;
 
     @Column(name = "terms")
-    private String terms;
-
-    @Column(name = "valid_until")
-    private Date validUntil;
+    private double terms;
 
     @OneToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @JoinColumn(name = "product_id")
+    private Product product;
 
 
 }

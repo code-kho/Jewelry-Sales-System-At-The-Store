@@ -22,5 +22,12 @@ public interface UserServiceImp {
 
      boolean deleteUser(int userId);
 
+     List<UserDTO> getUserByName(String name);
+
+     List<UserDTO> getUserByEmail(String email);
+
+     List<UserDTO> getAllUser();
+
+
     
 }

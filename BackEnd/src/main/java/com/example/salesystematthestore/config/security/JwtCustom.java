@@ -1,4 +1,4 @@
-package com.example.salesystematthestore.security;
+package com.example.salesystematthestore.config.security;
 
 import com.example.salesystematthestore.utils.JwtTokenHelper;
 import io.jsonwebtoken.Claims;

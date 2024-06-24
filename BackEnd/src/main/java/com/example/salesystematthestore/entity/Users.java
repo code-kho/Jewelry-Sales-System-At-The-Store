@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -58,6 +60,7 @@ public class Users {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {
             CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
     })
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private List<Order> Order;
 
     @ManyToOne(cascade = {
@@ -65,4 +68,12 @@ public class Users {
     })
     @JoinColumn(name = "status_id")
     private UserStatus userStatus;
+
+    @OneToOne(mappedBy = "user")
+    private Verify verify;
+
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
+    })
+    private List<BuyBack> buyBackList;
 }

@@ -1,4 +1,4 @@
-package com.example.salesystematthestore.security;
+package com.example.salesystematthestore.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,16 +26,27 @@ public class CustomFilterSecurity {
     JwtCustom jwtCustom;
 
 
+    public static final String[] url = {
+            "/swagger-ui/**",
+            "/api/v1/auth/**",
+            "v3/api-docs/**",
+            "v2/api-docs/**",
+            "/swagger-resource/**",
+            "/webjars/**"
+    };
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(Customizer.withDefaults()).sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).csrf(csrf -> csrf.disable()).authorizeHttpRequests(request -> {
-            request.requestMatchers("/user/signin/**").permitAll();
-            request.requestMatchers("/product/show-product").hasAnyAuthority("ADMIN", "MANAGER", "STAFF");
+            request.requestMatchers("/user/signin/**","/payment/vn-pay-callback/**","/payment/paypal/success/**","/user/verify-code/**").permitAll();
+            request.requestMatchers(url).permitAll();
+            request.requestMatchers("/product/**").hasAnyAuthority("ADMIN", "MANAGER", "STAFF");
             request.requestMatchers("/user/get-info-by-token").hasAnyAuthority("ADMIN", "MANAGER", "STAFF");
             request.requestMatchers("/user/get-staff-list").hasAnyAuthority("ADMIN", "MANAGER");
             request.requestMatchers("/user/signup/**").hasAnyAuthority("ADMIN");
             request.requestMatchers("/user/update/**").hasAnyAuthority("ADMIN");
-            request.anyRequest().hasAnyAuthority("ADMIN", "MANAGER");
+            request.anyRequest().hasAnyAuthority("STAFF","ADMIN", "MANAGER");
         });
         http.addFilterBefore(jwtCustom, UsernamePasswordAuthenticationFilter.class);
         return http.build();

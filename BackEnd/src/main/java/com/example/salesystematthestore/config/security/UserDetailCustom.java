@@ -1,4 +1,4 @@
-package com.example.salesystematthestore.security;
+package com.example.salesystematthestore.config.security;
 
 import com.example.salesystematthestore.entity.Users;
 import com.example.salesystematthestore.repository.UserRepository;

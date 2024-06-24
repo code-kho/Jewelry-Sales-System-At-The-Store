@@ -19,7 +19,7 @@ public class Product {
     @Column(name = "product_id")
     private int productId;
 
-    @Column(name = "barcode")
+    @Column(name = "barcode", columnDefinition = "LONGTEXT")
     @Lob
     private String barCode;
 
@@ -27,28 +27,33 @@ public class Product {
     private String productName;
 
     @Column(name = "ratio_price")
-    private double ratioPrice;
+    private Double ratioPrice;
 
     @Column(name = "weight")
-    private float weight;
+    private Double weight;
 
     @Column(name = "price")
-    private float price;
+    private Double price;
 
     @Column(name = "labor_cost")
-    private float laborCost;
+    private Double laborCost;
 
     @Column(name = "cost_price")
-    private float costPrice;
+    private Double costPrice;
 
     @Column(name = "stone_price")
-    private float stonePrice;
+    private Double stonePrice;
 
     @Column(name = "is_gem")
     private boolean isGem;
 
+    @Column(name = "is_active")
+    private boolean isActive;
+
+    @Column(name = "is_jewel")
+    private boolean isJewel;
+
     @Column(name = "image")
-    @Lob
     private String image;
 
     @Column(name = "quantity_in_stock")
@@ -56,10 +61,6 @@ public class Product {
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
-
-    @OneToOne
-    @JoinColumn(name = "buy_back_id")
-    private BuyBack buyBack;
 
     @ManyToOne(cascade = {
             CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
@@ -74,20 +75,35 @@ public class Product {
     @JoinColumn(name = "type_id")
     private ProductType productType;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<ProductCounter> productCounterList;
 
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
+    })
+    private List<BuyBack> buyBackList;
 
-    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY,cascade = {
-            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
     })
     private List<OrderItem> orderItemList;
 
     @ManyToOne(cascade = {
-            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
     })
     @JoinColumn(name = "collection_id")
     private Collection collection;
+
+    @ManyToOne(cascade = {
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
+    })
+    @JoinColumn(name = "promotion_id")
+    private Promotion promotion;
+
+
+    @OneToOne(mappedBy = "product")
+    private Warranty warranty;
 
 
 }

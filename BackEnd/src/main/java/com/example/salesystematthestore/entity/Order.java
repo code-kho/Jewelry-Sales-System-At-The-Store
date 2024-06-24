@@ -1,6 +1,5 @@
 package com.example.salesystematthestore.entity;
 
-import com.example.salesystematthestore.payload.request.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,10 +31,28 @@ public class Order {
     @Column(name = "shipping_cost")
     private double shippingCost;
 
+    @Column(name = "pay_time")
+    private Date payTime;
+
+    @Column(name = "tax")
+    private double tax;
+
+
+    @Column(name = "external_momo_transaction_code")
+    private String externalMomoTransactionCode;
+
+
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY,cascade = {
             CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
     })
     private List<OrderItem> orderItemList;
+
+
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
+    })
+    private List<BuyBack> buyBackList;
+
 
     @ManyToOne(cascade = {
             CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
@@ -43,23 +60,20 @@ public class Order {
     @JoinColumn(name = "user_id")
     private Users user;
 
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = {
-            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
-    })
-            private List<Payment> paymentList;
-
     @ManyToOne(cascade = {
             CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
     })
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToOne(mappedBy = "order")
-    private Warranty warranty;
 
     @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.REFRESH,CascadeType.PERSIST,CascadeType.MERGE})
     @JoinColumn(name = "status_id")
     private OrderStatus orderStatus;
+
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.REFRESH,CascadeType.PERSIST,CascadeType.MERGE})
+    @JoinColumn(name = "payment_id")
+    private Payments payments;
+
 
 }
