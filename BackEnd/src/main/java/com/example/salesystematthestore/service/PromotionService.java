@@ -45,11 +45,6 @@ public class PromotionService implements PromotionServiceImp {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date endDate = formatter.parse(promotionRequest.getEndDate());
 
-            Date initialDate = new Date();
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(initialDate);
-            calendar.add(Calendar.HOUR_OF_DAY, 7);
-
             Date startDate = new Date();
 
             promotion.setDiscount(promotionRequest.getDiscount());
@@ -149,6 +144,40 @@ public class PromotionService implements PromotionServiceImp {
         return transferPromotion(promotion);
     }
 
+    @Override
+    public boolean updatePromotion(PromotionRequest promotionRequest) {
+        boolean result = true;
+
+        Promotion promotion = promotionRepository.findById(promotionRequest.getId()).get();
+        try {
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date endDate = formatter.parse(promotionRequest.getEndDate());
+
+            Date startDate = formatter.parse(promotionRequest.getStartDate());
+
+            promotion.setDiscount(promotionRequest.getDiscount());
+            promotion.setDescription(promotionRequest.getDescription());
+            promotion.setStartDate(startDate);
+            promotion.setEndDate(endDate);
+            promotionRepository.save(promotion);
+
+            for (Integer productId : promotionRequest.getProductIdList()) {
+                Product product = productRepository.findByProductId(productId);
+                product.setPromotion(promotion);
+            }
+
+            for (Integer productId : promotionRequest.getRemoveProductList()) {
+                Product product = productRepository.findByProductId(productId);
+                product.setPromotion(null);
+            }
+
+            promotionRepository.save(promotion);
+        } catch (ParseException e) {
+            result = false;
+        }
+        return result;
+    }
 
 
 }

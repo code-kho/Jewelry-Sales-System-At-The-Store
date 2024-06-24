@@ -12,4 +12,6 @@ public interface PromotionServiceImp {
     List<PromotionDTO> getAllPromotion(String startDate, String endDate, String description, double discount, int page, int size, String sort, String sortType);
 
     PromotionDTO getPromotionById(int id);
+
+    boolean updatePromotion(PromotionRequest promotionRequest);
 }

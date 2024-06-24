@@ -48,4 +48,11 @@ public class PromotionController {
         responseData.setData(promotionServiceImp.getPromotionById(id));
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updatePromotion(@RequestBody PromotionRequest promotionRequest) {
+        ResponseData responseData = new ResponseData();
+        responseData.setData(promotionServiceImp.updatePromotion(promotionRequest));
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
 }
