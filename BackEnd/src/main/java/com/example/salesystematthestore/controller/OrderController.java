@@ -49,14 +49,10 @@ public class OrderController {
                                                  @RequestParam(required = false, defaultValue = "") String productName,
                                                  @RequestParam(required = false, defaultValue = "") String customerEmail,
                                                  @RequestParam(required = false, defaultValue = "") String customerName,
-                                                 @RequestParam(required = false, defaultValue = "") String customerPhoneNumber,
-                                                 @RequestParam(required = false, defaultValue = "0") int page,
-                                                 @RequestParam(required = false, defaultValue = "10") int size,
-                                                 @RequestParam(required = false, defaultValue = "ASC") String sort,
-                                                 @RequestParam(required = false, defaultValue = "id") String column) {
+                                                 @RequestParam(required = false, defaultValue = "") String customerPhoneNumber) {
         ResponseData responseData = new ResponseData();
 
-        responseData.setData(orderServiceImp.searchOrderBuyBack(orderId, productName, customerEmail, customerName, customerPhoneNumber, page, size, sort, column));
+        responseData.setData(orderServiceImp.searchOrderBuyBack(orderId, productName, customerEmail, customerName, customerPhoneNumber));
 
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }

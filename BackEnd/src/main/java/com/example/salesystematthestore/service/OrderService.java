@@ -10,15 +10,20 @@ import com.example.salesystematthestore.payload.request.OrderRequest;
 import com.example.salesystematthestore.payload.request.ProductItemRequest;
 import com.example.salesystematthestore.repository.*;
 import com.example.salesystematthestore.service.imp.CustomerServiceImp;
+import com.example.salesystematthestore.service.imp.EmailServiceImp;
 import com.example.salesystematthestore.service.imp.OrderServiceImp;
+import jakarta.mail.MessagingException;
 import jakarta.persistence.Id;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -27,27 +32,35 @@ import java.util.*;
 public class OrderService implements OrderServiceImp {
 
     @Autowired
-    OrderRepository orderRepository;
+    private OrderRepository orderRepository;
+
+    @Value("${spring.mail.username}")
+    private String fromMail;
 
     @Autowired
-    OrderStatusRepository orderStatusRepository;
+    private OrderStatusRepository orderStatusRepository;
 
     @Autowired
     ProductCounterRepository productCounterRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    WarrantyRepository warrantyRepository;
+    private WarrantyRepository warrantyRepository;
 
     @Autowired
-    CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     @Autowired
-    CustomerServiceImp customerServiceImp;
+    private CustomerServiceImp customerServiceImp;
+
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private EmailServiceImp emailServiceImp;
+
 
 
     @Override
@@ -288,34 +301,35 @@ public class OrderService implements OrderServiceImp {
     @Override
     public OrderDTO transferOrder(Order order) {
 
-
         OrderDTO result = new OrderDTO();
 
         result.setOrderId(order.getId());
         result.setOrderDate(order.getOrderDate());
         result.setStatus(order.getOrderStatus().getName());
         result.setCustomerName(order.getCustomer().getName());
+        result.setCustomerPhone(order.getCustomer().getPhoneNumber());
         result.setUserId(order.getUser().getId());
         result.setStaffName(order.getUser().getFullName());
         result.setTotalAmount(order.getTotalPrice());
         result.setTax(order.getTax());
         result.setVoucherPercent(0);
         result.setPriceBeforeVoucher(order.getTotalPrice());
-
+        if(order.getPayments()!=null) {
+            result.setPaymentMethod(order.getPayments().getPaymentMode());
+        }
         List<OrderItemDTO> orderItemDTOList = new ArrayList<>();
 
         for (OrderItem orderItem : order.getOrderItemList()) {
-            double discountPercent = 0;
-            if(orderItem.getProduct().getPromotion()!=null && checkValidPromotion(orderItem.getProduct())){
-                discountPercent = orderItem.getProduct().getPromotion().getDiscount();
-            }
+            double discountPercent = orderItem.getDiscountPercent();
 
-            double price = orderItem.getPrice()/((1+(discountPercent/100)));
+            double price = orderItem.getPrice()/((1-(discountPercent/100)));
 
             OrderItemDTO orderItemDTO = new OrderItemDTO();
             orderItemDTO.setProductId(orderItem.getProduct().getProductId());
+            orderItemDTO.setProductName(orderItem.getProduct().getProductName());
             orderItemDTO.setQuantity(orderItem.getQuantity());
             orderItemDTO.setPrice(price);
+            orderItemDTO.setPromotion(orderItem.getProduct().getPromotion() != null);
             orderItemDTO.setDiscountPrice(orderItem.getPrice());
             orderItemDTO.setAvailableBuyBack(orderItem.getAvalibleBuyBack());
             orderItemDTO.setImg(orderItem.getProduct().getImage());
@@ -381,6 +395,13 @@ public class OrderService implements OrderServiceImp {
             keyOrderItem.setProductId(productItemRequest.getProductId());
             orderItem.setKeys(keyOrderItem);
 
+            if(checkValidPromotion(productCounter.getProduct())){
+                orderItem.setDiscountPercent(productCounter.getProduct().getPromotion().getDiscount());
+            } else{
+                orderItem.setDiscountPercent(0.0);
+            }
+
+
             orderItem.setQuantity(productItemRequest.getQuantity());
             orderItem.setPrice(productItemRequest.getPrice());
 
@@ -415,7 +436,7 @@ public class OrderService implements OrderServiceImp {
         Users user = userRepository.findById(orderRequest.getUserId());
         order.setUser(user);
         order.setTotalPrice(orderRequest.getAmount());
-        order.setTax(7);
+        order.setTax(8);
         order.setOrderDate(new Date());
         orderRepository.save(order);
 
@@ -482,7 +503,7 @@ public class OrderService implements OrderServiceImp {
 
 
     @Override
-    public List<OrderDTO> searchOrderBuyBack(int orderId, String productName, String customerEmail, String customerName, String customerPhoneNumber, int page, int size, String sort, String column) {
+    public List<OrderDTO> searchOrderBuyBack(int orderId, String productName, String customerEmail, String customerName, String customerPhoneNumber) {
 
         List<OrderDTO> result = new ArrayList<>();
 
@@ -491,16 +512,8 @@ public class OrderService implements OrderServiceImp {
             OrderDTO orderDTO = transferOrder(order);
             result.add(orderDTO);
         } else{
-            Sort sortPage;
-            if (sort.equals("DESC")) {
 
-                sortPage = Sort.by(Sort.Direction.DESC, column);
-            } else{
-                sortPage = Sort.by(Sort.Direction.ASC, column);
-            }
-            Pageable pageable = PageRequest.of(page, size, sortPage);
-
-            Page<Order> orderPage = orderRepository.findByOrderItemList_Product_ProductNameContainsAndCustomer_NameContainsAndCustomer_EmailContainsAndCustomer_PhoneNumberContains(productName, customerName, customerEmail, customerPhoneNumber, pageable);
+            List<Order> orderPage = orderRepository.findByOrderStatus_IdAndOrderItemList_Product_ProductNameContainsAndCustomer_NameContainsAndCustomer_EmailContainsAndCustomer_PhoneNumberContains(3,productName, customerName, customerEmail, customerPhoneNumber);
 
             for(Order order : orderPage){
                 result.add(transferOrder(order));
@@ -509,6 +522,38 @@ public class OrderService implements OrderServiceImp {
         }
 
         return result;
+    }
+
+
+    public void sendOrderEmail(Order order) throws MessagingException {
+
+        Context context = new Context();
+        Map<String, Object> values = new HashMap<>();
+        int orderId = order.getId();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = order.getOrderDate();
+        String orderDate = formatter.format(date);
+
+        double amount = order.getTotalPrice();
+        OrderDTO orderDTO = transferOrder(order);
+        List<OrderItemDTO> products = orderDTO.getOrderItemList();
+
+        Customer customer = order.getCustomer();
+        String customerName = customer.getName();
+        String customerAddress =customer.getAddress();
+        String customerEmail = customer.getEmail();
+
+        values.put("orderId", orderId);
+        values.put("orderDate", orderDate);
+        values.put("amount", amount);
+        values.put("products", products);
+        values.put("customerName", customerName);
+        values.put("customerAddress", customerAddress);
+        values.put("customerEmail", customerEmail);
+        values.put("subtotal", amount/(1+order.getTax()));
+        context.setVariables(values);
+        emailServiceImp.sendThankYouOrder(fromMail,customerEmail,"Thank You For Your Order", context);
     }
 
 }

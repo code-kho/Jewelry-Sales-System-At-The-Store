@@ -17,7 +17,7 @@ import java.util.TimeZone;
 public class VNPayConfig {
     private String vnp_PayUrl = "http://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
 
-    private String vnp_ReturnUrl = "https://four-gems-api-c21adc436e90.herokuapp.com/payment/vn-pay-callback";
+    private String vnp_ReturnUrl = "https://four-gems-system-790aeec3afd8.herokuapp.com/payment/vn-pay-callback";
 
     private String vnp_TmnCode = "QWIQSI05";
 

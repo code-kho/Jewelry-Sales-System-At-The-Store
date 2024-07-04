@@ -15,12 +15,29 @@ public class BuyBackController {
     BuybackServiceImp buybackServiceImp;
 
     @PostMapping
-    public ResponseEntity<?> createBuyBack(@RequestParam int orderId,@RequestParam int userId,@RequestParam int productId,@RequestParam int quantity) {
+    public ResponseEntity<?> createBuyBack(@RequestParam int orderId,@RequestParam int userId,@RequestParam int productId) {
         ResponseData responseData = new ResponseData();
-        responseData.setData(buybackServiceImp.saveBuyback(orderId, userId, productId, quantity));
+        responseData.setData(buybackServiceImp.saveBuyback(orderId, userId, productId));
 
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
+
+    @GetMapping()
+    public ResponseEntity<?> viewBuyBackByCustomerPhone(@RequestParam(required = false, defaultValue = "") String phoneNumber) {
+        ResponseData responseData = new ResponseData();
+        responseData.setData(buybackServiceImp.getByCustomerPhone(phoneNumber));
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> viewBuyBackDetails(@PathVariable int id) {
+        ResponseData responseData = new ResponseData();
+        responseData.setData(buybackServiceImp.getBuyBackDetails(id));
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
 
 
 }

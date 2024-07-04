@@ -3,6 +3,7 @@ package com.example.salesystematthestore.controller;
 
 import com.example.salesystematthestore.payload.ResponseData;
 import com.example.salesystematthestore.payload.request.PromotionRequest;
+import com.example.salesystematthestore.repository.PromotionRepository;
 import com.example.salesystematthestore.service.imp.PromotionServiceImp;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 @RestController
 @RequestMapping("/promotions")
@@ -20,6 +23,8 @@ public class PromotionController {
 
     @Autowired
     PromotionServiceImp promotionServiceImp;
+    @Autowired
+    private PromotionRepository promotionRepository;
 
     @PostMapping
     public ResponseEntity<?> createPromotions(@RequestBody PromotionRequest promotionRequest) throws ParseException {
@@ -37,7 +42,8 @@ public class PromotionController {
                                              @RequestParam(defaultValue = "10") int size, @RequestParam(required = false, defaultValue = "100") double discount, @RequestParam(required = false, defaultValue = "id") String sort,
                                              @RequestParam(required = false, defaultValue = "ASC") String sortType) throws ParseException {
         ResponseData responseData = new ResponseData();
-        responseData.setData(promotionServiceImp.getAllPromotion(startDate, endDate, description, discount,page, size,sort,sortType));
+
+        responseData.setData(promotionServiceImp.getAllPromotion(startDate, endDate, description, discount, page, size, sort, sortType));
 
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }

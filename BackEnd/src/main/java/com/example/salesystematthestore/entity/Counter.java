@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -34,4 +35,9 @@ public class Counter {
     })
     private List<Users> usersList;
 
+    @OneToMany(mappedBy = "fromCounter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<TransferRequests> transferRequestsFrom;
+
+    @OneToMany(mappedBy = "toCounter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<TransferRequests> transferRequestsTo;
 }

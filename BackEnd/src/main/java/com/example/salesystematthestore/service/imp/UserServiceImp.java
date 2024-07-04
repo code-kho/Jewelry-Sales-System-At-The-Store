@@ -28,6 +28,6 @@ public interface UserServiceImp {
 
      List<UserDTO> getAllUser();
 
-
+     List<UserDTO> getStaffWithKPI(int counterId);
     
 }

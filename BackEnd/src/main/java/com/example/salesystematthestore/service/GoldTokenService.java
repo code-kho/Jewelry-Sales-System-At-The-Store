@@ -95,21 +95,16 @@ public class GoldTokenService implements GoldTokenServiceImp {
 
     public void updateGoldPrice() {
 
-            Map<String, Object> goldPrice = getGoldPrice();
-            List<GoldType> goldTypeList = goldTypeRepository.findAll();
+        Map<String, Object> goldPrice = getGoldPrice();
+        List<GoldType> goldTypeList = goldTypeRepository.findAll();
 
-            for(String key : goldPrice.keySet()){
-                System.out.println(key + " : " + goldPrice.get(key));
-            }
+        for (GoldType type : goldTypeList) {
 
-            for (GoldType type : goldTypeList) {
-                System.out.println(Double.parseDouble((goldPrice.get("price_gram_" + type.getTypeName().toLowerCase().trim()).toString())));
+            type.setPrice(Double.parseDouble((goldPrice.get("price_gram_" + type.getTypeName().toLowerCase().trim()).toString())));
+            type.setUpdateDate(new Date());
+        }
 
-                type.setPrice(Double.parseDouble((goldPrice.get("price_gram_" + type.getTypeName().toLowerCase().trim()).toString())));
-                type.setUpdateDate(new Date());
-            }
-
-            goldTypeRepository.saveAll(goldTypeList);
+        goldTypeRepository.saveAll(goldTypeList);
 
     }
 

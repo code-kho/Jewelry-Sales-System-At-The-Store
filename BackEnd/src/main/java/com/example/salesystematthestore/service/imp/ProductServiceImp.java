@@ -31,4 +31,11 @@ public interface ProductServiceImp {
     List<ProductDTO> getProductAvailableForAddPromotion(String name);
 
     ProductDTO getProductByBarcode(String barcode, int counterId);
+
+    ProductDTO getTopSellProduct(String categoryName, int countId);
+
+    List<ProductDTO> getProductAvailableBuyBack(int orderId);
+
+    List<ProductDTO> getProductQuantityLessThan(int counterId, int quantity);
+
 }

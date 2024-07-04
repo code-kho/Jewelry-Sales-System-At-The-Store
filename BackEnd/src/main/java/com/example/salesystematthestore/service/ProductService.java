@@ -42,6 +42,10 @@ public class ProductService implements ProductServiceImp {
     @Autowired
     GoldTokenServiceImp goldTokenServiceImp;
 
+    @Autowired
+    OrderItemRepository orderItemRepository;
+
+
     private boolean checkValidPromotion(Product product) {
         if (product.getPromotion() == null) {
             return true;
@@ -63,6 +67,37 @@ public class ProductService implements ProductServiceImp {
         Product product = productRepository.findByBarCode(barcode);
 
         return transferProduct(product, counterId);
+    }
+
+    private int countNumberProductSell(Product product, Counter counter) {
+        int count = 0;
+
+        List<OrderItem> orderItemList = orderItemRepository.findByProduct_ProductIdAndProduct_ProductCounterList_Counter(product.getProductId(), counter);
+
+        for (OrderItem orderItem : orderItemList) {
+            count += orderItem.getQuantity();
+        }
+
+        return count;
+    }
+
+
+    @Override
+    public ProductDTO getTopSellProduct(String categoryName, int countId) {
+        List<Product> productList = productRepository.findByProductType_NameAndProductCounterList_Counter_Id(categoryName, countId);
+        Product result = new Product();
+        int count = 0;
+        Counter counter = counterRepository.findById(countId);
+
+        for (Product product : productList) {
+            int countNumberProductSell = countNumberProductSell(product, counter);
+
+            if (countNumberProductSell > count) {
+                count = countNumberProductSell;
+                result = product;
+            }
+        }
+        return transferProduct(result, countId);
     }
 
     @Override
@@ -364,7 +399,7 @@ public class ProductService implements ProductServiceImp {
         productDTO.setGoldId(product.getGoldType().getId());
         productDTO.setTypeId(product.getProductType().getId());
         productDTO.setActive(product.isActive());
-
+        productDTO.setGoldTypeName(product.getGoldType().getTypeName());
         double cost = product.getGoldType().getPrice() * product.getWeight() + product.getStonePrice() + product.getLaborCost();
 
         double totalPrice = (cost * product.getRatioPrice() / 100) + cost;
@@ -378,6 +413,49 @@ public class ProductService implements ProductServiceImp {
         return productDTO;
     }
 
+    @Override
+    public List<ProductDTO> getProductAvailableBuyBack(int orderId) {
+        List<ProductDTO> result = new ArrayList<>();
+        List<OrderItem> orderItemList = orderItemRepository.findByKeys_OrderId(orderId);
+
+        for (OrderItem orderItem : orderItemList) {
+
+            Product product = orderItem.getProduct();
+            ProductDTO productDTO = new ProductDTO();
+            productDTO.setProductId(product.getProductId());
+            productDTO.setProductName(product.getProductName());
+            productDTO.setWeight(product.getWeight());
+            productDTO.setLaborCost(product.getLaborCost());
+            productDTO.setStonePrice(product.getStonePrice());
+            productDTO.setRatioPrice(productDTO.getRatioPrice());
+            productDTO.setGem(product.isGem());
+            productDTO.setImage(product.getImage());
+            productDTO.setDescription(product.getDescription());
+            productDTO.setCategoryName(product.getProductType().getName());
+            productDTO.setGoldId(product.getGoldType().getId());
+            productDTO.setTypeId(product.getProductType().getId());
+            productDTO.setPrice(orderItem.getPrice());
+            productDTO.setAvailableBuyBack(orderItem.getAvalibleBuyBack() > 0);
+
+            result.add(productDTO);
+        }
+        return result;
+    }
+
+    @Override
+    public List<ProductDTO> getProductQuantityLessThan(int counterId, int quantity) {
+
+        List<ProductCounter> productList = productCounterRepository.findByCounter_IdAndQuantityLessThanEqual(counterId, quantity);
+
+        List<ProductDTO> result = new ArrayList<>();
+
+        for (ProductCounter productCounter : productList) {
+            ProductDTO productDTO = transferProduct(productCounter.getProduct(), counterId);
+            result.add(productDTO);
+        }
+
+        return result;
+    }
 
     @Override
     public List<ProductDTO> showProductWarehouse(int numberOfRecord, int page, String col, String typeSort, String categoryName, String searchKeyword) {
@@ -432,7 +510,7 @@ public class ProductService implements ProductServiceImp {
                     productDTO.setGoldId(product.getGoldType().getId());
                     productDTO.setTypeId(product.getProductType().getId());
                     productDTO.setActive(product.isActive());
-
+                    productDTO.setGoldTypeName(product.getGoldType().getTypeName());
                     double cost = product.getGoldType().getPrice() * product.getWeight() + product.getStonePrice() + product.getLaborCost();
 
                     double totalPrice = (cost * product.getRatioPrice() / 100) + cost;

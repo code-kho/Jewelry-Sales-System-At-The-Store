@@ -89,6 +89,11 @@ public class Product {
     })
     private List<OrderItem> orderItemList;
 
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
+    })
+    private List<ProductRequests> productRequestsList;
+
     @ManyToOne(cascade = {
             CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
     })

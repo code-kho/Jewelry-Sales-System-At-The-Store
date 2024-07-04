@@ -28,7 +28,7 @@ public interface UserRepository extends JpaRepository<Users, Integer> {
 
     Users findByCounter_IdAndRole_Id(int counterId, int roleId);
 
-    Users findByRole_Id(int id);
+    List<Users> findByRole_IdAndCounter_Id(int roleId, int counterId);
 
     List<Users> findByEmailContains(String email);
 

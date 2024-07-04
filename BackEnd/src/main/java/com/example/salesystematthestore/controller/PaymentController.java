@@ -14,6 +14,7 @@ import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 import io.swagger.v3.oas.annotations.Hidden;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,7 @@ public class PaymentController {
     @Autowired
     private PaymentMethodRepository paymentMethodRepository;
 
+
     @PostMapping("/vn-pay")
     public ResponseEntity<?> pay(HttpServletRequest request, @RequestParam int orderId) {
 
@@ -67,7 +69,7 @@ public class PaymentController {
     }
 
     @GetMapping("/vn-pay-callback")
-    public RedirectView payCallbackHandler(@RequestParam String vnp_TransactionStatus, @RequestParam String vnp_TransactionNo, @RequestParam int orderId) {
+    public RedirectView payCallbackHandler(@RequestParam String vnp_TransactionStatus, @RequestParam String vnp_TransactionNo, @RequestParam int orderId) throws MessagingException {
         ResponseData responseData = new ResponseData();
 
         if (vnp_TransactionStatus.equals("00")) {
@@ -80,6 +82,7 @@ public class PaymentController {
             Payments payments = paymentMethodRepository.findById(2).get();
             order.setPayments(payments);
             orderRepository.save(order);
+            orderServiceImp.sendOrderEmail(order);
 
             return new RedirectView(successUrl);
 
@@ -94,7 +97,7 @@ public class PaymentController {
 
 
     @PostMapping("/cash")
-    public ResponseEntity<?> paymentByCash(@RequestParam int orderId) {
+    public ResponseEntity<?> paymentByCash(@RequestParam int orderId) throws MessagingException {
 
         Order order = orderRepository.findById(orderId).get();
         order.setPayTime(new Date());
@@ -104,7 +107,7 @@ public class PaymentController {
         Payments payments = paymentMethodRepository.findById(1).get();
         order.setPayments(payments);
         orderRepository.save(order);
-
+        orderServiceImp.sendOrderEmail(order);
         ResponseData responseData = new ResponseData();
         responseData.setData(true);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
@@ -118,7 +121,7 @@ public class PaymentController {
         ResponseData responseData = new ResponseData();
 
         try {
-            String baseUrl = "https://four-gems-api-c21adc436e90.herokuapp.com";
+            String baseUrl = "https://four-gems-system-790aeec3afd8.herokuapp.com";
             String cancelUrl = baseUrl +"/payment/paypal/cancel";
             String successUrl = baseUrl +"/payment/paypal/success?orderId=" + orderId;
             Payment payments = paypalServiceImp.createPayment(total, "USD", "paypal", "sale", "description", cancelUrl, successUrl);
@@ -151,11 +154,14 @@ public class PaymentController {
                 Payments payments = paymentMethodRepository.findById(3).get();
                 order.setPayments(payments);
                 orderRepository.save(order);
+                orderServiceImp.sendOrderEmail(order);
 
                 return new RedirectView(successUrl);
             }
         } catch (PayPalRESTException e) {
             System.out.println(e.getMessage());
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
         }
         return new RedirectView(failureUrl);
     }

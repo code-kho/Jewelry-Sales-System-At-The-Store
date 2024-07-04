@@ -166,6 +166,32 @@ public class ProductController {
     }
 
 
+    @GetMapping("/get-top-sell-product-by-category")
+    public ResponseEntity<?> getTopSellerProduct(@RequestParam String typeName,@RequestParam int countId, @RequestParam(required = false, defaultValue = "10") int size) {
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(productServiceImp.getTopSellProduct(typeName, countId));
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-product-available-for-buy-back")
+    public ResponseEntity<?> getProductAvailableForBuyBack(@RequestParam int orderId) {
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(productServiceImp.getProductAvailableBuyBack(orderId));
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-product-quantity-less-than")
+    public ResponseEntity<?> getProductQuantityLessThan(@RequestParam int counterid, @RequestParam int quantity) {
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(productServiceImp.getProductQuantityLessThan(counterid, quantity));
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
 
 
 }

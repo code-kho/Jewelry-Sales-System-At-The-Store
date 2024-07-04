@@ -4,6 +4,7 @@ import com.example.salesystematthestore.dto.OrderDTO;
 import com.example.salesystematthestore.dto.ProductDTO;
 import com.example.salesystematthestore.entity.Order;
 import com.example.salesystematthestore.payload.request.OrderRequest;
+import jakarta.mail.MessagingException;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -38,6 +39,7 @@ public interface OrderServiceImp {
 
     OrderDTO transferOrder(Order order);
 
-    List<OrderDTO> searchOrderBuyBack(int orderId, String productName, String customerEmail, String customerName, String customerPhoneNumber, int page, int size, String sort, String column);
+    List<OrderDTO> searchOrderBuyBack(int orderId, String productName, String customerEmail, String customerName, String customerPhoneNumber);
 
+    void sendOrderEmail(Order order) throws MessagingException;
 }

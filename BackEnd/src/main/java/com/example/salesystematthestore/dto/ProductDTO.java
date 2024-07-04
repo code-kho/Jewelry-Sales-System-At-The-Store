@@ -24,5 +24,6 @@ public class ProductDTO implements Serializable {
     private int goldId;
     private int typeId;
     private boolean isActive;
-
+    private boolean availableBuyBack;
+    private String goldTypeName;
 }

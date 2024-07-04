@@ -39,4 +39,7 @@ public class OrderItem {
 
     @Column(name = "avalible_buy_back")
     private int avalibleBuyBack;
+
+    @Column(name = "discount_percent")
+    private Double discountPercent;
 }

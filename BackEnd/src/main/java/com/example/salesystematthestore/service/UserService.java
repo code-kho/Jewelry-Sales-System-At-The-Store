@@ -74,7 +74,7 @@ public class UserService implements UserServiceImp {
         userDTO.setRevenue(revenue);
         userDTO.setRoleName(user.getRole().getName());
         userDTO.setRoleId(user.getRole().getId());
-        
+
         userDTO.setCounterId(user.getCounter().getId());
 
         return userDTO;
@@ -87,10 +87,45 @@ public class UserService implements UserServiceImp {
 
         List<UserDTO> result = new ArrayList<>();
 
-        for(Users user: usersList){
+        for (Users user : usersList) {
             UserDTO userDTO = getUserInformation(user.getId());
 
             result.add(userDTO);
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<UserDTO> getStaffWithKPI(int counterId) {
+
+        List<Users> userList = userRepository.findByRole_IdAndCounter_Id(1, counterId);
+
+        List<UserDTO> result = new ArrayList<>();
+
+        for (Users user : userList) {
+            UserDTO userDTO = getUserInformation(user.getId());
+            userDTO.setFullName(user.getFullName());
+
+            if (user.getOrder() != null) {
+                userDTO.setKPI(countKIP(user.getId()));
+            } else {
+                userDTO.setKPI(0);
+            }
+
+            result.add(userDTO);
+        }
+
+        return result;
+    }
+
+    private double countKIP(int userId) {
+        double result = 0;
+
+        List<Order> orderList = orderRepository.findByUser_IdAndOrderStatus_Id(userId, 3);
+
+        for (Order order : orderList) {
+            result += order.getTotalPrice();
         }
 
         return result;
@@ -103,7 +138,7 @@ public class UserService implements UserServiceImp {
 
         List<UserDTO> result = new ArrayList<>();
 
-        for(Users user: usersList){
+        for (Users user : usersList) {
             UserDTO userDTO = getUserInformation(user.getId());
 
             result.add(userDTO);
@@ -113,7 +148,6 @@ public class UserService implements UserServiceImp {
     }
 
 
-
     @Override
     public List<UserDTO> getUserByEmail(String email) {
 
@@ -121,7 +155,7 @@ public class UserService implements UserServiceImp {
 
         List<UserDTO> result = new ArrayList<>();
 
-        for(Users user: usersList){
+        for (Users user : usersList) {
             UserDTO userDTO = getUserInformation(user.getId());
 
             result.add(userDTO);
@@ -222,12 +256,12 @@ public class UserService implements UserServiceImp {
         return new ArrayList<>(userDTOList.subList(0, 5));
     }
 
-    private void transferAndSave(Users userInput,User user){
+    private void transferAndSave(Users userInput, User user) {
 
         Users userAdd;
-        if(userInput == null){
+        if (userInput == null) {
             userAdd = new Users();
-        } else{
+        } else {
             userAdd = userRepository.findById(userInput.getId());
         }
 
@@ -251,7 +285,7 @@ public class UserService implements UserServiceImp {
 
         try {
             transferAndSave(null, user);
-        } catch (Exception e){
+        } catch (Exception e) {
             result = false;
         }
 
@@ -262,31 +296,31 @@ public class UserService implements UserServiceImp {
     public boolean updateUser(User user, int userId) {
         boolean result = true;
 
-        try{
+        try {
             Users users = userRepository.findById(userId);
 
             transferAndSave(users, user);
-        } catch (Exception e){
+        } catch (Exception e) {
             result = false;
         }
 
         return result;
     }
 
-    private void transferOrder(Users userSend, Users userReceived){
+    private void transferOrder(Users userSend, Users userReceived) {
 
-        if(!userSend.getOrder().isEmpty()){
-            for(Order order: userSend.getOrder()){
+        if (!userSend.getOrder().isEmpty()) {
+            for (Order order : userSend.getOrder()) {
                 order.setUser(userReceived);
                 orderRepository.save(order);
             }
         }
     }
 
-    private void transferBuyBack(Users userSend, Users userReceived){
+    private void transferBuyBack(Users userSend, Users userReceived) {
 
-        if(!userSend.getBuyBackList().isEmpty()){
-            for(BuyBack buyBack: userSend.getBuyBackList()){
+        if (!userSend.getBuyBackList().isEmpty()) {
+            for (BuyBack buyBack : userSend.getBuyBackList()) {
                 buyBack.setUsers(userReceived);
                 buyBackRepository.save(buyBack);
             }
@@ -298,9 +332,9 @@ public class UserService implements UserServiceImp {
 
         boolean result = true;
 
-        Users userSend =userRepository.findById(userId);
+        Users userSend = userRepository.findById(userId);
 
-        if(userSend.getRole().getId()==1){
+        if (userSend.getRole().getId() == 1) {
             int countId = userSend.getCounter().getId();
 
             Users userReceived = userRepository.findByCounter_IdAndRole_Id(countId, 2);
@@ -311,7 +345,7 @@ public class UserService implements UserServiceImp {
 
         try {
             userRepository.delete(userSend);
-        }catch (Exception e){
+        } catch (Exception e) {
             result = false;
         }
 
