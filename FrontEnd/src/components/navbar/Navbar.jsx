@@ -15,10 +15,10 @@ import CategoryMenu from "components/categories/CategoryMenu";
 import MegaMenu from "./MegaMenu";
 import MegaMenu2 from "./MegaMenu2";
 import useSettings from "hooks/useSettings";
-import navbarNavigations from "data/navbarNavigations"; // NavList props interface
+import navbarNavigations from "data/navbarNavigations";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
-// const common css style
 const navLinkStyle = {
     cursor: "pointer",
     transition: "color 150ms ease-in-out",
@@ -29,7 +29,7 @@ const navLinkStyle = {
     "&:last-child": {
         marginRight: 0,
     },
-}; // style components
+};
 
 const StyledNavLink = styled(NavLink)(() => ({ ...navLinkStyle }));
 const ParentNav = styled(Box)(({ theme }) => ({
@@ -88,33 +88,43 @@ const ChildNavsWrapper = styled(Box)(() => ({
     display: "none",
     position: "absolute",
     transform: "translate(-50%, 0%)",
-})); // ==========================================================
+}));
 
-// ==========================================================
+const LogoutButton = styled("div")(({ theme }) => ({
+    color: "white",
+    cursor: "pointer",
+    "&:hover": {
+        color: theme.palette.primary.main,
+    },
+}));
+
 const Navbar = ({ navListOpen, hideCategories, elevation, border }) => {
+    const router = useRouter();
     const { settings } = useSettings();
     const [role, setRole] = useState("");
     useEffect(() => {
         const role = localStorage.getItem("role");
         setRole(role);
     }, []);
+    const handleLogOut = () => {
+        console.log("Logout clicked");
+        localStorage.clear();
+        router.push("/login");
+    };
     const renderNestedNav = (list = [], isRoot = false) => {
         return list.map((nav) => {
             if (isRoot) {
-                // show megamenu
                 if (nav.megaMenu) {
                     return (
-                        //@ts-ignore
                         <MegaMenu
                             key={nav.title}
                             title={nav.title}
                             menuList={nav.child}
                         />
                     );
-                } // show megamenu with sub
+                }
                 if (nav.megaMenuWithSub) {
                     return (
-                        //@ts-ignore
                         <MegaMenu2
                             key={nav.title}
                             title={nav.title}
@@ -122,8 +132,7 @@ const Navbar = ({ navListOpen, hideCategories, elevation, border }) => {
                         />
                     );
                 }
-
-                if (role == "staff") {
+                if (role === "staff") {
                     if (
                         (nav.url && nav.withStaff === true) ||
                         nav.common === true
@@ -174,7 +183,6 @@ const Navbar = ({ navListOpen, hideCategories, elevation, border }) => {
                                     }}
                                 />
                             </FlexBox>
-
                             <ChildNavsWrapper className="child-nav-item">
                                 <BazaarCard
                                     elevation={3}
@@ -198,7 +206,6 @@ const Navbar = ({ navListOpen, hideCategories, elevation, border }) => {
                         </NavLink>
                     );
                 }
-
                 if (nav.child) {
                     return (
                         <ParentNav
@@ -210,14 +217,12 @@ const Navbar = ({ navListOpen, hideCategories, elevation, border }) => {
                                 <Box flex="1 1 0" component="span">
                                     {nav.title}
                                 </Box>
-
                                 {settings.direction === "ltr" ? (
                                     <ArrowRight fontSize="small" />
                                 ) : (
                                     <ArrowLeft fontSize="small" />
                                 )}
                             </MenuItem>
-
                             <ParentNavItem className="parent-nav-item">
                                 <BazaarCard
                                     sx={{
@@ -244,7 +249,6 @@ const Navbar = ({ navListOpen, hideCategories, elevation, border }) => {
         >
             {!hideCategories ? (
                 <InnerContainer>
-                    {/* Category megamenu */}
                     <CategoryMenu open={navListOpen}>
                         <CategoryMenuButton variant="text">
                             <Category fontSize="small" />
@@ -257,7 +261,6 @@ const Navbar = ({ navListOpen, hideCategories, elevation, border }) => {
                             >
                                 Categories
                             </Paragraph>
-
                             {settings.direction === "ltr" ? (
                                 <ChevronRight
                                     className="dropdown-icon"
@@ -271,26 +274,26 @@ const Navbar = ({ navListOpen, hideCategories, elevation, border }) => {
                             )}
                         </CategoryMenuButton>
                     </CategoryMenu>
-
-                    {/* Horizontal menu */}
                     <FlexBox gap={4}>
                         {renderNestedNav(navbarNavigations, true)}
+                        <LogoutButton onClick={handleLogOut}>
+                            Logout
+                        </LogoutButton>
                     </FlexBox>
                 </InnerContainer>
             ) : (
-                <InnerContainer
-                    sx={{
-                        justifyContent: "center",
-                    }}
-                >
+                <InnerContainer sx={{ justifyContent: "center" }}>
                     <FlexBox gap={4}>
                         {renderNestedNav(navbarNavigations, true)}
+                        <LogoutButton onClick={handleLogOut}>
+                            Logout
+                        </LogoutButton>
                     </FlexBox>
                 </InnerContainer>
             )}
         </NavBarWrapper>
     );
-}; //  set default props data
+};
 
 Navbar.defaultProps = {
     elevation: 2,

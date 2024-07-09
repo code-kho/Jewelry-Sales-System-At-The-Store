@@ -27,45 +27,45 @@ const ProductSearchResult = () => {
     const [productList, setProductList] = useState([]);
     const [length, setLength] = useState(0);
     const router = useRouter();
-    // Define the state to store the selected value
+
     const [selectedValue, setSelectedValue] = useState(sortOptions[0].value);
-    console.log(selectedValue);
-    // Handle change event
+
     const handleChange = (event) => {
         setSelectedValue(event.target.value);
     };
-    console.log(router.query.slug);
-    let token = "";
-    if (typeof localStorage !== "undefined") {
-        token = localStorage.getItem("token");
-    } else if (typeof sessionStorage !== "undefined") {
-        // Fallback to sessionStorage if localStorage is not supported
-        token = localStorage.getItem("token");
-    } else {
-        // If neither localStorage nor sessionStorage is supported
-        console.log("Web Storage is not supported in this environment.");
-    }
+
     const cateogory = router.query.slug;
+    const token =
+        typeof localStorage !== "undefined"
+            ? localStorage.getItem("token")
+            : "";
+
     useEffect(() => {
         const fetchShowProduct = async () => {
+            const counterId = localStorage.getItem("counterId");
             try {
                 const resShowProduct = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/product/show-product?countId=1&pageSize=200&page=0&sortKeyword=productId&sortType=${selectedValue}&categoryName=${cateogory}&searchKeyword= `,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=200&page=0&sortKeyword=productId&sortType=${selectedValue}&categoryName=${cateogory}&searchKeyword= `,
                     {
                         headers: {
-                            Authorization: "Bearer " + token, //the token is a variable which holds the token
+                            Authorization: `Bearer ${token}`,
                         },
                     }
                 );
-                setProductList(resShowProduct.data.data);
-                console.log(resShowProduct.data.data);
-                setLength(resShowProduct.data.data.length);
+
+                const filteredProducts = resShowProduct.data.data.filter(
+                    (res) => res.active === true
+                );
+                setProductList(filteredProducts);
+                setLength(filteredProducts.length);
             } catch (e) {
                 console.log(e);
             }
         };
+
         fetchShowProduct();
-    }, [selectedValue]);
+    }, [selectedValue, cateogory, token]);
+
     return (
         <ShopLayout1>
             <Container
@@ -74,7 +74,6 @@ const ProductSearchResult = () => {
                     mb: 6,
                 }}
             >
-                {/* TOP BAR AREA */}
                 <Card
                     elevation={1}
                     sx={{
@@ -105,7 +104,7 @@ const ProductSearchResult = () => {
                     >
                         <FlexBox alignItems="center" gap={1} flex="1 1 0">
                             <Paragraph color="grey.600" whiteSpace="pre">
-                                Short by:
+                                Sort by:
                             </Paragraph>
 
                             <TextField
@@ -113,10 +112,10 @@ const ProductSearchResult = () => {
                                 fullWidth
                                 size="small"
                                 variant="outlined"
-                                placeholder="Short by"
+                                placeholder="Sort by"
                                 defaultValue={sortOptions[0].value}
                                 value={selectedValue}
-                                onChange={handleChange} // Add the onChange handler
+                                onChange={handleChange}
                                 sx={{
                                     flex: "1 1 0",
                                     minWidth: "150px",
@@ -156,7 +155,6 @@ const ProductSearchResult = () => {
                                 />
                             </IconButton>
 
-                            {/* SHOW IN THE SMALL DEVICE */}
                             {downMd && (
                                 <Sidenav
                                     handle={
@@ -173,7 +171,6 @@ const ProductSearchResult = () => {
                 </Card>
 
                 <Grid container spacing={3}>
-                    {/* PRODUCT FILTER SIDEBAR AREA */}
                     <Grid
                         item
                         md={3}
@@ -187,11 +184,8 @@ const ProductSearchResult = () => {
                         <ProductFilterCard />
                     </Grid>
 
-                    {/* PRODUCT VIEW AREA */}
                     <Grid item md={9} xs={12}>
                         {view === "grid" ? (
-                            //đổ api lên
-                            // <ProductCard1List products={productDatabase.slice(95, 104)} />
                             <ProductCard1List products={productList} />
                         ) : (
                             <ProductCard9List products={productList} />
@@ -205,12 +199,13 @@ const ProductSearchResult = () => {
 
 const sortOptions = [
     {
-        label: "Rating high to low",
+        label: "Price high to low",
         value: "DESC",
     },
     {
-        label: "Rating low to high",
+        label: "Price low to high",
         value: "ASC",
     },
 ];
+
 export default ProductSearchResult;

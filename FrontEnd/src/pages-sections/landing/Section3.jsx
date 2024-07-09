@@ -473,14 +473,14 @@ const vendorPageList = [
 ];
 const customerPageList = [
   {
-    imgUrl: "/assets/images/landing/customer/profile.jpg",
-    previewUrl: "/profile",
+    imgUrl: "/assets/images/landing/customer/buyback-profile.jpg",
+    previewUrl: "/buyback-profile",
     title: "Profile",
     page: "user",
   },
   {
-    imgUrl: "/assets/images/landing/customer/edit-profile.jpg",
-    previewUrl: "/profile/edit",
+    imgUrl: "/assets/images/landing/customer/edit-buyback-profile.jpg",
+    previewUrl: "/buyback-profile/edit",
     title: "Edit Profile",
     page: "user",
   },
@@ -498,13 +498,13 @@ const customerPageList = [
   },
   {
     imgUrl: "/assets/images/landing/customer/my-addresses.jpg",
-    previewUrl: "/address",
+    previewUrl: "/buy-back",
     title: "My Addresses",
     page: "user",
   },
   {
     imgUrl: "/assets/images/landing/customer/add-new-addresses.jpg",
-    previewUrl: "/address/512474",
+    previewUrl: "/buy-back/512474",
     title: "Add Addresses",
     page: "user",
   },

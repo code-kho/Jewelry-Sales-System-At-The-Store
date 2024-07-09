@@ -1,3 +1,4 @@
+//Dashboard - Orders/Sold Item
 import { Card } from "@mui/material";
 import { FlexBetween } from "components/flex-box";
 import { H1, H2, H3 } from "components/Typography";
@@ -30,15 +31,6 @@ const Card1 = (props) => {
           mb: 2,
         }}
       >
-        {/*<H4 fontWeight={500} color="grey.500">*/}
-        {/*    {amount2}*/}
-        {/*</H4>*/}
-
-        {/*<FlexBox alignItems="center" color={color}>*/}
-        {/*    {status === "up" && <ArrowDropUp/>}*/}
-        {/*    {status === "down" && <ArrowDropDown/>}*/}
-        {/*    <H4 fontSize={12}>{percentage}</H4>*/}
-        {/*</FlexBox>*/}
       </FlexBetween>
 
       <H2>Yesterday</H2>

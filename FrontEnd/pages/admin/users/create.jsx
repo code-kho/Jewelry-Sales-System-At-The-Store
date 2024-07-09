@@ -47,7 +47,7 @@ export default function CreateAccount() {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "https://four-gems-api-c21adc436e90.herokuapp.com/user/signup",
+        "https://four-gems-system-790aeec3afd8.herokuapp.com/user/signup",
         accountNew,
         {
           headers: {

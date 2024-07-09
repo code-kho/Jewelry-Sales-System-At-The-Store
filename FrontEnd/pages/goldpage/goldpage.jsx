@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { Box, Container, styled, Tab, Tabs } from "@mui/material";
 import { H1, H2 } from "components/Typography";
 import ShopLayout1 from "components/layouts/ShopLayout1";
@@ -22,8 +21,6 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
 }));
 
 const GoldPage = (props) => {
-    const router = useRouter();
-    const [selectedOption, setSelectedOption] = useState(0);
     const [goldType, setGoldType] = useState(null);
     const [VNDPrice, setVNDPrice] = useState(null);
     const [error, setError] = useState(null);
@@ -33,9 +30,7 @@ const GoldPage = (props) => {
                 const response = await axios.get(
                     "https://v6.exchangerate-api.com/v6/ee99510cfff86d6a1abd06e9/latest/USD?fbclid=IwZXh0bgNhZW0CMTAAAR37CxmzoLLTk9IY5UXhq2AFF_pitJhnjHwuMpfZLc5QeRwzu4hpCx6CNiY_aem_AVQHYNMmVwUvG5V3Agzhse0Mo_tq1m1HwCIRdyRrZ4u_gR5Of4PSz3mIsM8t-7gIkDyotlHJNpG6Nu8UI43CJ8Fp"
                 );
-                // console.log(response.data.conversion_rates.SGD); // Ghi log dữ liệu phản hồi vào console
                 if (response.data) {
-                    // Kiểm tra nếu có thuộc tính 'price'
                     setVNDPrice(response.data.conversion_rates.VND);
                 } else {
                     setError("Không thể vnd.");
@@ -60,29 +55,6 @@ const GoldPage = (props) => {
         { type: "14k Gold", price: goldType?.price_gram_14k },
         { type: "10k Gold", price: goldType?.price_gram_10k },
     ];
-    const handleOptionClick = (_, value) => setSelectedOption(value);
-
-    // if (router.isFallback) {
-    //     return <h1>Loading...</h1>;
-    // }
-
-    // if (!respone.ok) {
-    //     throw new Error("Something went wrong!");
-    // }
-
-    // if (isLoading) {
-    //     return (
-    //         <SpinnerLoading/>
-    //     );
-    // }
-
-    // if (httpError) {
-    //     return (
-    //         <div className="container mt-5">
-    //             <p>{httpError}</p>
-    //         </div>
-    //     );
-    // }
 
     const convertVND = (price) =>
         (price * VNDPrice).toLocaleString("en-US", {
@@ -125,8 +97,6 @@ const GoldPage = (props) => {
                     </table>
                 </div>
 
-                {/*{relatedProducts && <RelatedProducts productsData={relatedProducts} />}*/}
-
                 <div
                     style={{
                         display: "grid",
@@ -142,7 +112,6 @@ const GoldPage = (props) => {
                 <style jsx>{`
                     .container {
                         margin: 20px;
-                        font-family: "Comic Neue";
                         font-size: 28px;
                     }
 
@@ -172,11 +141,4 @@ const GoldPage = (props) => {
 
 export default GoldPage;
 
-// export const getStaticProps = async ({ params }) => {
-//     const relatedProducts = await getRelatedProducts();
-//     return {
-//         props: {
-//             relatedProducts,
-//         },
-//     };
-// };
+

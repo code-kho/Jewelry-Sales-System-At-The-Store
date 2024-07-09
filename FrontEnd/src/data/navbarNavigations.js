@@ -37,12 +37,5 @@ const navbarNavigations = [
         url: "/warranty",
         withStaff: false,
     },
-    {
-        megaMenu: false,
-        megaMenuWithSub: false,
-        title: "Logout",
-        url: "/login",
-        common: true,
-    },
 ];
 export default navbarNavigations;

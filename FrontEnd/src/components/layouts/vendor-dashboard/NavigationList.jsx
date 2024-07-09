@@ -34,6 +34,34 @@ export const navigations = [
         ],
     },
     {
+        name: "Rotate Goods",
+        icon: duotone.Products,
+        children: [
+            {
+                name: "Rotate Requests",
+                path: "/admin/rotate/rotate-request",
+            },
+            {
+                name: "Rotate List",
+                path: "/admin/product-reviews",
+            },
+        ],
+    },
+    {
+        name: "Import Goods",
+        icon: duotone.Products,
+        children: [
+            {
+                name: "Import Requests",
+                path: "/admin/import/import-goods",
+            },
+            {
+                name: "Quantity Counter List",
+                path: "/admin/import/counter-list",
+            },
+        ],
+    },
+    {
         name: "Users Account",
         icon: duotone.Customers,
         path: "/admin/users-account",

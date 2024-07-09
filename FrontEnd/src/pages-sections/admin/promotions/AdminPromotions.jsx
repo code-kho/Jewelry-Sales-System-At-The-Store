@@ -19,14 +19,19 @@ const validationSchema = yup.object().shape({
 });
 
 const AdminPromotions = () => {
-    const handleFormSubmit = async (values, { setSubmitting, resetForm, setErrors }) => {
+    const handleFormSubmit = async (
+        values,
+        { setSubmitting, resetForm, setErrors }
+    ) => {
         try {
             await axios.post(
-                "https://four-gems-api-c21adc436e90.herokuapp.com/promotions",
+                "https://four-gems-system-790aeec3afd8.herokuapp.com/promotions",
                 values,
                 {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "token"
+                        )}`,
                     },
                 }
             );

@@ -11,7 +11,7 @@ import BazaarRating from "components/BazaarRating";
 import { useAppContext } from "contexts/AppContext";
 import ProductViewDialog from "components/products/ProductViewDialog";
 import { FlexBox } from "../flex-box";
-import { calculateDiscount, currency } from "lib"; // styled components
+import { calculateDiscount, currency } from "lib";
 
 const StyledBazaarCard = styled(BazaarCard)(() => ({
   height: "100%",
@@ -64,9 +64,8 @@ const ContentWrapper = styled(Box)(() => ({
     whiteSpace: "nowrap",
     textOverflow: "ellipsis",
   },
-})); // ========================================================
+}));
 
-// ========================================================
 const ProductCard1 = ({
   id,
   slug,
@@ -87,16 +86,16 @@ const ProductCard1 = ({
   const toggleIsFavorite = () => setIsFavorite((fav) => !fav);
 
   const toggleDialog = useCallback(() => setOpenModal((open) => !open), []);
-  const cartItem = state.cart.find((item) => item.slug === slug);
+  const cartItem = state.cart.find((item) => item.id === id);
 
   const handleCartAmountChange = (product, type) => () => {
     dispatch({
       type: "CHANGE_CART_AMOUNT",
       payload: product,
-    }); // SHOW ALERT PRODUCT ADDED OR REMOVE
+    });
 
     if (type === "remove") {
-      enqueueSnackbar("Remove from Cart", {
+      enqueueSnackbar("Removed from Cart", {
         variant: "error",
       });
     } else {

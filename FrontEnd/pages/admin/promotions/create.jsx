@@ -30,7 +30,7 @@ export default function CreatePromotion() {
         try {
             const token = localStorage.getItem("token");
             await axios.post(
-                "https://four-gems-api-c21adc436e90.herokuapp.com/promotions",
+                "https://four-gems-system-790aeec3afd8.herokuapp.com/promotions",
                 {
                     description: values.description,
                     discount: values.discount,

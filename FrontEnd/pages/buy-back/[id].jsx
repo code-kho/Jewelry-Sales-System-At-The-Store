@@ -7,7 +7,7 @@ import Card1 from "components/Card1";
 import UserDashboardHeader from "components/header/UserDashboardHeader";
 import CustomerDashboardLayout from "components/layouts/customer-dashboard";
 import CustomerDashboardNavigation from "components/layouts/customer-dashboard/Navigations";
-import api from "utils/__api__/address"; // =============================================================
+import api from "utils/__api__/buy-back"; // =============================================================
 
 // =============================================================
 const AddressEditor = ({ address }) => {
@@ -27,7 +27,7 @@ const AddressEditor = ({ address }) => {
   }; // SECTION TITLE HEADER LINK
 
   const HEADER_LINK = (
-    <Link href="/address" passHref>
+    <Link href="/pages/buy-back" passHref>
       <Button
         color="primary"
         sx={{

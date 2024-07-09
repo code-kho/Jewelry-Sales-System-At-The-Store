@@ -24,7 +24,7 @@ const Waiting = () => {
             console.log(orderId);
             try {
                 const responseGetOrderStatus = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/order/status/${orderId}`,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/order/status/${orderId}`,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token

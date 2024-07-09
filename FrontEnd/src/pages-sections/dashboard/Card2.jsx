@@ -1,10 +1,10 @@
+//Dashboard - Weekly Sales/ Total Orders of the Week
 import { Box, Card } from "@mui/material";
-import { ArrowDropUp } from "@mui/icons-material";
 import { FlexBox } from "components/flex-box";
 import { H1, H3, H6, Paragraph } from "components/Typography"; // =========================================================
 
 // =========================================================
-const Card2 = ({ children, title, amount, percentage }) => {
+const Card2 = ({ children, title, amount }) => {
   return (
     <Card
       sx={{
@@ -28,8 +28,6 @@ const Card2 = ({ children, title, amount, percentage }) => {
           <Box>
             <H1 mb={2}>{amount}</H1>
             <FlexBox mt={0.3} alignItems="center" color="info.main">
-              {/*<ArrowDropUp />*/}
-              {/*<Paragraph fontSize={12}>{percentage}</Paragraph>*/}
             </FlexBox>
           </Box>
         </FlexBox>

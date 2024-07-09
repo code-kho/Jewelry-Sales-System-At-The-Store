@@ -55,7 +55,7 @@ const Cart = () => {
   const handleBtnSearch = async () => {
     const fetchSearchCustomInfo = async () => {
       try {
-        const resCusInfo = await axios.get(`https://four-gems-api-c21adc436e90.herokuapp.com/customers?phoneNumber=${dataNumSearch}`,
+        const resCusInfo = await axios.get(`https://four-gems-system-790aeec3afd8.herokuapp.com/customers?phoneNumber=${dataNumSearch}`,
             {
               headers: {
                 Authorization: 'Bearer ' + token //the token is a variable which holds the token

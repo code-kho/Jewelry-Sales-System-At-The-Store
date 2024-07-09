@@ -38,7 +38,7 @@ export default function CreateCusInfo() {
         try {
             const token = localStorage.getItem("token");
             const response = await axios.post(
-                "https://four-gems-api-c21adc436e90.herokuapp.com/customers",
+                "https://four-gems-system-790aeec3afd8.herokuapp.com/customers",
                 customerInfo,
                 {
                     headers: {

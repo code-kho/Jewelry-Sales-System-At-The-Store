@@ -28,7 +28,7 @@ const PromotionRow = ({ promotion }) => {
     const handleDeletePromotion = async () => {
         try {
             await axios.delete(
-                `https://four-gems-api-c21adc436e90.herokuapp.com/promotions/${id}`,
+                `https://four-gems-system-790aeec3afd8.herokuapp.com/promotions/${id}`,
                 {
                     headers: {
                         Authorization: "Bearer " + token,
@@ -67,9 +67,12 @@ const PromotionRow = ({ promotion }) => {
                     </div>
                 ) : (
                     <div>
-                        <StyledIconButton sx={{
-                            color: "grey.600",
-                        }}  onClick={() => setEdit(!edit)}>
+                        <StyledIconButton
+                            sx={{
+                                color: "grey.600",
+                            }}
+                            onClick={() => setEdit(!edit)}
+                        >
                             <Edit />
                         </StyledIconButton>
                     </div>

@@ -48,7 +48,7 @@ const list = [
   {
     title: "Account",
     icon: User2,
-    href: "/profile",
+    href: "/buyback-profile",
   },
 ];
 export default MobileNavigationBar;

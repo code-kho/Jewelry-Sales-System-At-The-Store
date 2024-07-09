@@ -1,7 +1,16 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { Edit } from "@mui/icons-material";
-import { Avatar, Box, Button, MenuItem, TextField } from "@mui/material";
+import {
+    Avatar,
+    Box,
+    Button,
+    MenuItem,
+    TextField,
+    Select,
+    FormControl,
+    InputLabel,
+} from "@mui/material";
 import { FlexBox } from "components/flex-box";
 import BazaarSwitch from "components/BazaarSwitch";
 import { currency } from "lib";
@@ -16,8 +25,26 @@ import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import DropZone from "../../../components/DropZone";
 
-// ========================================================================
-const ProductRow = ({ product }) => {
+// Define category options
+const categoryOptions = [
+    { id: 30, name: "bracelet" },
+    { id: 31, name: "earring" },
+    { id: 32, name: "ring" },
+    { id: 33, name: "necklace" },
+    { id: 34, name: "charm" },
+];
+const goldTypeOptions = [
+    { id: 50, name: "10k" },
+    { id: 53, name: "14k" },
+    { id: 54, name: "16k" },
+    { id: 51, name: "18k" },
+    { id: 55, name: "20k" },
+    { id: 56, name: "21k" },
+    { id: 57, name: "22k" },
+    { id: 52, name: "24k" },
+];
+
+export const ProductRow = ({ product }) => {
     const {
         productName,
         price,
@@ -33,9 +60,11 @@ const ProductRow = ({ product }) => {
         stonePrice,
         active,
         goldId,
+        typeId,
+        goldTypeName,
+        collectionId,
     } = product;
     const router = useRouter();
-    const [update, setUpdate] = useState();
     const [edit, setEdit] = useState(false);
     const [newProductName, setProductName] = useState(productName);
     const [newWeight, setNewWeight] = useState(weight);
@@ -45,11 +74,14 @@ const ProductRow = ({ product }) => {
         useState(quantityInStock);
     const [newStonePrice, setNewStonePrice] = useState(stonePrice);
     const [newDescription, setNewDescription] = useState(description);
-    const [newGem, setNewGem] = useState(gem);
+    const [newGem, setNewGem] = useState(gem ? 1 : 0);
     const [newImage, setNewImage] = useState(image);
     const [newCategoryName, setNewCategoryName] = useState(categoryName);
-    const [newActive, setNewActive] = useState(active);
+    const [newCategoryId, setNewCategoryId] = useState(typeId);
+    const [newActive, setNewActive] = useState(active ? 1 : 0);
     const [newGoldId, setNewGoldId] = useState(goldId);
+    const [newGoldTypeName, setNewGoldTypeName] = useState(goldTypeName);
+    const [newCollectionId, setNewCollectionId] = useState(collectionId);
 
     let token = "";
     if (typeof localStorage !== "undefined") {
@@ -61,26 +93,24 @@ const ProductRow = ({ product }) => {
     }
 
     const handleUpdateProduct = async () => {
-        console.log(productId);
         try {
             const response = await axios.put(
-                console.log(productId),
-                `https://four-gems-api-c21adc436e90.herokuapp.com/product/update-product=${productId}`,
+                `https://four-gems-system-790aeec3afd8.herokuapp.com/product/update-product`,
                 {
                     productId: productId,
                     productName: newProductName,
                     weight: newWeight,
-                    price: price,
                     laborCost: newLaborCost,
                     ratioPrice: newRatioPrice,
                     stonePrice: newStonePrice,
+                    isGem: newGem,
+                    isActive: newActive,
+                    image: newImage,
                     quantityInStock: newQuantityInStock,
                     description: newDescription,
-                    goldId: newGoldId,
-                    isGem: newGem,
-                    image: newImage,
-                    active: newActive,
-                    categoryName: newCategoryName,
+                    goldId: newGoldId, // Update to use newGoldId instead of goldId
+                    typeId: newCategoryId,
+                    collectionId: newCollectionId,
                 },
                 {
                     headers: {
@@ -88,9 +118,8 @@ const ProductRow = ({ product }) => {
                     },
                 }
             );
-            setUpdate(response.data);
-            setEdit(false);
             console.log(response.data);
+            setEdit(false);
         } catch (error) {
             console.error("There was an error!", error);
         }
@@ -98,10 +127,31 @@ const ProductRow = ({ product }) => {
 
     const handleEdit = () => {
         setEdit(true);
+        // Ensure the state reflects the current product values when entering edit mode
+        setNewGoldId(goldId);
+        setNewGoldTypeName(goldTypeName);
+        setNewCategoryId(typeId);
+        setNewCategoryName(categoryName);
     };
 
     const handleCancel = () => {
         setEdit(false);
+        // Revert the state to initial product values
+        setProductName(productName);
+        setNewWeight(weight);
+        setNewLaborCost(laborCost);
+        setNewRatioPrice(ratioPrice);
+        setNewQuantityInStock(quantityInStock);
+        setNewStonePrice(stonePrice);
+        setNewDescription(description);
+        setNewGem(gem ? 1 : 0);
+        setNewImage(image);
+        setNewCategoryName(categoryName);
+        setNewCategoryId(typeId);
+        setNewActive(active ? 1 : 0);
+        setNewGoldId(goldId);
+        setNewGoldTypeName(goldTypeName);
+        setNewCollectionId(collectionId);
     };
 
     return (
@@ -143,10 +193,29 @@ const ProductRow = ({ product }) => {
             </StyledTableCell>
             <StyledTableCell align="left">
                 {edit ? (
-                    <TextField
-                        value={newCategoryName}
-                        onChange={(e) => setNewCategoryName(e.target.value)}
-                    />
+                    <FormControl fullWidth>
+                        <InputLabel>Category</InputLabel>
+                        <Select
+                            value={newCategoryName}
+                            onChange={(e) => {
+                                const selectedCategory = categoryOptions.find(
+                                    (option) => option.name === e.target.value
+                                );
+                                setNewCategoryName(e.target.value);
+                                setNewCategoryId(selectedCategory.id);
+                            }}
+                            label="Category"
+                        >
+                            {categoryOptions.map((category) => (
+                                <MenuItem
+                                    key={category.id}
+                                    value={category.name}
+                                >
+                                    {category.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                 ) : (
                     categoryName
                 )}
@@ -228,34 +297,49 @@ const ProductRow = ({ product }) => {
             </StyledTableCell>
             <StyledTableCell align="left">
                 {edit ? (
-                    <TextField
-                        value={newGoldId}
-                        onChange={(e) => setNewGoldId(e.target.value)}
-                    />
+                    <FormControl fullWidth>
+                        <InputLabel>Gold Type</InputLabel>
+                        <Select
+                            value={newGoldTypeName}
+                            onChange={(e) => {
+                                const selectedGold = goldTypeOptions.find(
+                                    (option) => option.name === e.target.value
+                                );
+                                setNewGoldTypeName(e.target.value); // Set newGoldTypeName to the name
+                                setNewGoldId(selectedGold.id); // Set newGoldId to the id
+                            }}
+                            label="Gold Type"
+                        >
+                            {goldTypeOptions.map((gold) => (
+                                <MenuItem key={gold.id} value={gold.name}>
+                                    {gold.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                 ) : (
-                    goldId
+                    goldTypeName
                 )}
             </StyledTableCell>
+
             <StyledTableCell align="left">
                 {edit ? (
-                    <TextField
-                        value={newGem}
-                        onChange={(e) => setNewGem(e.target.value)}
+                    <BazaarSwitch
+                        checked={newGem === 1}
+                        onChange={(e) => setNewGem(e.target.checked ? 1 : 0)}
                     />
-                ) : gem ? (
-                    "Yes"
                 ) : (
-                    "No"
+                    <BazaarSwitch checked={newGem === 1} />
                 )}
             </StyledTableCell>
             <StyledTableCell align="left">
                 {edit ? (
                     <BazaarSwitch
-                        checked={newActive}
-                        onChange={(e) => setNewActive(e.target.checked)}
+                        checked={newActive === 1}
+                        onChange={(e) => setNewActive(e.target.checked ? 1 : 0)}
                     />
                 ) : (
-                    <BazaarSwitch checked={newActive} />
+                    <BazaarSwitch checked={newActive === 1} />
                 )}
             </StyledTableCell>
             <StyledTableCell align="center">
@@ -279,5 +363,3 @@ const ProductRow = ({ product }) => {
         </StyledTableRow>
     );
 };
-
-export default ProductRow;

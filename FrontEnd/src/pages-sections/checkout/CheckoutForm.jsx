@@ -60,7 +60,7 @@ const CheckoutForm = () => {
             console.log("Fetching customer info for ID:", customerId);
             try {
                 const responeGetCus = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/customers/${customerId}`,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/customers/${customerId}`,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
@@ -85,7 +85,7 @@ const CheckoutForm = () => {
         console.log(orderNew);
         try {
             const createOrder = await axios.post(
-                `https://four-gems-api-c21adc436e90.herokuapp.com/order`,
+                `https://four-gems-system-790aeec3afd8.herokuapp.com/order`,
                 orderNew,
                 {
                     headers: {

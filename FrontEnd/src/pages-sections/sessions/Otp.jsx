@@ -1,4 +1,3 @@
-import { useCallback, useState } from "react";
 import { Button, Card, Box, styled } from "@mui/material";
 import { useFormik } from "formik";
 import { H1 } from "components/Typography";
@@ -7,14 +6,6 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { MuiOtpInput } from "mui-one-time-password-input";
 import React from "react";
-const fbStyle = {
-    background: "#3B5998",
-    color: "white",
-};
-const googleStyle = {
-    background: "#4285F4",
-    color: "white",
-};
 export const Wrapper = styled(({ children, passwordVisibility, ...rest }) => (
     <Card {...rest}>{children}</Card>
 ))(({ theme, passwordVisibility }) => ({
@@ -28,12 +19,6 @@ export const Wrapper = styled(({ children, passwordVisibility, ...rest }) => (
             ? theme.palette.grey[600]
             : theme.palette.grey[400],
     },
-    ".facebookButton": {
-        marginBottom: 10,
-        ...fbStyle,
-        "&:hover": fbStyle,
-    },
-    ".googleButton": { ...googleStyle, "&:hover": googleStyle },
     ".agreement": {
         marginTop: 12,
         marginBottom: 24,
@@ -41,10 +26,6 @@ export const Wrapper = styled(({ children, passwordVisibility, ...rest }) => (
 }));
 
 const Otp = () => {
-    const [passwordVisibility, setPasswordVisibility] = useState(false);
-    const togglePasswordVisibility = useCallback(() => {
-        setPasswordVisibility((visible) => !visible);
-    }, []);
     const nav = useRouter();
     const [otp, setOtp] = React.useState("");
     const handleOtp = (newValue) => {
@@ -54,7 +35,7 @@ const Otp = () => {
     const handleFormSubmit = async (values) => {
         try {
             const response = await axios.post(
-                `https://four-gems-api-c21adc436e90.herokuapp.com/user/verify-code?username=${email}&otp=${otp}`,
+                `https://four-gems-system-790aeec3afd8.herokuapp.com/user/verify-code?username=${email}&otp=${otp}`,
                 {
                     username: email,
                     otp: otp,
@@ -76,7 +57,7 @@ const Otp = () => {
         onSubmit: handleFormSubmit,
     });
     return (
-        <Wrapper elevation={3} passwordVisibility={passwordVisibility}>
+        <Wrapper elevation={3}>
             <form onSubmit={handleSubmit}>
                 <BazaarImage
                     src="/assets/images/logo.svg"

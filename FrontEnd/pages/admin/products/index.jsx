@@ -75,14 +75,14 @@ export default function ProductList({ initialProducts }) {
             try {
                 if (token) {
                     const response = await axios.get(
-                        `https://four-gems-api-c21adc436e90.herokuapp.com/product/show-product?countId=${counterId}&pageSize=200&page=0&sortKeyword=productId&sortType=DESC&categoryName= &searchKeyword=`,
+                        `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=200&page=0&sortKeyword=productId&sortType=DESC&categoryName=&searchKeyword=`,
                         {
                             headers: {
                                 Authorization: `Bearer ` + token,
                             },
                         }
                     );
-                    setProducts(response.data.data);
+                    setProducts(response?.data?.data);
                 } else {
                     console.warn(
                         "Token is missing. Please ensure it's properly set."
@@ -95,7 +95,7 @@ export default function ProductList({ initialProducts }) {
             }
         };
         fetchData();
-    }, []);
+    }, [products]);
     console.log(filteredList.length);
     return (
         <Box py={4}>
@@ -121,8 +121,8 @@ export default function ProductList({ initialProducts }) {
                                 hideSelectBtn
                                 orderBy={orderBy}
                                 heading={tableHeading}
-                                rowCount={filteredList.length}
-                                numSelected={selected.length}
+                                rowCount={filteredList?.length}
+                                numSelected={selected?.length}
                                 onRequestSort={handleRequestSort}
                                 sx={{
                                     "& th": {
@@ -135,7 +135,7 @@ export default function ProductList({ initialProducts }) {
                                 {filteredList.map((product) => (
                                     <ProductRow
                                         product={product}
-                                        key={product.productId}
+                                        key={product?.productId}
                                     />
                                 ))}
                             </TableBody>
@@ -146,7 +146,7 @@ export default function ProductList({ initialProducts }) {
                 <Stack alignItems="center" my={4}>
                     <TablePagination
                         onChange={handleChangePage}
-                        count={Math.ceil(products.length / rowsPerPage)}
+                        count={Math.ceil(products?.length / rowsPerPage)}
                         page={page + 1}
                         rowsPerPage={rowsPerPage}
                         onPageChange={handleChangePage}

@@ -20,7 +20,6 @@ const MiniCart = ({ toggleSidenav }) => {
   const { palette } = useTheme();
   const { state, dispatch } = useAppContext();
   const cartList = state.cart;
-
   const handleCartAmountChange = (amount, product) => () => {
     dispatch({
       type: "CHANGE_CART_AMOUNT",
@@ -46,7 +45,7 @@ const MiniCart = ({ toggleSidenav }) => {
         >
           <ShoppingBagOutlined color="inherit" />
           <Box fontWeight={600} fontSize="16px" ml={1}>
-            {cartList.length} item
+            {cartList.length} kind of items
           </Box>
         </FlexBox>
 
@@ -177,20 +176,6 @@ const MiniCart = ({ toggleSidenav }) => {
 
       {!!cartList.length && (
         <Box p={2.5}>
-          {/*<Link href="/checkout-alternative" passHref>*/}
-          {/*  <Button*/}
-          {/*    fullWidth*/}
-          {/*    color="primary"*/}
-          {/*    variant="contained"*/}
-          {/*    sx={{*/}
-          {/*      mb: "0.75rem",*/}
-          {/*      height: "40px",*/}
-          {/*    }}*/}
-          {/*    onClick={toggleSidenav}*/}
-          {/*  >*/}
-          {/*    Checkout Now (${getTotalPrice().toFixed(2)})*/}
-          {/*  </Button>*/}
-          {/*</Link>*/}
 
           <Link href="/cart" passHref>
             <Button

@@ -93,7 +93,7 @@ export default function CustomerList({ initialCustomers }) {
             setLoading(true);
             try {
                 const respone = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/user/get-all`,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/user/get-all`,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
@@ -113,7 +113,7 @@ export default function CustomerList({ initialCustomers }) {
         const fetchDataSearch = async () => {
             try {
                 const responeSearch = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/user/get-by-email?email=${dataSearch}`,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/user/get-by-email?email=${dataSearch}`,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token

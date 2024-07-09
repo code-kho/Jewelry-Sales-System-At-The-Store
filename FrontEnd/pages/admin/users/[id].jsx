@@ -28,7 +28,7 @@ export default function UpdateAccount() {
     const handleGetUser = async () => {
       try {
         const respone = await axios.post(
-          `https://four-gems-api-c21adc436e90.herokuapp.com/user/get-user-information?userId=${router.query.id}`,
+          `https://four-gems-system-790aeec3afd8.herokuapp.com/user/get-user-information?userId=${router.query.id}`,
           {
             userId: router.query.id,
           },

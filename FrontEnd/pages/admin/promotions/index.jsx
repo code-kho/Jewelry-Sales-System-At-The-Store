@@ -62,7 +62,7 @@ export default function PromotionList() {
             setLoading(true);
             try {
                 const response = await axios.get(
-                    "https://four-gems-api-c21adc436e90.herokuapp.com/promotions",
+                    "https://four-gems-system-790aeec3afd8.herokuapp.com/promotions",
                     {
                         headers: {
                             Authorization: "Bearer " + token,
@@ -85,7 +85,7 @@ export default function PromotionList() {
             if (!dataSearch) return;
             try {
                 const response = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/promotions/search?query=${dataSearch}`,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/promotions/search?query=${dataSearch}`,
                     {
                         headers: {
                             Authorization: "Bearer " + token,

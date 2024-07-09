@@ -50,34 +50,18 @@ const Login = () => {
         setPasswordVisibility((visible) => !visible);
     }, []);
     const nav = useRouter();
-
     const handleFormSubmit = async (values) => {
-        // console.log(values);
-        // gọi api post, truyền password vaf username về theo form BE, lấy dc response != "" => log
-        // if
-        // http://localhost:8080/user/signin?username=${email}&password=${password}
         const { email, password } = values;
-
-        console.log(
-            `http://localhost:8080/user/signin?username=${email}&password=${password}`
-        );
         localStorage.setItem("username", email);
         try {
             const response = await axios.post(
-                `https://four-gems-api-c21adc436e90.herokuapp.com/user/signin?username=${email}&password=${password}`,
+                `https://four-gems-system-790aeec3afd8.herokuapp.com/user/signin?username=${email}&password=${password}`,
                 {
                     username: email,
                     password: password,
                 }
             );
             console.log(response.data.data !== undefined);
-            // if (response.data.data !== "") {
-            //     console.log("successfully logged in");
-
-            //     nav.push("/");
-            // } else {
-            //     console.log("error");
-            // }
             if (response.data.data !== "") {
                 console.log("successfully logged in");
                 nav.push("/otp");
@@ -160,19 +144,6 @@ const Login = () => {
                     Login
                 </Button>
             </form>
-
-            {/* <SocialButtons /> */}
-
-            {/*<FlexRowCenter mt="1.25rem">*/}
-            {/*  <Box>Don&apos;t have account?</Box>*/}
-            {/*  <Link href="/signup" passHref legacyBehavior>*/}
-            {/*    <a>*/}
-            {/*      <H6 ml={1} borderBottom="1px solid" borderColor="grey.900">*/}
-            {/*        Sign Up*/}
-            {/*      </H6>*/}
-            {/*    </a>*/}
-            {/*  </Link>*/}
-            {/*</FlexRowCenter>*/}
 
             <FlexBox
                 justifyContent="center"

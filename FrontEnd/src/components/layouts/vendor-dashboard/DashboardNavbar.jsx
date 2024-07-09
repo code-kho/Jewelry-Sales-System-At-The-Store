@@ -1,6 +1,6 @@
-import {useRouter} from "next/router";
-import {Search} from "@mui/icons-material";
-import {Box, Button, styled, useMediaQuery} from "@mui/material";
+import { useRouter } from "next/router";
+import { Search } from "@mui/icons-material";
+import { Box, Button, styled, useMediaQuery } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
@@ -8,14 +8,14 @@ import InputBase from "@mui/material/InputBase";
 import Globe from "components/icons/Globe";
 import Toggle from "components/icons/Toggle";
 import AccountPopover from "./popovers/AccountPopover";
-import {FlexBox, FlexRowCenter} from "components/flex-box";
+import { FlexBox, FlexRowCenter } from "components/flex-box";
 import NotificationsPopover from "./popovers/NoficationPopover"; // custom styled components
-import {H3} from "components/Typography";
-import {useEffect, useState} from "react";
+import { H3 } from "components/Typography";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
-const DashboardNavbarRoot = styled(AppBar)(({theme}) => ({
+const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
     zIndex: 11,
     paddingTop: "1rem",
     paddingBottom: "1rem",
@@ -30,7 +30,7 @@ const StyledToolBar = styled(Toolbar)(() => ({
         minHeight: "auto",
     },
 }));
-const ToggleWrapper = styled(FlexRowCenter)(({theme}) => ({
+const ToggleWrapper = styled(FlexRowCenter)(({ theme }) => ({
     width: 40,
     height: 40,
     flexShrink: 0,
@@ -38,7 +38,7 @@ const ToggleWrapper = styled(FlexRowCenter)(({theme}) => ({
     borderRadius: "8px",
     backgroundColor: theme.palette.grey[100],
 }));
-const CustomButton = styled(Button)(({theme}) => ({
+const CustomButton = styled(Button)(({ theme }) => ({
     minHeight: 40,
     flexShrink: 0,
     marginLeft: 16,
@@ -49,7 +49,7 @@ const CustomButton = styled(Button)(({theme}) => ({
         display: "none",
     },
 }));
-const StyledInputBase = styled(InputBase)(({theme}) => ({
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
     width: 500,
     padding: "5px 10px",
     borderRadius: "50px",
@@ -61,36 +61,40 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
 })); // ===================================================================
 
 // ===================================================================
-const DashboardNavbar = ({handleDrawerToggle}) => {
+const DashboardNavbar = ({ handleDrawerToggle }) => {
     const router = useRouter();
     const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
     const [name, setName] = useState();
-    let token = '';
-    if (typeof localStorage !== 'undefined') {
-        token = localStorage.getItem('token');
-    } else if (typeof sessionStorage !== 'undefined') {
+    let token = "";
+    if (typeof localStorage !== "undefined") {
+        token = localStorage.getItem("token");
+    } else if (typeof sessionStorage !== "undefined") {
         // Fallback to sessionStorage if localStorage is not supported
-        token = localStorage.getItem('token');
+        token = localStorage.getItem("token");
     } else {
         // If neither localStorage nor sessionStorage is supported
-        console.log('Web Storage is not supported in this environment.');
+        console.log("Web Storage is not supported in this environment.");
     }
     useEffect(() => {
         const decoded = jwtDecode(token);
         // console.log(decoded)
         const fetchDataName = async () => {
             try {
-                const resName = await axios.post(`https://four-gems-api-c21adc436e90.herokuapp.com/user/get-info-by-token?token=${token}`, {}, {
-                    headers: {
-                        Authorization: 'Bearer ' + token //the token is a variable which holds the token
+                const resName = await axios.post(
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/user/get-info-by-token?token=${token}`,
+                    {},
+                    {
+                        headers: {
+                            Authorization: "Bearer " + token, //the token is a variable which holds the token
+                        },
                     }
-                });
+                );
                 // console.log(resName.data)
                 setName(decoded.name);
             } catch (e) {
-                console.log(e)
+                console.log(e);
             }
-        }
+        };
         fetchDataName();
     }, []);
     return (
@@ -99,7 +103,7 @@ const DashboardNavbar = ({handleDrawerToggle}) => {
                 <StyledToolBar disableGutters>
                     {downLg && (
                         <ToggleWrapper onClick={handleDrawerToggle}>
-                            <Toggle/>
+                            <Toggle />
                         </ToggleWrapper>
                     )}
 
@@ -116,10 +120,10 @@ const DashboardNavbar = ({handleDrawerToggle}) => {
             Browse Website
           </CustomButton> */}
 
-                    <Box flexGrow={1} sx={{}}/>
+                    <Box flexGrow={1} sx={{}} />
 
                     <FlexBox alignItems="center" gap={4}>
-                        <StyledInputBase
+                        {/* <StyledInputBase
                             placeholder="Search anything..."
                             startAdornment={
                                 <Search
@@ -129,10 +133,10 @@ const DashboardNavbar = ({handleDrawerToggle}) => {
                                     }}
                                 />
                             }
-                        />
-                        <AccountPopover/>
+                        /> */}
+                        <AccountPopover />
                         <H3>{name}</H3>
-                        <NotificationsPopover/>
+                        <NotificationsPopover />
                     </FlexBox>
                 </StyledToolBar>
             </Container>

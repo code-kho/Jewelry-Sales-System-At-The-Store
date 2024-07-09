@@ -26,7 +26,8 @@ const OrderRow = ({ order }) => {
     const handleConfirmUser = async () => {
         try {
             const resConfirmUser = await axios.put(
-                `https://four-gems-api-c21adc436e90.herokuapp.com/order/confirm-order?id=${orderId}`, orderId,
+                `https://four-gems-system-790aeec3afd8.herokuapp.com/order/confirm-order?id=${orderId}`,
+                orderId,
                 {
                     headers: {
                         Authorization: "Bearer " + token, //the token is a variable which holds the token
@@ -40,15 +41,16 @@ const OrderRow = ({ order }) => {
         }
     };
     const handleViewOrderDetail = async () => {
-        console.log(orderId)
+        console.log(orderId);
         localStorage.setItem("orderId", orderId);
         router.push(`/admin/orders/${orderId}`);
-    }
+    };
     const handleCancelUser = async () => {
         try {
-            console.log(orderId)
+            console.log(orderId);
             const resCancelUser = await axios.put(
-                `https://four-gems-api-c21adc436e90.herokuapp.com/order/cancel-order?id=${orderId}`, orderId,
+                `https://four-gems-system-790aeec3afd8.herokuapp.com/order/cancel-order?id=${orderId}`,
+                orderId,
                 {
                     headers: {
                         Authorization: "Bearer " + token, //the token is a variable which holds the token
@@ -60,7 +62,7 @@ const OrderRow = ({ order }) => {
         } catch (e) {
             console.log(e);
         }
-    }
+    };
     return (
         <StyledTableRow tabIndex={-1} role="checkbox">
             <StyledTableCell align="left">{orderId}</StyledTableCell>
@@ -75,7 +77,9 @@ const OrderRow = ({ order }) => {
                 {orderDate}
             </StyledTableCell>
 
-            <StyledTableCell align="left">{currency(totalAmount)}</StyledTableCell>
+            <StyledTableCell align="left">
+                {currency(totalAmount)}
+            </StyledTableCell>
 
             <StyledTableCell align="left">
                 <StatusWrapper status={status}>{status}</StatusWrapper>
@@ -110,7 +114,9 @@ const OrderRow = ({ order }) => {
                     </div>
                 ) : (
                     <>
-                        <StyledIconButton onClick={() => handleViewOrderDetail()}>
+                        <StyledIconButton
+                            onClick={() => handleViewOrderDetail()}
+                        >
                             <RemoveRedEye />
                         </StyledIconButton>
 

@@ -5,7 +5,7 @@
 import Mock from "../../mock";
 import { addressList } from "./data"; // get all users
 
-Mock.onGet("/api/address/user").reply(async () => {
+Mock.onGet("/api/buy-back/user").reply(async () => {
   try {
     return [200, addressList];
   } catch (err) {
@@ -19,7 +19,7 @@ Mock.onGet("/api/address/user").reply(async () => {
   }
 }); // get all user id
 
-Mock.onGet("/api/address/address-ids").reply(async () => {
+Mock.onGet("/api/buy-back/buy-back-ids").reply(async () => {
   try {
     const ids = addressList.map((item) => ({
       params: {
@@ -38,7 +38,7 @@ Mock.onGet("/api/address/address-ids").reply(async () => {
   }
 }); // get single user
 
-Mock.onGet("/api/address/user/1").reply(async (config) => {
+Mock.onGet("/api/buy-back/user/1").reply(async (config) => {
   try {
     if (config?.params?.id) {
       const address = addressList.find((item) => item.id === config.params.id);

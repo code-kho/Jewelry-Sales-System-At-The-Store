@@ -23,22 +23,44 @@ const Market = (props) => {
     const [showEarringProduct, setShowEarringProduct] = useState([]);
     const [showNecklaceProduct, setShowNecklaceProduct] = useState([]);
     const [showCharmProduct, setShowCharmProduct] = useState([]);
-
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                router.push("/login");
+                return;
+            }
+            const decoded = jwtDecode(token);
+            localStorage.setItem("role", decoded.role);
+            localStorage.setItem("counterId", decoded?.counterId);
+            if (decoded?.role === "staff") {
+                router.push("/");
+            } else if (decoded?.role === "QC") {
+                router.push("/qcpage");
+            } else {
+                router.push("/vendor/dashboard");
+            }
+        }
+    }, []);
     useEffect(() => {
         const fetchProductBracelet = async () => {
             const token = localStorage.getItem("token");
             const counterId = localStorage.getItem("counterId");
             try {
                 const resBraceletProduct = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=productId&sortType=ASC&categoryName=bracelet&searchKeyword= `,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=productId&sortType=ASC&categoryName=bracelet&searchKeyword= `,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
                         },
                     }
                 );
-                setShowBraceletProduct(resBraceletProduct?.data?.data);
-                // console.log(resBraceletProduct.data.data);
+
+                setShowBraceletProduct(
+                    resBraceletProduct?.data?.data.filter(
+                        (res) => res.active === true
+                    )
+                );
             } catch (e) {
                 console.log(e);
             }
@@ -52,14 +74,18 @@ const Market = (props) => {
             const counterId = localStorage.getItem("counterId");
             try {
                 const resRingProduct = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=price&sortType= &categoryName=ring&searchKeyword= `,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=price&sortType= &categoryName=ring&searchKeyword= `,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
                         },
                     }
                 );
-                setShowRingProduct(resRingProduct?.data?.data);
+                setShowRingProduct(
+                    resRingProduct?.data?.data.filter(
+                        (res) => res.active === true
+                    )
+                );
             } catch (e) {
                 console.log(e);
             }
@@ -73,14 +99,18 @@ const Market = (props) => {
             const counterId = localStorage.getItem("counterId");
             try {
                 const resEarringProduct = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=price&sortType= &categoryName=earring&searchKeyword= `,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=price&sortType= &categoryName=earring&searchKeyword= `,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
                         },
                     }
                 );
-                setShowEarringProduct(resEarringProduct?.data?.data);
+                setShowEarringProduct(
+                    resEarringProduct?.data?.data.filter(
+                        (res) => res.active === true
+                    )
+                );
             } catch (e) {
                 console.log(e);
             }
@@ -94,14 +124,18 @@ const Market = (props) => {
             const counterId = localStorage.getItem("counterId");
             try {
                 const resNecklacesProduct = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=price&sortType= &categoryName=necklace&searchKeyword= `,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=price&sortType= &categoryName=necklace&searchKeyword= `,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
                         },
                     }
                 );
-                setShowNecklaceProduct(resNecklacesProduct?.data?.data);
+                setShowNecklaceProduct(
+                    resNecklacesProduct?.data?.data.filter(
+                        (res) => res.active === true
+                    )
+                );
             } catch (e) {
                 console.log(e);
             }
@@ -115,14 +149,18 @@ const Market = (props) => {
             const counterId = localStorage.getItem("counterId");
             try {
                 const resCharmProduct = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=productId&sortType=ASC&categoryName=charm&searchKeyword= `,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=100&page=0&sortKeyword=productId&sortType=ASC&categoryName=charm&searchKeyword= `,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
                         },
                     }
                 );
-                setShowCharmProduct(resCharmProduct?.data?.data);
+                setShowCharmProduct(
+                    resCharmProduct?.data?.data.filter(
+                        (res) => res.active === true
+                    )
+                );
             } catch (e) {
                 console.log(e);
             }
@@ -130,45 +168,10 @@ const Market = (props) => {
         fetchProductCharm();
     }, []);
 
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-            const token = localStorage.getItem("token");
-            // const dataShow = Api.getProduct(token)
-            if (!token) {
-                // No token found, redirect to login page
-                router.push("/login");
-                return; // Exit early
-            }
-
-            // Attempt to decode the token
-            const decoded = jwtDecode(token);
-            localStorage.setItem("role", decoded.role);
-            localStorage.setItem("counterId", decoded?.counterId);
-            const counterId = localStorage.getItem("counterId");
-            if (decoded?.role === "staff") {
-                // Redirect to home page for staff
-                router.push("/");
-            } else if (decoded?.role === "QC") {
-                router.push("/qcpage");
-            } else {
-                router.push("/vendor/dashboard");
-            }
-        }
-    }, []);
-
     return (
         <ShopLayout1 topbarBgColor={theme.palette.grey[900]}>
             <SEO title="FourGemsShop" />
             <Box bgcolor="#FFFFFF">
-                {/* HERO SLIDER AND GRID */}
-                {/* <Section1 carouselData={props?.mainCarouselData} /> */}
-
-                {/* SERVICE CARDS */}
-                {/* <Section2 serviceList={props?.serviceList} /> */}
-
-                {/* CATEGORIES AND ANIMATED OFFER BANNER */}
-                {/* <Section3 categories={props?.categories} /> */}
-
                 {/* Necklaces */}
                 <Section5 products={showNecklaceProduct} />
 
@@ -201,7 +204,6 @@ const Market = (props) => {
 };
 
 export const getStaticProps = async () => {
-    const brands = await api?.getBrands();
     const products = await api?.getProducts();
     const serviceList = await api?.getServices();
     const categories = await api?.getCategories();
@@ -211,7 +213,6 @@ export const getStaticProps = async () => {
     const womenFashionProducts = await api?.getWomenFashionProducts();
     return {
         props: {
-            brands,
             products,
             categories,
             serviceList,

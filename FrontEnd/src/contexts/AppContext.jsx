@@ -13,7 +13,7 @@ const AppContext = createContext({
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case "CHANGE_CART_AMOUNT":
+    case "CHANGE_CART_AMOUNT": {
       const cartList = state.cart;
       const cartItem = action.payload;
       const exist = cartList.find((item) => item.id === cartItem.id);
@@ -23,40 +23,27 @@ const reducer = (state, action) => {
 
       if (cartItem.qty < 1) {
         newCart = cartList.filter((item) => item.id !== cartItem.id);
-        totalQuantity = newCart.reduce((acc, item) => acc + item.qty, 0);
-        return { ...state, cart: newCart, totalQuantity };
-      }
-
-      if (exist) {
+      } else if (exist) {
         newCart = cartList.map((item) =>
-          item.id === cartItem.id ? { ...item, qty: cartItem.qty } : item
+            item.id === cartItem.id ? { ...item, qty: cartItem.qty } : item
         );
-        totalQuantity = newCart.reduce((acc, item) => acc + item.qty, 0);
-        return { ...state, cart: newCart, totalQuantity };
+      } else {
+        newCart = [...cartList, cartItem];
       }
 
-      newCart = [...cartList, { ...cartItem, qty: 1 }];
       totalQuantity = newCart.reduce((acc, item) => acc + item.qty, 0);
       return { ...state, cart: newCart, totalQuantity };
-
-    default: {
-      return state;
     }
+
+    default:
+      return state;
   }
 };
 
 export const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
-  const contextValue = useMemo(
-    () => ({
-      state,
-      dispatch,
-    }),
-    [state, dispatch]
-  );
-  return (
-    <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>
-  );
+  const contextValue = useMemo(() => ({ state, dispatch }), [state, dispatch]);
+  return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;
 };
 
 export const useAppContext = () => useContext(AppContext);

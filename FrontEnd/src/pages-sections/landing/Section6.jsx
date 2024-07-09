@@ -23,7 +23,7 @@ const list = [
     title: "User Dashboard",
     thumbnail: "/assets/images/landing/user-dashboard.png",
     subTitle:
-      "Structured user dashboard for managing user account, orders, address and etc.",
+      "Structured user dashboard for managing user account, orders, buy-back and etc.",
     category: "user",
     buttonText: "Browse User Dashboard",
   },

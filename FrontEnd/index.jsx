@@ -82,7 +82,7 @@ export default function SellerList({ sellers }) {
             setLoading(true);
             try {
                 const responeCusInfo = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/customers`,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/customers`,
                     {
                         headers: {
                             Authorization: "Bearer " + token, //the token is a variable which holds the token
@@ -103,7 +103,7 @@ export default function SellerList({ sellers }) {
         const fetchDataCusSearch = async () => {
             try {
                 const responeSearchCus = await axios.get(
-                    `https://four-gems-api-c21adc436e90.herokuapp.com/customers?phoneNumber=${dataSearch}`,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/customers?phoneNumber=${dataSearch}`,
                     {
                         headers: {
                             Authorization: "Bearer " + token,

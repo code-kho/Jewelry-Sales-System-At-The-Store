@@ -35,7 +35,7 @@ export default function SellerList() {
 
 
 
-    fetch("https://four-gems-api-c21adc436e90.herokuapp.com/user/get-all", {
+    fetch("https://four-gems-system-790aeec3afd8.herokuapp.com/user/get-all", {
       headers: {
         Authorization: `Bearer ${storedToken}`,
       },

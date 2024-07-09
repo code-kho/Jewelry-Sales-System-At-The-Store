@@ -12,7 +12,6 @@ import { currency } from "lib";
 // ================================================================
 const ProductIntro = ({ product }) => {
     const { productId, price, productName, image, description } = product;
-    console.log(image);
     const { state, dispatch } = useAppContext();
     const [selectedImage, setSelectedImage] = useState(0); // CHECK PRODUCT EXIST OR NOT IN THE CART
 

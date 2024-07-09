@@ -19,9 +19,6 @@ const QCLayout = ({ children, showTopbar = true, showNavbar = true }) => {
             {showTopbar && <Topbar />}
 
             <Box zIndex={4} position="relative" className="section-after-sticky">
-                {/* NAVIGATION BAR */}
-                {showNavbar && <NavbarQC elevation={0} />}
-
                 {/* BODY CONTENT */}
                 {children}
             </Box>

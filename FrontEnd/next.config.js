@@ -4,10 +4,6 @@ const withTM = require("next-transpile-modules")([
 ]);
 
 module.exports = withTM({
-    // any other next.js settings you want to configure
-});
-
-module.exports = withTM({
     devIndicators: {},
     publicRuntimeConfig: {
         // Available on both server and client

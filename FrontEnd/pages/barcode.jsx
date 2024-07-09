@@ -12,16 +12,6 @@ const BarCodeTest = () => {
     const [barCode, setBarcodeScan] = useState("No Product");
     const [getProductByBarCode, setGetProductByBarCode] = useState();
     const [isClient, setIsClient] = useState(false);
-    let token = "";
-    if (typeof localStorage !== "undefined") {
-        token = localStorage.getItem("token");
-    } else if (typeof sessionStorage !== "undefined") {
-        // Fallback to sessionStorage if localStorage is not supported
-        token = localStorage.getItem("token");
-    } else {
-        // If neither localStorage nor sessionStorage is supported
-        console.log("Web Storage is not supported in this environment.");
-    }
 
     useEffect(() => {
         setIsClient(true);
@@ -35,20 +25,17 @@ const BarCodeTest = () => {
             const onKeydown = (event) => {
                 const now = Date.now();
 
-                // Reset barcode if too much time has passed since the last key press
                 if (now - lastKeyTime > 100) {
                     barcode = "";
                 }
 
-                // Process only alphanumeric keys (ignore special keys)
                 if (/^[a-zA-Z0-9]$/.test(event.key)) {
                     barcode += event.key;
                 } else if (event.key === "Enter") {
-                    // Check if the barcode length is correct and set the barcode state
                     if (barcode.length > 0) {
                         setBarcodeScan(barcode);
+                        barcode = "";
                     }
-                    barcode = "";
                 }
 
                 lastKeyTime = now;
@@ -64,35 +51,39 @@ const BarCodeTest = () => {
 
     useEffect(() => {
         const counterId = localStorage.getItem("counterId");
-        if (barCode !== "No Product") {
-            const fetchProByBarCode = async () => {
+        let token = localStorage.getItem("token");
+
+        const fetchProByBarCode = async () => {
+            if (barCode !== "No Product") {
                 try {
                     const resGetByBarCode = await axios.get(
-                        `https://four-gems-api-c21adc436e90.herokuapp.com/product/get-product-by-barcode?countId=${counterId}&barcode=${barCode}`,
+                        `https://four-gems-system-790aeec3afd8.herokuapp.com/product/get-product-by-barcode?countId=${counterId}&barcode=${barCode}`,
                         {
                             headers: {
-                                Authorization: "Bearer " + token, //the token is a variable which holds the token
+                                Authorization: `Bearer ${token}`,
                             },
                         }
                     );
                     const product = resGetByBarCode.data.data;
                     setGetProductByBarCode(product);
                     handleAddToCart(product);
+                    setBarcodeScan("No Product");
                 } catch (e) {
                     console.log(e);
                 }
-            };
-            fetchProByBarCode();
-        }
-    }, [barCode, token]);
-    console.log(barCode)
+            }
+        };
+        fetchProByBarCode();
+    }, [barCode]);
+
     const handleAddToCart = (product) => {
+        const cartItem = state.cart.find((item) => item.id === product.productId);
         const payload = {
             id: product.productId,
             name: product.productName,
             price: product.price,
             imgUrl: product.image,
-            qty: 1,
+            qty: (cartItem?.qty || 0) + 1,
         };
         dispatch({
             type: "CHANGE_CART_AMOUNT",
@@ -103,6 +94,7 @@ const BarCodeTest = () => {
         });
     };
 
+    console.log(barCode);
     return (
         <div>
             <Topbar />
