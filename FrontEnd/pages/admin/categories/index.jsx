@@ -1,4 +1,5 @@
-import { Box, Card, Stack, Table, TableContainer } from "@mui/material";
+import { useState, useEffect } from "react";
+import { Button, Box, Card, Stack, Table, TableContainer } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import SearchArea from "components/dashboard/SearchArea";
 import TableHeader from "components/data-table/TableHeader";
@@ -8,124 +9,159 @@ import { H3 } from "components/Typography";
 import useMuiTable from "hooks/useMuiTable";
 import Scrollbar from "components/Scrollbar";
 import { CategoryRow } from "pages-sections/admin";
-import api from "utils/__api__/dashboard"; // TABLE HEADING DATA LIST
+import axios from "axios";
+import { useRouter } from "next/router";
 
+// TABLE HEADING DATA LIST
 const tableHeading = [
-  {
-    id: "id",
-    label: "ID",
-    align: "left",
-  },
-  {
-    id: "name",
-    label: "Name",
-    align: "left",
-  },
-  {
-    id: "image",
-    label: "Image",
-    align: "left",
-  },
-  {
-    id: "level",
-    label: "Level",
-    align: "left",
-  },
-  {
-    id: "featured",
-    label: "Featured",
-    align: "left",
-  },
-  {
-    id: "action",
-    label: "Action",
-    align: "center",
-  },
-]; // =============================================================================
+    { id: "id", label: "ID", align: "left" },
+    { id: "name", label: "Product Type Name", align: "left" },
+    { id: "createdDate", label: "Created Date", align: "left" },
+    { id: "action", label: "Edit", align: "center" },
+];
 
 CategoryList.getLayout = function getLayout(page) {
-  return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
-}; // =============================================================================
+    return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
+};
 
-// =============================================================================
-export default function CategoryList(props) {
-  const { categories } = props; // RESHAPE THE PRODUCT LIST BASED TABLE HEAD CELL ID
+export default function CategoryList({ initialCategories }) {
+    const [categories, setCategories] = useState(initialCategories);
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
-  const filteredCategories = categories.map((item) => ({
-    id: item.id,
-    name: item.name,
-    image: item.image,
-    featured: item.featured,
-    level: Math.ceil(Math.random() * 1),
-  }));
-  const {
-    order,
-    orderBy,
-    selected,
-    rowsPerPage,
-    filteredList,
-    handleChangePage,
-    handleRequestSort,
-  } = useMuiTable({
-    listData: filteredCategories,
-  });
-  return (
-    <Box py={4}>
-      <H3 mb={2}>Product Categories</H3>
+    const handleNav = () => {
+        router.push("/admin/categories/create");
+    };
 
-      <SearchArea
-        handleSearch={() => {}}
-        buttonText="Add Category"
-        handleBtnClick={() => {}}
-        searchPlaceholder="Search Category..."
-      />
+    let token = "";
+    if (typeof localStorage !== "undefined") {
+        token = localStorage.getItem("token");
+    } else if (typeof sessionStorage !== "undefined") {
+        token = sessionStorage.getItem("token");
+    } else {
+        console.log("Web Storage is not supported in this environment.");
+    }
 
-      <Card>
-        <Scrollbar>
-          <TableContainer
-            sx={{
-              minWidth: 900,
-            }}
-          >
-            <Table>
-              <TableHeader
-                order={order}
-                hideSelectBtn
-                orderBy={orderBy}
-                heading={tableHeading}
-                rowCount={categories.length}
-                numSelected={selected.length}
-                onRequestSort={handleRequestSort}
-              />
+    const {
+        order,
+        orderBy,
+        selected,
+        rowsPerPage,
+        filteredList,
+        handleChangePage,
+        handleRequestSort,
+        page,
+        handleChangeRowsPerPage,
+    } = useMuiTable({
+        listData: categories,
+    });
 
-              <TableBody>
-                {filteredList.map((category) => (
-                  <CategoryRow
-                    item={category}
-                    key={category.id}
-                    selected={selected}
-                  />
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Scrollbar>
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                if (token) {
+                    const response = await axios.get(
+                        `https://four-gems-system-790aeec3afd8.herokuapp.com/product-type`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ` + token,
+                            },
+                        }
+                    );
+                    setCategories(response?.data?.data);
+                } else {
+                    console.warn(
+                        "Token is missing. Please ensure it's properly set."
+                    );
+                }
+            } catch (error) {
+                console.error("Failed to fetch product types:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, [categories]);
 
-        <Stack alignItems="center" my={4}>
-          <TablePagination
-            onChange={handleChangePage}
-            count={Math.ceil(categories.length / rowsPerPage)}
-          />
-        </Stack>
-      </Card>
-    </Box>
-  );
+    return (
+        <Box py={4}>
+            <H3>Product Type List</H3>
+
+            <SearchArea
+                handleSearch={() => {}}
+                buttonText="Add Product Type"
+                handleBtnClick={handleNav}
+                searchPlaceholder="Search Product Type..."
+            />
+            <Card>
+                <Scrollbar autoHide={false}>
+                    <TableContainer
+                        sx={{
+                            minWidth: 1200,
+                            width: 1200,
+                        }}
+                    >
+                        <Table>
+                            <TableHeader
+                                order={order}
+                                hideSelectBtn
+                                orderBy={orderBy}
+                                heading={tableHeading}
+                                rowCount={filteredList?.length}
+                                numSelected={selected?.length}
+                                onRequestSort={handleRequestSort}
+                                sx={{
+                                    "& th": {
+                                        minWidth: 150,
+                                    },
+                                }}
+                            />
+
+                            <TableBody>
+                                {filteredList.map((category) => (
+                                    <CategoryRow
+                                        category={category}
+                                        key={category?.id}
+                                    />
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Scrollbar>
+
+                <Stack alignItems="center" my={4}>
+                    <TablePagination
+                        onChange={handleChangePage}
+                        count={Math.ceil(categories?.length / rowsPerPage)}
+                        page={page + 1}
+                        rowsPerPage={rowsPerPage}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                </Stack>
+            </Card>
+        </Box>
+    );
 }
+
 export const getStaticProps = async () => {
-  const categories = await api.category();
-  return {
-    props: {
-      categories,
-    },
-  };
+    try {
+        const response = await axios.get(
+            `https://four-gems-system-790aeec3afd8.herokuapp.com/product-type`
+        );
+        const categories = response?.data?.data || [];
+        return {
+            props: {
+                initialCategories: categories,
+            },
+        };
+    } catch (error) {
+        console.error("Failed to fetch initial product types:", error);
+        return {
+            props: {
+                initialCategories: [],
+            },
+        };
+    }
 };

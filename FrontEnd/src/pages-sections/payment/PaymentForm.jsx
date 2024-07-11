@@ -58,7 +58,7 @@ const PaymentForm = () => {
                 }
             );
             setVNPayUrl(createVNPay.data.data);
-            console.log(createVNPay.data.data.paymentUrl);
+            localStorage.removeItem('percentDiscount');
             router.push(createVNPay.data.data.paymentUrl);
         } catch (error) {
             console.error("Failed to fetch VNPay:", error);
@@ -76,7 +76,7 @@ const PaymentForm = () => {
                 }
             );
             setPaypalUrl(createOrder.data.data);
-            console.log(createOrder.data.data);
+            localStorage.removeItem('percentDiscount');
             router.push(createOrder.data.data);
         } catch (error) {
             console.error("Failed to fetch VNPay:", error);
@@ -94,7 +94,7 @@ const PaymentForm = () => {
                 }
             );
             setCodData(createCod.data.data);
-            console.log(createCod.data.data);
+            localStorage.removeItem('percentDiscount');
             router.push("/order-success");
         } catch (error) {
             console.error("Failed to fetch VNPay:", error);

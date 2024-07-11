@@ -4,7 +4,6 @@ import { Edit } from "@mui/icons-material";
 import {
     Avatar,
     Box,
-    Button,
     MenuItem,
     TextField,
     Select,
@@ -16,7 +15,6 @@ import BazaarSwitch from "components/BazaarSwitch";
 import { currency } from "lib";
 import {
     StyledTableRow,
-    CategoryWrapper,
     StyledTableCell,
     StyledIconButton,
 } from "../StyledComponents";
@@ -44,7 +42,7 @@ const goldTypeOptions = [
     { id: 52, name: "24k" },
 ];
 
-export const ProductRow = ({ product }) => {
+const ProductRow = ({ product }) => {
     const {
         productName,
         price,
@@ -363,3 +361,5 @@ export const ProductRow = ({ product }) => {
         </StyledTableRow>
     );
 };
+
+export default ProductRow;

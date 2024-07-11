@@ -3,22 +3,17 @@ import {
   Box,
   Card,
   Grid,
-  Button,
   Avatar,
   Divider,
-  MenuItem,
-  TextField,
-  IconButton,
 } from "@mui/material";
-import { FlexBetween, FlexBox } from "components/flex-box";
+import { FlexBox } from "components/flex-box";
 import { H2, H5, H6, Paragraph, Span } from "components/Typography";
 import { currency } from "lib";
 import {jwtDecode} from "jwt-decode";
-import {token} from "stylis";
+
 
 // ===================================================================
 const OrderDetails = ({ order }) => {
-  console.log(order);
   let token = '';
   if (typeof localStorage !== 'undefined') {
     token = localStorage.getItem('token');
@@ -31,8 +26,6 @@ const OrderDetails = ({ order }) => {
   }
   const decoded = jwtDecode(token);
   console.log(decoded)
-  order.orderItemList.map((item) => console.log(item.img));
-
   return (
       <Grid container spacing={3}>
         <Grid item xs={12}>

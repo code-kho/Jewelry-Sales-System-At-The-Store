@@ -8,26 +8,33 @@ import { H3 } from "components/Typography";
 import useMuiTable from "hooks/useMuiTable";
 import { ReviewRow } from "pages-sections/admin";
 import api from "utils/__api__/dashboard";
+import {useEffect, useState} from "react";
+import axios from "axios";
 // TABLE HEADING DATA LIST
 const tableHeading = [
   {
-    id: "product",
-    label: "Product",
+    id: "id",
+    label: "Resquest Id",
     align: "left",
   },
   {
-    id: "customer",
-    label: "Customer",
+    id: "fromCounter",
+    label: "From Counter",
     align: "left",
   },
   {
-    id: "comment",
-    label: "Comment",
+    id: "toCounter",
+    label: "To Counter",
     align: "left",
   },
   {
-    id: "published",
-    label: "Published",
+    id: "totalQuantity",
+    label: "Total Product",
+    align: "left",
+  },
+  {
+    id: "status",
+    label: "Status",
     align: "left",
   },
   {
@@ -37,22 +44,51 @@ const tableHeading = [
   },
 ]; // =============================================================================
 
-ProductReviews.getLayout = function getLayout(page) {
+RotategoodsList.getLayout = function getLayout(page) {
   return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
 }; // =============================================================================
 
 // =============================================================================
-export default function ProductReviews({ reviews }) {
-  // RESHAPE THE REVIEW LIST BASED TABLE HEAD CELL ID
-  const filteredrReviews = reviews.map((item) => ({
+export default function RotategoodsList({ reviews }) {
+  const [showRotate, setShowRotate] = useState();
+  let token = '';
+  if (typeof localStorage !== 'undefined') {
+    token = localStorage.getItem('token');
+  } else if (typeof sessionStorage !== 'undefined') {
+    // Fallback to sessionStorage if localStorage is not supported
+    token = localStorage.getItem('token');
+  } else {
+    // If neither localStorage nor sessionStorage is supported
+    console.log('Web Storage is not supported in this environment.');
+  }
+  useEffect(() => {
+    const counterId = localStorage.getItem("counterId");
+    const fetchRotateReq = async () => {
+      try {
+        const resRotateRes = await axios.get(
+            `https://four-gems-system-790aeec3afd8.herokuapp.com/transfer-request/get-in-counter?counterId=${counterId}`,
+            {
+              headers: {
+                Authorization: "Bearer " + token, //the token is a variable which holds the token
+              },
+            }
+        );
+        console.log(resRotateRes.data.data);
+        setShowRotate(resRotateRes.data.data);
+      } catch (e) {
+        console.log("Can not fetch rotate request" + e);
+      }
+    };
+    fetchRotateReq();
+  }, []);
+  const filteredRotateReq = showRotate?.map((item) => ({
     id: item.id,
-    published: true,
-    comment: item.comment,
-    productId: item.product.id,
-    product: item.product.title,
-    productImage: item.product.thumbnail,
-    customer: `${item.customer.name.firstName} ${item.customer.name.lastName}`,
+    fromCounter: item.fromCounter.address,
+    toCounter: item.toCounter.address,
+    totalQuantity: item.totalQuantity,
+    status: item.status
   }));
+  console.log(filteredRotateReq)
   const {
     order,
     orderBy,
@@ -62,7 +98,7 @@ export default function ProductReviews({ reviews }) {
     handleChangePage,
     handleRequestSort,
   } = useMuiTable({
-    listData: filteredrReviews,
+    listData: filteredRotateReq,
     defaultSort: "product",
   });
   return (
@@ -88,8 +124,8 @@ export default function ProductReviews({ reviews }) {
               />
 
               <TableBody>
-                {filteredList.map((review) => (
-                  <ReviewRow review={review} key={review.id} />
+                {filteredList?.map((showRotate) => (
+                  <ReviewRow showRotate={showRotate} key={showRotate.id} />
                 ))}
               </TableBody>
             </Table>

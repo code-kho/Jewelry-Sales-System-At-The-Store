@@ -5,12 +5,14 @@ import { ProductForm } from "pages-sections/admin";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import { useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 CreateProduct.getLayout = function getLayout(page) {
     return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
 };
 
 export default function CreateProduct() {
+    const router = useRouter();
     const [productPublish, setProductPublish] = useState(1);
     const [files, setFiles] = useState([]); // Files will now contain URLs
     const [imgUrl, setImgUrl] = useState("");
@@ -80,6 +82,7 @@ export default function CreateProduct() {
         } catch (e) {
             console.log(e);
         }
+        router.push("/admin/products");
     };
 
     return (

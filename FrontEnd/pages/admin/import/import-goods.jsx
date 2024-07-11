@@ -33,6 +33,8 @@ const ImportGoods = () => {
     const [loading, setLoading] = useState(true);
     const [rotateRequestPopup, setRotateRequestPopup] = useState(false);
     const [counters, setCounters] = useState([]);
+    const [refreshData, setRefreshData] = useState(false); // State to trigger API call
+
     let token = "";
 
     if (typeof localStorage !== "undefined") {
@@ -63,6 +65,30 @@ const ImportGoods = () => {
         fetchCounters();
     }, [token]);
 
+    useEffect(() => {
+        const fetchProductRotate = async () => {
+            try {
+                const response = await axios.get(
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-all-product-not-in-counter?counterId=${rotateId.counterId}`,
+                    {
+                        headers: {
+                            Authorization: "Bearer " + token,
+                        },
+                    }
+                );
+                setRotateGoods(response.data.data);
+            } catch (error) {
+                console.error("Failed to fetch data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (rotateId.counterId) {
+            fetchProductRotate();
+        }
+    }, [rotateId.counterId, refreshData]); // Re-fetch when rotateId.counterId or refreshData changes
+
     const handleFormSubmit = async (values) => {
         setRotateId(values);
         const counterId = localStorage.getItem("counterId");
@@ -79,37 +105,6 @@ const ImportGoods = () => {
 
     const handleClosePopup = () => {
         setPopupOpen(false);
-    };
-
-    const handleConfirmRotate = async (values) => {
-        setRotateRequestPopup(false);
-        const counterId = localStorage.getItem("counterId");
-        const RotateRequest = {
-            fromCounterId: parseInt(values.counterId),
-            toCounterId: parseInt(counterId),
-            productTransferRequestList: cartList.map((item) => ({
-                productId: item.id,
-                quantity: item.qty,
-            })),
-        };
-
-        try {
-            const createRotateRequest = await axios.post(
-                `https://four-gems-system-790aeec3afd8.herokuapp.com/transfer-request`,
-                RotateRequest,
-                {
-                    headers: {
-                        Authorization: "Bearer " + token,
-                    },
-                }
-            );
-            console.log(
-                "Rotate request created:",
-                createRotateRequest.data.data
-            );
-        } catch (error) {
-            console.error("Failed to create import request:", error);
-        }
     };
 
     const handleConfirmTransfer = async (values) => {
@@ -132,26 +127,39 @@ const ImportGoods = () => {
             }
         };
 
-        const fetchProductRotate = async () => {
-            try {
-                const response = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-all-product-not-in-counter?counterId=${counterId}`,
-                    {
-                        headers: {
-                            Authorization: "Bearer " + token,
-                        },
-                    }
-                );
-                setRotateGoods(response.data.data);
-            } catch (error) {
-                console.error("Failed to fetch data:", error);
-            } finally {
-                setLoading(false);
-            }
+        await fetchCounterInfo();
+        setRefreshData((prev) => !prev); // Toggle refreshData state to re-fetch product data
+    };
+
+    const handleConfirmRotate = async (values) => {
+        setRotateRequestPopup(false);
+        const ImportRequest = {
+            fromCounterId: 0,
+            toCounterId: rotateId.counterId,
+            productTransferRequestList: cartList.map((item) => ({
+                productId: item.id,
+                quantity: item.qty,
+            })),
         };
 
-        await fetchCounterInfo();
-        await fetchProductRotate();
+        try {
+            const createImportRequest = await axios.put(
+                `https://four-gems-system-790aeec3afd8.herokuapp.com/product/import-list-product-from-warehouse`,
+                ImportRequest,
+                {
+                    headers: {
+                        Authorization: "Bearer " + token,
+                    },
+                }
+            );
+            console.log(
+                "Import request created:",
+                createImportRequest.data.data
+            );
+            setRefreshData((prev) => !prev); // Toggle refreshData state to re-fetch product data
+        } catch (error) {
+            console.error("Failed to create import request:", error);
+        }
     };
 
     const handleOpenRotateRequestPopup = () => {
@@ -184,7 +192,7 @@ const ImportGoods = () => {
                     </Box>
                 </Grid>
                 <Grid item xs={12} md={4}>
-                    <Formik 
+                    <Formik
                         initialValues={rotateId}
                         validationSchema={validationSchema}
                         onSubmit={handleFormSubmit}

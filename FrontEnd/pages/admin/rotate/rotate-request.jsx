@@ -15,7 +15,6 @@ import {
 } from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
-import Link from "next/link";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
 import ProductCardRotateGoodsList from "../../../src/components/products/ProductCardRotateGoodsList";
 import SEO from "components/SEO";

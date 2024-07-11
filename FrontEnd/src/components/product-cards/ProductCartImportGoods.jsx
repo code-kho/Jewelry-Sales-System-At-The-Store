@@ -1,7 +1,7 @@
 import { Add, Remove } from "@mui/icons-material";
 import { Box, Button, Card, Grid, styled } from "@mui/material";
 import Image from "components/BazaarImage";
-import { H5, Span } from "components/Typography";
+import { H5 } from "components/Typography";
 import { FlexBetween, FlexBox } from "components/flex-box";
 import { useAppContext } from "contexts/AppContext";
 
@@ -61,7 +61,7 @@ const ProductCardImportGoods = (props) => {
                                     }}
                                     onClick={handleCartAmountChange(1)}
                                 >
-                                    Add To Rotate
+                                    Add To Import
                                 </Button>
                             )}
 

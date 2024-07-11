@@ -40,17 +40,17 @@ const StatusWrapper = styled(Box)(({ theme, status }) => {
   let color = theme.palette.secondary.main;
   let backgroundColor = theme.palette.secondary[100];
 
-  if (status === "Accepted" || status === "Delivered" || status === "Normal" || status === "Complete") {
+  if (status === "Accepted" || status === "Delivered" || status === "Normal" || status === "Complete"  || status === "APPROVE") {
     color = theme.palette.success.main;
     backgroundColor = theme.palette.success[100];
   }
 
-  if (status === "Rejected" || status === "Urgent" || status === "Cancelled" || status === "Cancel") {
+  if (status === "Rejected" || status === "Urgent" || status === "Cancelled" || status === "Cancel" || status === "CANCEL") {
     color = theme.palette.error.main;
     backgroundColor = theme.palette.error[100];
   }
 
-  if (status === "In Process") {
+  if (status === "In Process" || status === "PENDING") {
     color = theme.palette.warning.main;
     backgroundColor = theme.palette.warning[100];
   }

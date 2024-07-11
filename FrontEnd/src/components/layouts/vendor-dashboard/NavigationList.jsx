@@ -10,28 +10,19 @@ export const navigations = [
         path: "/vendor/dashboard",
     },
     {
-        name: "Products",
+        name: "Product List",
         icon: duotone.Products,
-        children: [
-            {
-                name: "Product List",
-                path: "/admin/products",
-            },
-            {
-                name: "Review",
-                path: "/admin/product-reviews",
-            },
-        ],
+        path: "/admin/products",
     },
     {
-        name: "Orders",
+        name: "Category List",
+        icon: duotone.Products,
+        path: "/admin/categories",
+    },
+    {
+        name: "Order List",
         icon: duotone.Order,
-        children: [
-            {
-                name: "Order List",
-                path: "/admin/orders",
-            },
-        ],
+        path: "/admin/orders",
     },
     {
         name: "Rotate Goods",
@@ -43,7 +34,7 @@ export const navigations = [
             },
             {
                 name: "Rotate List",
-                path: "/admin/product-reviews",
+                path: "/admin/rotategoodslist/rotategoods-list",
             },
         ],
     },

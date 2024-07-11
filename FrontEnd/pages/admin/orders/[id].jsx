@@ -25,7 +25,6 @@ export default function OrderEdit() {
     console.log("Web Storage is not supported in this environment.");
   }
   useEffect(() => {
-    console.log(orderId);
     const fetchOrderDetail = async () => {
       try {
         const resOrderDetail = await axios.get(`https://four-gems-system-790aeec3afd8.herokuapp.com/order/${orderId}`, {
