@@ -84,7 +84,7 @@ export default function OrderList({ orders }) {
             }
         };
         fetchOrderInfo();
-    }, []);
+    }, [orderInfo]);
     console.log(orderInfo);
     const filteredOrders = orderInfo?.map((order) => ({
         orderId: order?.orderId,

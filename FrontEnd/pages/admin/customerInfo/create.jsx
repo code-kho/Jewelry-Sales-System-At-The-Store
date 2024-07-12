@@ -49,7 +49,7 @@ export default function CreateCusInfo() {
         } catch (e) {
             console.log(e);
         }
-        await router.push("/checkout");
+        await router.push("/cart");
     };
     return (
         <Box py={4}>

@@ -34,7 +34,6 @@ const OrderRow = ({ order }) => {
                     },
                 }
             );
-            window.location.reload();
             console.log(resConfirmUser.data.data);
         } catch (e) {
             console.log(e);
@@ -57,7 +56,6 @@ const OrderRow = ({ order }) => {
                     },
                 }
             );
-            window.location.reload();
             console.log(resCancelUser.data.data);
         } catch (e) {
             console.log(e);

@@ -39,7 +39,7 @@ const Waiting = () => {
             }
         };
         fetchStatusOrder();
-        const intervalId = setInterval(fetchStatusOrder, 120000); // Fetch every 2 minutes
+        const intervalId = setInterval(fetchStatusOrder, 10000); // Fetch every 2 minutes
 
         return () => clearInterval(intervalId); // Cleanup interval on component unmount
     }, []);

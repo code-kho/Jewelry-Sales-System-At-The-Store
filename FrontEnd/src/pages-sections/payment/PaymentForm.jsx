@@ -58,7 +58,7 @@ const PaymentForm = () => {
                 }
             );
             setVNPayUrl(createVNPay.data.data);
-            localStorage.removeItem('percentDiscount');
+            localStorage.removeItem("percentDiscount");
             router.push(createVNPay.data.data.paymentUrl);
         } catch (error) {
             console.error("Failed to fetch VNPay:", error);
@@ -76,7 +76,7 @@ const PaymentForm = () => {
                 }
             );
             setPaypalUrl(createOrder.data.data);
-            localStorage.removeItem('percentDiscount');
+            localStorage.removeItem("percentDiscount");
             router.push(createOrder.data.data);
         } catch (error) {
             console.error("Failed to fetch VNPay:", error);
@@ -94,7 +94,7 @@ const PaymentForm = () => {
                 }
             );
             setCodData(createCod.data.data);
-            localStorage.removeItem('percentDiscount');
+            localStorage.removeItem("percentDiscount");
             router.push("/order-success");
         } catch (error) {
             console.error("Failed to fetch VNPay:", error);
@@ -173,9 +173,7 @@ const PaymentForm = () => {
                 <FormControlLabel
                     name="cod"
                     onChange={handlePaymentMethodChange}
-                    label={
-                        <Paragraph fontWeight={600}>Cash On Delivery</Paragraph>
-                    }
+                    label={<Paragraph fontWeight={600}>Cash</Paragraph>}
                     control={
                         <Radio
                             checked={paymentMethod === "cod"}

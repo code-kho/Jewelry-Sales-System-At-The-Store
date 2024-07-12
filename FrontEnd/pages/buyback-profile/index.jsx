@@ -1,23 +1,25 @@
 import { Person } from "@mui/icons-material";
 import {
-  Box,
-  Button,
-  Card,
-  Grid,
-  Typography,
-  useMediaQuery,
+    Box,
+    Button,
+    Card,
+    Grid,
+    Typography,
+    useMediaQuery,
 } from "@mui/material";
 import TableRow from "components/TableRow";
 import { H3, H5, Small } from "components/Typography";
 import { FlexBetween, FlexBox } from "components/flex-box";
 import UserDashboardHeader from "components/header/UserDashboardHeader";
 import CustomerDashboardNavigation from "components/layouts/customer-dashboard/Navigations";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import QCDashboardLayout from "../../src/components/layouts/customer-dashboard/QCPage";
+import { useRouter } from "next/router";
 
 // ============================================================
 const Profile = ({ user }) => {
+    const router = useRouter();
     const downMd = useMediaQuery((theme) => theme.breakpoints.down("md")); // SECTION TITLE HEADER LINK
     const [customerShowInfo, setCustomerShowInfo] = useState("");
     const [product, setProduct] = useState({});
@@ -88,12 +90,12 @@ const Profile = ({ user }) => {
         const productId = localStorage.getItem("productId");
         const orderId = localStorage.getItem("orderId");
         const userId = localStorage.getItem("userId");
-        console.log(productId, orderId, userId)
+        console.log(productId, orderId, userId);
         try {
             if (token) {
                 const responeFormBuyBack = await axios.post(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/buyback?orderId=${orderId}&userId=${userId}&productId=${productId}`,
-                    {},  // Add any data payload if required
+                    {}, // Add any data payload if required
                     {
                         headers: {
                             Authorization: `Bearer ` + token,
@@ -109,107 +111,130 @@ const Profile = ({ user }) => {
         } catch (error) {
             console.error("Failed to create form buy back:", error);
         }
+        router.push("/buy-back");
     };
-  return (
-    <QCDashboardLayout>
-      {/* TITLE HEADER AREA */}
-      <UserDashboardHeader
-        icon={Person}
-        title="Buy Back Confirm"
-        navigation={<CustomerDashboardNavigation />}
-      />
+    return (
+        <QCDashboardLayout>
+            {/* TITLE HEADER AREA */}
+            <UserDashboardHeader
+                icon={Person}
+                title="Buy Back Confirm"
+                navigation={<CustomerDashboardNavigation />}
+            />
 
-      {/* USER PROFILE INFO */}
-      <Box mb={4}>
-        <Grid container spacing={3}>
-          <Grid item md={12} xs={12}>
-            <Card
-              sx={{
-                display: "flex",
-                p: "14px 32px",
-                height: "100%",
-                alignItems: "center",
-              }}
+            {/* USER PROFILE INFO */}
+            <Box mb={4}>
+                <Grid container spacing={3}>
+                    <Grid item md={12} xs={12}>
+                        <Card
+                            sx={{
+                                display: "flex",
+                                p: "14px 32px",
+                                height: "100%",
+                                alignItems: "center",
+                            }}
+                        >
+                            <Box ml={1.5} flex="1 1 0">
+                                <FlexBetween flexWrap="wrap">
+                                    <div>
+                                        <Grid container alignItems="center">
+                                            <Grid item xs>
+                                                <H5 my="0px">
+                                                    {customerShowInfo.name}
+                                                </H5>
+                                            </Grid>
+                                            <Grid item sx={{ ml: 27 }}>
+                                                <Typography color="grey.600">
+                                                    Loyalty Point:
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item>
+                                                <Typography
+                                                    ml={0.5}
+                                                    color="primary.main"
+                                                >
+                                                    {
+                                                        customerShowInfo.loyaltyPoints
+                                                    }
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid
+                                            container
+                                            alignItems="center"
+                                            color="grey.600"
+                                        >
+                                            <Grid item>
+                                                <Typography>
+                                                    {
+                                                        customerShowInfo.phoneNumber
+                                                    }
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item sx={{ ml: 25 }}>
+                                                <Typography>
+                                                    {customerShowInfo.email}
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
+                                    </div>
+                                    <Typography
+                                        color="grey.600"
+                                        letterSpacing="0.2em"
+                                    >
+                                        {customerShowInfo.memberShipTier?.toUpperCase()}{" "}
+                                        USER
+                                    </Typography>
+                                </FlexBetween>
+                            </Box>
+                        </Card>
+                    </Grid>
+                </Grid>
+            </Box>
+
+            <TableRow
+                sx={{
+                    cursor: "auto",
+                    p: "0.75rem 1.5rem",
+                    ...(downMd && {
+                        alignItems: "start",
+                        flexDirection: "column",
+                        justifyContent: "flex-start",
+                    }),
+                }}
             >
-
-              <Box ml={1.5} flex="1 1 0">
-                  <FlexBetween flexWrap="wrap">
-                      <div>
-                          <Grid container alignItems="center">
-                              <Grid item xs>
-                                  <H5 my="0px">{customerShowInfo.name}</H5>
-                              </Grid>
-                              <Grid item sx={{ml: 27}}>
-                                  <Typography color="grey.600">Loyalty Point:</Typography>
-                              </Grid>
-                              <Grid item>
-                                  <Typography ml={0.5} color="primary.main">
-                                      {customerShowInfo.loyaltyPoints}
-                                  </Typography>
-                              </Grid>
-                          </Grid>
-                          <Grid container alignItems="center" color="grey.600">
-                              <Grid item>
-                                  <Typography>{customerShowInfo.phoneNumber}</Typography>
-                              </Grid>
-                              <Grid item sx={{ml: 25}}>
-                                  <Typography>{customerShowInfo.email}</Typography>
-                              </Grid>
-                          </Grid>
-                      </div>
-                      <Typography color="grey.600" letterSpacing="0.2em">
-                          {customerShowInfo.memberShipTier?.toUpperCase()} USER
-                      </Typography>
-                  </FlexBetween>
-              </Box>
-            </Card>
-          </Grid>
-        </Grid>
-      </Box>
-
-        <TableRow
-            sx={{
-                cursor: "auto",
-                p: "0.75rem 1.5rem",
-                ...(downMd && {
-                    alignItems: "start",
-                    flexDirection: "column",
-                    justifyContent: "flex-start",
-                }),
-            }}
-        >
-            <TableRowItem title="Product Id" value={product.productId}/>
-            <TableRowItem title="Last Name" value={product.productName}/>
-            <TableRowItem title="Product Price" value={product.price}/>
-            <TableRowItem title="Buy Back Price" value={getBuyBackPrice}/>
-        </TableRow>
-        <Button
-            color="primary"
-            variant="contained"
-            sx={{
-                mt: 3,
-                mb: 4.5,
-                px: "1.75rem",
-                height: 40,
-                padding: 2,
-            }}
-            onClick={() => handleSubmitBuyBack()}
-        >
-            Submit
-        </Button>
-    </QCDashboardLayout>
-  );
+                <TableRowItem title="Product Id" value={product.productId} />
+                <TableRowItem title="Last Name" value={product.productName} />
+                <TableRowItem title="Product Price" value={product.price} />
+                <TableRowItem title="Buy Back Price" value={getBuyBackPrice} />
+            </TableRow>
+            <Button
+                color="primary"
+                variant="contained"
+                sx={{
+                    mt: 3,
+                    mb: 4.5,
+                    px: "1.75rem",
+                    height: 40,
+                    padding: 2,
+                }}
+                onClick={() => handleSubmitBuyBack()}
+            >
+                Submit
+            </Button>
+        </QCDashboardLayout>
+    );
 };
 
 const TableRowItem = ({ title, value }) => {
-  return (
-    <FlexBox flexDirection="column" p={1}>
-      <Small color="grey.600" mb={0.5} textAlign="left">
-        {title}
-      </Small>
-      <span>{value}</span>
-    </FlexBox>
-  );
+    return (
+        <FlexBox flexDirection="column" p={1}>
+            <Small color="grey.600" mb={0.5} textAlign="left">
+                {title}
+            </Small>
+            <span>{value}</span>
+        </FlexBox>
+    );
 };
 
 export default Profile;

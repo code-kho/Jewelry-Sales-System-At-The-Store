@@ -75,7 +75,7 @@ export default function ProductList({ initialProducts }) {
             try {
                 if (token) {
                     const response = await axios.get(
-                        `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=200&page=0&sortKeyword=productId&sortType=DESC&categoryName=&searchKeyword=`,
+                        `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-all-product-from-warehouse?pageSize=200&page=0&sortKeyword=productId&sortType=DESC&categoryName= &searchKeyword=a`,
                         {
                             headers: {
                                 Authorization: `Bearer ` + token,

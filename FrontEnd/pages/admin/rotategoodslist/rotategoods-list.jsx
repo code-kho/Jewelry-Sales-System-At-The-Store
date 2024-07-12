@@ -66,7 +66,7 @@ export default function RotategoodsList({ reviews }) {
     const fetchRotateReq = async () => {
       try {
         const resRotateRes = await axios.get(
-            `https://four-gems-system-790aeec3afd8.herokuapp.com/transfer-request/get-in-counter?counterId=${counterId}`,
+            `https://four-gems-system-790aeec3afd8.herokuapp.com/transfer-request/get-in-counter-received?counterId=${counterId}`,
             {
               headers: {
                 Authorization: "Bearer " + token, //the token is a variable which holds the token
@@ -103,7 +103,7 @@ export default function RotategoodsList({ reviews }) {
   });
   return (
     <Box py={4}>
-      <H3 mb={2}>Product Reviews</H3>
+      <H3 mb={2}>Rotate List</H3>
 
       <Card>
         <Scrollbar>
