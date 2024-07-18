@@ -1,11 +1,15 @@
 package com.example.salesystematthestore.service;
 
+import com.example.salesystematthestore.dto.ProductTransferDTO;
+import com.example.salesystematthestore.dto.RequestTransferDTO;
 import com.example.salesystematthestore.entity.*;
 import com.example.salesystematthestore.entity.key.KeyProductCouter;
 import com.example.salesystematthestore.entity.key.KeyProductRequest;
 import com.example.salesystematthestore.payload.request.ProductTransferRequest;
 import com.example.salesystematthestore.payload.request.TransferRequest;
 import com.example.salesystematthestore.repository.*;
+import com.example.salesystematthestore.service.imp.CounterServiceImp;
+import com.example.salesystematthestore.service.imp.ProductServiceImp;
 import com.example.salesystematthestore.service.imp.RequestTransferServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +27,9 @@ public class TransferRequestService implements RequestTransferServiceImp {
     ProductCounterRepository productCounterRepository;
 
     @Autowired
+    ProductServiceImp productServiceImp;
+
+    @Autowired
     ProductRepository productRepository;
 
     @Autowired
@@ -36,6 +43,9 @@ public class TransferRequestService implements RequestTransferServiceImp {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    CounterServiceImp counterServiceImp;
 
     @Override
     @Transactional
@@ -82,9 +92,6 @@ public class TransferRequestService implements RequestTransferServiceImp {
                 productCounterTo.setKeyProductCouter(keyProductCounterTo);
             }
 
-            productCounterToList.add(productCounterTo);
-            productCounterTo.setQuantity(productTransferRequest.getQuantity());
-            productCounterTo.setKeyProductCouter(keyProductCounterTo);
             productCounterToList.add(productCounterTo);
 
             KeyProductRequest keyProductRequest = new KeyProductRequest();
@@ -217,5 +224,69 @@ public class TransferRequestService implements RequestTransferServiceImp {
 
         return result;
     }
+
+    @Override
+    public List<RequestTransferDTO> getAllRequestTransfer(int counterId) {
+        List<RequestTransferDTO> result = new ArrayList<>();
+        List<TransferRequests> transferRequestsList = new ArrayList<>();
+
+        transferRequestsList.addAll(transferRequestRepository.findByFromCounter_Id(counterId));
+        transferRequestsList.addAll(transferRequestRepository.findByToCounter_Id(counterId));
+
+        for(TransferRequests transferRequests : transferRequestsList){
+            RequestTransferDTO requestTransferDTO =  getRequestTransferById(transferRequests.getId());
+            result.add(requestTransferDTO);
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<RequestTransferDTO> getAllRequestInCounterReceived(int counterId) {
+        List<RequestTransferDTO> result = new ArrayList<>();
+        List<TransferRequests> transferRequestsList = new ArrayList<>();
+
+        transferRequestsList.addAll(transferRequestRepository.findByToCounter_Id(counterId));
+
+        for(TransferRequests transferRequests : transferRequestsList){
+            RequestTransferDTO requestTransferDTO =  getRequestTransferById(transferRequests.getId());
+            result.add(requestTransferDTO);
+        }
+
+        return result;
+    }
+
+    @Override
+    public RequestTransferDTO getRequestTransferById(int transferRequestId) {
+        RequestTransferDTO result = new RequestTransferDTO();
+        TransferRequests transferRequests = transferRequestRepository.findById(transferRequestId).get();
+        List<ProductTransferDTO> productTransferDTOS = new ArrayList<>();
+
+
+        Counter fromCounter = transferRequests.getFromCounter();
+        Counter toCounter = transferRequests.getToCounter();
+
+        List<ProductRequests> productRequests = transferRequests.getProductRequestsList();
+        for(ProductRequests productRequest : productRequests){
+            ProductTransferDTO productTransferDTO = new ProductTransferDTO();
+
+            productTransferDTO.setQuantity(productRequest.getQuantity());
+            productTransferDTO.setProductId(productRequest.getProduct().getProductId());
+            productTransferDTO.setProductName(productRequest.getProduct().getProductName());
+            productTransferDTO.setImage(productRequest.getProduct().getImage());
+            productTransferDTOS.add(productTransferDTO);
+
+        }
+        result.setId(transferRequests.getId());
+        result.setStatus(transferRequests.getTransferRequestStatus().getStatusName());
+        result.setTotalQuantity(productTransferDTOS.size());
+        result.setToCounter(counterServiceImp.getCounterById(toCounter.getId()));
+        result.setFromCounter(counterServiceImp.getCounterById(fromCounter.getId()));
+        result.setProducts(productTransferDTOS);
+
+
+        return result;
+    }
+
 
 }

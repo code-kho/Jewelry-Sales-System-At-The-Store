@@ -16,5 +16,7 @@ public interface ProductCounterRepository extends JpaRepository<ProductCounter, 
 
     List<ProductCounter> findByCounter_IdAndQuantityLessThanEqual(int id, int quantity);
 
+    List<ProductCounter> findByKeyProductCouter_CouterId(int couterId);
+
 
 }

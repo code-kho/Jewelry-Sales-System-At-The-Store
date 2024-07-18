@@ -37,6 +37,11 @@ public class Order {
     @Column(name = "tax")
     private double tax;
 
+    @Column(name = "voucher_percent")
+    private double voucherPercent;
+
+    @Column(name = "discount_percent_membership")
+    private double discountPercentMembership;
 
     @Column(name = "external_momo_transaction_code")
     private String externalMomoTransactionCode;

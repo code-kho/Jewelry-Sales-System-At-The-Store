@@ -7,15 +7,12 @@ import com.example.salesystematthestore.repository.OrderRepository;
 import com.example.salesystematthestore.service.imp.OrderServiceImp;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/order")
@@ -33,11 +30,7 @@ public class OrderController {
     public ResponseEntity<?> getOrders(@RequestParam(required = false) Integer counterId) {
         ResponseData responseData = new ResponseData();
 
-        if (counterId == null) {
-            responseData.setData(orderServiceImp.getAllOrder(0));
-        } else {
-            responseData.setData(orderServiceImp.getAllOrder(counterId));
-        }
+        responseData.setData(orderServiceImp.getAllOrder(Objects.requireNonNullElse(counterId, 0)));
 
 
         return new ResponseEntity<>(responseData, HttpStatus.OK);
@@ -75,7 +68,7 @@ public class OrderController {
     @GetMapping("/status/{id}")
     public ResponseEntity<?> getOrderStatus(@PathVariable int id) {
         ResponseData responseData = new ResponseData();
-        responseData.setData(orderRepository.findById(id).get().getOrderStatus().getName());
+        responseData.setData(orderRepository.findById(id).getOrderStatus().getName());
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 

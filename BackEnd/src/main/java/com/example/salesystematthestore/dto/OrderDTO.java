@@ -21,6 +21,7 @@ public class OrderDTO implements Serializable {
     private double voucherPercent;
     private double tax;
     private String paymentMethod;
+    private double discountPercentForMemberShip;
     private List<OrderItemDTO> orderItemList;
 }
 

@@ -63,11 +63,10 @@ public class CustomerService implements CustomerServiceImp {
     public CustomerDTO getCustomerById(int id) {
 
         CustomerDTO customerDTO = new CustomerDTO();
-        Optional<Customer> customer = customerRepository.findById(id);
+        Customer customer = customerRepository.findById(id);
 
-        if (customer.isPresent()) {
-            customerDTO = transferCustomer(customer.get());
-        }
+            customerDTO = transferCustomer(customer);
+
 
         return customerDTO;
     }
@@ -101,7 +100,7 @@ public class CustomerService implements CustomerServiceImp {
 
     @Override
     public void updateMembershipTier(int point, int customerId) {
-        Customer customer = customerRepository.findById(customerId).get();
+        Customer customer = customerRepository.findById(customerId);
         MemberShipTier memberShipTier;
         if (point >= 5000 && point<10000) {
             memberShipTier = memberShipTierRepository.findById(1).get();

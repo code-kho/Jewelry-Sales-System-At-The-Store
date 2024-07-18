@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.io.IOException;
 import java.util.Date;
 
 @RestController
@@ -69,15 +70,15 @@ public class PaymentController {
     }
 
     @GetMapping("/vn-pay-callback")
-    public RedirectView payCallbackHandler(@RequestParam String vnp_TransactionStatus, @RequestParam String vnp_TransactionNo, @RequestParam int orderId) throws MessagingException {
+    public RedirectView payCallbackHandler(@RequestParam String vnp_TransactionStatus, @RequestParam String vnp_TransactionNo, @RequestParam int orderId) throws MessagingException, IOException {
         ResponseData responseData = new ResponseData();
 
         if (vnp_TransactionStatus.equals("00")) {
 
-            Order order = orderRepository.findById(orderId).get();
+            Order order = orderRepository.findById(orderId);
             order.setPayTime(new Date());
             order.setExternalMomoTransactionCode(vnp_TransactionNo);
-            OrderStatus orderStatus = orderStatusRepository.findById(3).get();
+            OrderStatus orderStatus = orderStatusRepository.findById(3);
             order.setOrderStatus(orderStatus);
             Payments payments = paymentMethodRepository.findById(2).get();
             order.setPayments(payments);
@@ -97,12 +98,12 @@ public class PaymentController {
 
 
     @PostMapping("/cash")
-    public ResponseEntity<?> paymentByCash(@RequestParam int orderId) throws MessagingException {
+    public ResponseEntity<?> paymentByCash(@RequestParam int orderId) throws MessagingException, IOException {
 
-        Order order = orderRepository.findById(orderId).get();
+        Order order = orderRepository.findById(orderId);
         order.setPayTime(new Date());
         order.setExternalMomoTransactionCode("CASH" + orderId);
-        OrderStatus orderStatus = orderStatusRepository.findById(3).get();
+        OrderStatus orderStatus = orderStatusRepository.findById(3);
         order.setOrderStatus(orderStatus);
         Payments payments = paymentMethodRepository.findById(1).get();
         order.setPayments(payments);
@@ -141,15 +142,15 @@ public class PaymentController {
 
 
     @GetMapping("/paypal/success")
-    public RedirectView successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, @RequestParam int orderId) {
+    public RedirectView successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, @RequestParam int orderId)throws MessagingException, IOException {
         try {
             Payment payment = paypalServiceImp.executePayment(paymentId, payerId);
             if (payment.getState().equals("approved")) {
 
-                Order order = orderRepository.findById(orderId).get();
+                Order order = orderRepository.findById(orderId);
                 order.setPayTime(new Date());
                 order.setExternalMomoTransactionCode(paymentId);
-                OrderStatus orderStatus = orderStatusRepository.findById(3).get();
+                OrderStatus orderStatus = orderStatusRepository.findById(3);
                 order.setOrderStatus(orderStatus);
                 Payments payments = paymentMethodRepository.findById(3).get();
                 order.setPayments(payments);

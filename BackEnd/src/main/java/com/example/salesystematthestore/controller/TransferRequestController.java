@@ -48,4 +48,28 @@ public class TransferRequestController {
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
+    @GetMapping("/get-in-counter")
+    public ResponseEntity<?> getAllRequestTransferByCounterId(@RequestParam int counterId) {
+        ResponseData responseData = new ResponseData();
+        responseData.setData(requestTransferServiceImp.getAllRequestTransfer(counterId));
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getRequestTransferById(@PathVariable int transferRequestId) {
+        ResponseData responseData = new ResponseData();
+        responseData.setData(requestTransferServiceImp.getRequestTransferById(transferRequestId));
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-in-counter-received")
+    public ResponseEntity<?> getAllRequestTransferInCounterReceived(@RequestParam int counterId) {
+        ResponseData responseData = new ResponseData();
+        responseData.setData(requestTransferServiceImp.getAllRequestInCounterReceived(counterId));
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
 }

@@ -14,6 +14,7 @@ public interface OrderRepository extends JpaRepository<Order,Integer> {
 
     List<Order> findByUser_Counter_Id(int id);
 
+    Order findById(int id);
 
     @Override
     boolean existsById(Integer id);

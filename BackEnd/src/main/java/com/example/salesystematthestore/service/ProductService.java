@@ -6,7 +6,10 @@ import com.example.salesystematthestore.dto.ProductDTO;
 import com.example.salesystematthestore.entity.*;
 import com.example.salesystematthestore.entity.Collection;
 import com.example.salesystematthestore.entity.key.KeyProductCouter;
+import com.example.salesystematthestore.payload.ResponseData;
 import com.example.salesystematthestore.payload.request.ProductRequest;
+import com.example.salesystematthestore.payload.request.ProductTransferRequest;
+import com.example.salesystematthestore.payload.request.TransferRequest;
 import com.example.salesystematthestore.repository.*;
 import com.example.salesystematthestore.service.imp.GoldTokenServiceImp;
 import com.example.salesystematthestore.service.imp.ProductServiceImp;
@@ -14,7 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
 
@@ -196,6 +204,43 @@ public class ProductService implements ProductServiceImp {
     }
 
     @Override
+    public List<ProductDTO> showAllProductWithQuantityCounter() {
+
+        List<Product> productList = productRepository.findAll();
+        List<Counter> counterList = counterRepository.findAll();
+        List<ProductDTO> result = new ArrayList<>();
+
+        for (Product product : productList) {
+            ProductDTO productDTO = getProductInWarehouseById(product.getProductId());
+            LinkedHashMap<Integer, Integer> quantityInCounter = new LinkedHashMap<>();
+            productDTO.setQuantityInCounter(quantityInCounter);
+            result.add(productDTO);
+        }
+
+        for (Counter counter : counterList) {
+            for (ProductDTO product : result) {
+                KeyProductCouter keyProductCouter = new KeyProductCouter();
+                keyProductCouter.setProductId(product.getProductId());
+                keyProductCouter.setCouterId(counter.getId());
+
+                LinkedHashMap<Integer, Integer> quantityInCounter = product.getQuantityInCounter();
+
+                if (productCounterRepository.existsByKeyProductCouter(keyProductCouter)) {
+                    ProductCounter productCounter = productCounterRepository.findByKeyProductCouter(keyProductCouter);
+                    quantityInCounter.put(counter.getId(), productCounter.getQuantity());
+
+                } else {
+                    quantityInCounter.put(counter.getId(), 0);
+                }
+
+                product.setQuantityInCounter(quantityInCounter);
+            }
+
+        }
+        return result;
+    }
+
+    @Override
     public List<ProductTypeDTO> getProductType() {
         List<ProductType> productTypeList = productTypeRepository.findAll();
 
@@ -245,6 +290,7 @@ public class ProductService implements ProductServiceImp {
         productDTO.setGoldId(product.getGoldType().getId());
         productDTO.setTypeId(product.getProductType().getId());
         productDTO.setActive(product.isActive());
+        productDTO.setGoldTypeName(product.getGoldType().getTypeName());
 
         double cost = product.getGoldType().getPrice() * product.getWeight() + product.getStonePrice() + product.getLaborCost();
 
@@ -400,6 +446,8 @@ public class ProductService implements ProductServiceImp {
         productDTO.setTypeId(product.getProductType().getId());
         productDTO.setActive(product.isActive());
         productDTO.setGoldTypeName(product.getGoldType().getTypeName());
+        productDTO.setAvailableRotate(quantityInStock > 0);
+        productDTO.setWarrantyYear(product.getWarranty().getTerms());
         double cost = product.getGoldType().getPrice() * product.getWeight() + product.getStonePrice() + product.getLaborCost();
 
         double totalPrice = (cost * product.getRatioPrice() / 100) + cost;
@@ -451,6 +499,44 @@ public class ProductService implements ProductServiceImp {
 
         for (ProductCounter productCounter : productList) {
             ProductDTO productDTO = transferProduct(productCounter.getProduct(), counterId);
+            result.add(productDTO);
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<ProductDTO> getProductCheckRequest(int counterId, List<Integer> listId) {
+
+        List<ProductDTO> result = new ArrayList<>();
+
+        for (int id : listId) {
+            try {
+                Product product = productRepository.findByProductId(id);
+                ProductDTO productDTO = transferProduct(product, counterId);
+                result.add(productDTO);
+            } catch (Exception ignored) {
+
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<ProductDTO> showProductNotInCounter(int counterId) {
+        List<ProductCounter> productCounterList = productCounterRepository.findByKeyProductCouter_CouterId(counterId);
+        List<Integer> idProductCouterList = new ArrayList<>();
+
+        for (ProductCounter productCounter : productCounterList) {
+            idProductCouterList.add(productCounter.getProduct().getProductId());
+        }
+
+        List<Product> productList = productRepository.findByProductIdNotIn(idProductCouterList);
+        List<ProductDTO> result = new ArrayList<>();
+
+        for (Product product : productList) {
+            ProductDTO productDTO = getProductInWarehouseById(product.getProductId());
             result.add(productDTO);
         }
 
@@ -510,6 +596,7 @@ public class ProductService implements ProductServiceImp {
                     productDTO.setGoldId(product.getGoldType().getId());
                     productDTO.setTypeId(product.getProductType().getId());
                     productDTO.setActive(product.isActive());
+                    productDTO.setGoldTypeName(product.getGoldType().getTypeName());
                     productDTO.setGoldTypeName(product.getGoldType().getTypeName());
                     double cost = product.getGoldType().getPrice() * product.getWeight() + product.getStonePrice() + product.getLaborCost();
 
@@ -586,6 +673,46 @@ public class ProductService implements ProductServiceImp {
 
         } catch (Exception e) {
             result = false;
+        }
+
+        return result;
+    }
+
+
+    @Override
+    public boolean importListProductFromWarehouse(@RequestBody TransferRequest transferRequest) {
+        boolean result = true;
+
+        for (ProductTransferRequest productTransferRequest : transferRequest.getProductTransferRequestList()) {
+            try {
+                int productId = productTransferRequest.getProductId();
+                KeyProductCouter keyProductCouter = new KeyProductCouter();
+
+                keyProductCouter.setProductId(productId);
+                keyProductCouter.setCouterId(transferRequest.getToCounterId());
+
+                ProductCounter productCounter;
+                Product product = productRepository.findByProductId(productId);
+
+                if (productCounterRepository.existsByKeyProductCouter(keyProductCouter)) {
+                    productCounter = productCounterRepository.findByKeyProductCouter(keyProductCouter);
+
+                    productCounter.setQuantity(productCounter.getQuantity() + productTransferRequest.getQuantity());
+
+                } else {
+                    productCounter = new ProductCounter();
+                    productCounter.setKeyProductCouter(keyProductCouter);
+                    productCounter.setQuantity(productTransferRequest.getQuantity());
+                }
+
+                product.setQuantityInStock(product.getQuantityInStock() - productTransferRequest.getQuantity());
+
+                productRepository.save(product);
+                productCounterRepository.save(productCounter);
+
+            } catch (Exception e) {
+                result = false;
+            }
         }
 
         return result;

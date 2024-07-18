@@ -1,5 +1,6 @@
 package com.example.salesystematthestore.service.imp;
 
+import com.example.salesystematthestore.dto.RequestTransferDTO;
 import com.example.salesystematthestore.payload.request.TransferRequest;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -14,4 +15,11 @@ public interface RequestTransferServiceImp {
     boolean cancelTransfer(int userId, int transferRequestId);
 
     boolean completeTransfer(int userId, int transferRequestId);
+
+    List<RequestTransferDTO> getAllRequestTransfer(int counterId);
+
+    RequestTransferDTO getRequestTransferById(int transferRequestId);
+
+    List<RequestTransferDTO> getAllRequestInCounterReceived(int counterId);
+
 }

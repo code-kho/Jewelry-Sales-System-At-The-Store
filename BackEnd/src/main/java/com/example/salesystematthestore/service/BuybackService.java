@@ -40,7 +40,7 @@ public class BuybackService implements BuybackServiceImp {
         boolean result = true;
         try {
             BuyBack buyback = new BuyBack();
-            Order order = orderRepository.findById(orderId).get();
+            Order order = orderRepository.findById(orderId);
             Users user = userRepository.findById(userId);
             double price = 0;
 

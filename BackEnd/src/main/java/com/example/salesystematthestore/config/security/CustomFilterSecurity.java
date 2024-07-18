@@ -48,6 +48,8 @@ public class CustomFilterSecurity {
             request.requestMatchers("/user/update/**").hasAnyAuthority("ADMIN");
             request.requestMatchers("transfer-request/**").hasAnyAuthority("ADMIN","MANAGER");
             request.requestMatchers("counter/**").hasAnyAuthority("ADMIN","MANAGER");
+            request.requestMatchers("product-type/**").hasAnyAuthority("ADMIN","MANAGER");
+            request.requestMatchers("voucher/**").hasAnyAuthority("ADMIN","MANAGER","STAFF");
         request.anyRequest().hasAnyAuthority("STAFF","ADMIN", "MANAGER","QC");
         });
         http.addFilterBefore(jwtCustom, UsernamePasswordAuthenticationFilter.class);

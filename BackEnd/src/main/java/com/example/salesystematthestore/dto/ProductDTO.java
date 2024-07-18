@@ -1,12 +1,15 @@
 package com.example.salesystematthestore.dto;
 
+import com.example.salesystematthestore.entity.Counter;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 @Data
 public class ProductDTO implements Serializable {
-    private int productId;
+    private Integer productId;
     private String barCode;
     private String productName;
     private Double weight;
@@ -18,12 +21,16 @@ public class ProductDTO implements Serializable {
     private Double stonePrice;
     private boolean isGem;
     private String image;
-    private int quantityInStock;
+    private Integer quantityInStock;
     private String description;
     private String categoryName;
-    private int goldId;
-    private int typeId;
+    private Integer goldId;
+    private Integer typeId;
     private boolean isActive;
     private boolean availableBuyBack;
+    private boolean availableRotate;
     private String goldTypeName;
+    private int quantityRequest;
+    private LinkedHashMap<Integer, Integer> quantityInCounter;
+    private double warrantyYear;
 }

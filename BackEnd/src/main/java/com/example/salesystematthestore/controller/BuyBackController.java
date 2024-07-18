@@ -11,11 +11,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/buyback")
 public class BuyBackController {
 
+    private final BuybackServiceImp buybackServiceImp;
+
     @Autowired
-    BuybackServiceImp buybackServiceImp;
+    public BuyBackController(BuybackServiceImp buybackServiceImp) {
+        this.buybackServiceImp = buybackServiceImp;
+    }
 
     @PostMapping
-    public ResponseEntity<?> createBuyBack(@RequestParam int orderId,@RequestParam int userId,@RequestParam int productId) {
+    public ResponseEntity<?> createBuyBack(@RequestParam int orderId, @RequestParam int userId, @RequestParam int productId) {
         ResponseData responseData = new ResponseData();
         responseData.setData(buybackServiceImp.saveBuyback(orderId, userId, productId));
 
@@ -37,7 +41,6 @@ public class BuyBackController {
 
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
-
 
 
 }
