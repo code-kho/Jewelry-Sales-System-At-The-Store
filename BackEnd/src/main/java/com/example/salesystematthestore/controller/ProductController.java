@@ -20,11 +20,15 @@ import java.util.List;
 @Tag(name = "Product", description = "Operations related to product management ")
 public class ProductController {
 
-    @Autowired
-    ProductServiceImp productServiceImp;
+    private final ProductServiceImp productServiceImp;
+
+    private final ProductRepository productRepository;
 
     @Autowired
-    private ProductRepository productRepository;
+    public ProductController(ProductServiceImp productServiceImp, ProductRepository productRepository) {
+        this.productServiceImp = productServiceImp;
+        this.productRepository = productRepository;
+    }
 
     @GetMapping("/get-product-out-of-stock")
     public ResponseEntity<?> getProductOutOfStock(@RequestParam int countId) {
@@ -184,7 +188,7 @@ public class ProductController {
 
 
     @GetMapping("/get-top-sell-product-by-category")
-    public ResponseEntity<?> getTopSellerProduct(@RequestParam String typeName, @RequestParam int countId, @RequestParam(required = false, defaultValue = "10") int size) {
+    public ResponseEntity<?> getTopSellerProduct(@RequestParam String typeName, @RequestParam int countId) {
         ResponseData responseData = new ResponseData();
 
         responseData.setData(productServiceImp.getTopSellProduct(typeName, countId));

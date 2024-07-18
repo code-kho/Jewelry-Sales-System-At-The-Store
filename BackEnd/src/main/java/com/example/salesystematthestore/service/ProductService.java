@@ -53,6 +53,9 @@ public class ProductService implements ProductServiceImp {
     @Autowired
     OrderItemRepository orderItemRepository;
 
+    @Autowired
+    WarrantyRepository warrantyRepository;
+
 
     private boolean checkValidPromotion(Product product) {
         if (product.getPromotion() == null) {
@@ -317,7 +320,7 @@ public class ProductService implements ProductServiceImp {
             product.setLaborCost(productRequest.getLaborCost());
             product.setCostPrice(0.0);
             product.setStonePrice(productRequest.getStonePrice());
-
+            
             product.setGem(productRequest.getIsGem() == 1);
 
             product.setActive(productRequest.getIsActive() == 1);
@@ -339,7 +342,13 @@ public class ProductService implements ProductServiceImp {
                 Optional<Collection> collection = collectionRepository.findById(productRequest.getCollectionId());
                 collection.ifPresent(product::setCollection);
             }
+            
+            Warranty warranty = new Warranty();
 
+            warrantyRepository.save(warranty);
+            warranty.setTerms(productRequest.getWarrantyYear());
+
+            product.setWarranty(warranty);
             productRepository.save(product);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -628,7 +637,7 @@ public class ProductService implements ProductServiceImp {
                 productDTO.setActive(product.isActive());
 
                 productDTO.setGoldTypeName(product.getGoldType().getTypeName());
-                
+
                 double cost = product.getGoldType().getPrice() * product.getWeight() + product.getStonePrice() + product.getLaborCost();
 
                 double totalPrice = (cost * product.getRatioPrice() / 100) + cost;

@@ -2,21 +2,23 @@ package com.example.salesystematthestore.controller;
 
 
 import com.example.salesystematthestore.payload.ResponseData;
-import com.example.salesystematthestore.payload.request.PromotionRequest;
 import com.example.salesystematthestore.service.imp.ProductTypeServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-
 @RestController
 @RequestMapping("/product-type")
 public class ProductTypeController {
 
+    private final ProductTypeServiceImp productTypeServiceImp;
+
     @Autowired
-    ProductTypeServiceImp productTypeServiceImp;
+    public ProductTypeController(ProductTypeServiceImp productTypeServiceImp) {
+        this.productTypeServiceImp = productTypeServiceImp;
+    }
+
 
     @PostMapping
     public ResponseEntity<?> createProductType(@RequestParam String productTypeName) {
@@ -39,7 +41,7 @@ public class ProductTypeController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateProductType(@RequestParam int typeId,@RequestParam String name) {
+    public ResponseEntity<?> updateProductType(@RequestParam int typeId, @RequestParam String name) {
         ResponseData responseData = new ResponseData();
 
         responseData.setData(productTypeServiceImp.updateProductType(typeId, name));
@@ -49,15 +51,13 @@ public class ProductTypeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAllProductType(@PathVariable int id){
+    public ResponseEntity<?> getAllProductType(@PathVariable int id) {
         ResponseData responseData = new ResponseData();
 
         responseData.setData(productTypeServiceImp.getProductTypeById(id));
 
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
-
-
 
 
 }

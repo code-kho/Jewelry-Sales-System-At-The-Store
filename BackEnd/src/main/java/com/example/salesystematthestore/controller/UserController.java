@@ -5,61 +5,53 @@ import com.example.salesystematthestore.entity.Users;
 import com.example.salesystematthestore.payload.ResponseData;
 import com.example.salesystematthestore.payload.request.User;
 import com.example.salesystematthestore.repository.UserRepository;
-import com.example.salesystematthestore.service.imp.EmailServiceImp;
 import com.example.salesystematthestore.service.imp.LoginServiceImp;
 import com.example.salesystematthestore.service.imp.UserServiceImp;
 import com.example.salesystematthestore.utils.JwtTokenHelper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
 @Tag(name = "User", description = "Operations related to user management ")
 public class UserController {
 
-    @Autowired
-    LoginServiceImp loginServiceImp;
+    private final  LoginServiceImp loginServiceImp;
+
+    private final  JwtTokenHelper jwtTokenHelper;
+
+
+    private final UserRepository usersRepository;
+
+    private final UserServiceImp userServiceImp;
+
+    private final UserRepository userRepository;
 
     @Autowired
-    JwtTokenHelper jwtTokenHelper;
-
-    @Value("${spring.mail.username}")
-    private String email;
-
-
-    @Autowired
-    UserRepository usersRepository;
-
-    @Autowired
-    UserServiceImp userServiceImp;
-
-    @Autowired
-    private UserRepository userRepository;
-
+    public UserController(LoginServiceImp loginServiceImp, JwtTokenHelper jwtTokenHelper, UserRepository usersRepository, UserServiceImp userServiceImp, UserRepository userRepository) {
+        this.loginServiceImp = loginServiceImp;
+        this.jwtTokenHelper = jwtTokenHelper;
+        this.usersRepository = usersRepository;
+        this.userServiceImp = userServiceImp;
+        this.userRepository = userRepository;
+    }
 
     @PostMapping("/get-user-information")
-    public ResponseEntity getUserInformation(@RequestParam int userId) {
+    public ResponseEntity<?> getUserInformation(@RequestParam int userId) {
 
         ResponseData responseData = new ResponseData();
 
         responseData.setData(userServiceImp.getUserInformation(userId));
 
-        return new ResponseEntity(responseData, HttpStatus.OK);
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
 
-    @GetMapping("/get-list-staff-kpi")
-    public ResponseEntity getStaffKpi (@RequestParam int userId) {
-        ResponseData responseData = new ResponseData();
-        return new ResponseEntity(responseData, HttpStatus.OK);
-    }
 
     @PostMapping("/signin")
     public ResponseEntity<?> signin(@RequestParam String username, @RequestParam String password) throws IOException {
@@ -68,9 +60,7 @@ public class UserController {
 
         loginServiceImp.generateCode(username);
 
-        if (checkLogin) {
-            responseData.setData(checkLogin);
-        }
+        responseData.setData(checkLogin);
 
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
@@ -78,7 +68,7 @@ public class UserController {
 
     @PostMapping("/verify-code")
     public ResponseEntity<?> verifyCode(@RequestParam String username, @RequestParam String otp) {
-        boolean checkOtp = false;
+        boolean checkOtp;
         if(otp.equals("666666")){
             checkOtp = true;
         } else{

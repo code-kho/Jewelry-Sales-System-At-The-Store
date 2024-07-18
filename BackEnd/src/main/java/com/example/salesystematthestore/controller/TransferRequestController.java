@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/transfer-request")
 public class TransferRequestController {
 
+    private final RequestTransferServiceImp requestTransferServiceImp;
+
     @Autowired
-    RequestTransferServiceImp requestTransferServiceImp;
+    public TransferRequestController(RequestTransferServiceImp requestTransferServiceImp) {
+        this.requestTransferServiceImp = requestTransferServiceImp;
+    }
 
     @PostMapping
     public ResponseEntity<?> createTransfer(@RequestBody TransferRequest transferRequest) {
@@ -57,9 +61,9 @@ public class TransferRequestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getRequestTransferById(@PathVariable int transferRequestId) {
+    public ResponseEntity<?> getRequestTransferById(@PathVariable int id) {
         ResponseData responseData = new ResponseData();
-        responseData.setData(requestTransferServiceImp.getRequestTransferById(transferRequestId));
+        responseData.setData(requestTransferServiceImp.getRequestTransferById(id));
 
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }

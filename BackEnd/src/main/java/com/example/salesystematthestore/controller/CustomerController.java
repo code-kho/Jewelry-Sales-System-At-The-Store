@@ -33,8 +33,8 @@ public class CustomerController {
             return new ResponseEntity<>(responseData, HttpStatus.OK);
         } else {
             responseData.setData(customerServiceImp.getAllCustomers());
-            responseData.setStatus(200);
-            return new ResponseEntity<>(responseData, HttpStatus.OK);
+            responseData.setStatus(404);
+            return new ResponseEntity<>(responseData, HttpStatus.NOT_FOUND);
         }
     }
 

@@ -72,7 +72,6 @@ public class PaymentController {
 
     @GetMapping("/vn-pay-callback")
     public RedirectView payCallbackHandler(@RequestParam String vnp_TransactionStatus, @RequestParam String vnp_TransactionNo, @RequestParam int orderId) throws MessagingException, IOException {
-        ResponseData responseData = new ResponseData();
 
         if (vnp_TransactionStatus.equals("00")) {
 
@@ -81,7 +80,7 @@ public class PaymentController {
             order.setExternalMomoTransactionCode(vnp_TransactionNo);
             OrderStatus orderStatus = orderStatusRepository.findById(3);
             order.setOrderStatus(orderStatus);
-            Payments payments = paymentMethodRepository.findById(2).get();
+            Payments payments = paymentMethodRepository.findById(2);
             order.setPayments(payments);
             orderRepository.save(order);
             orderServiceImp.sendOrderEmail(order);
@@ -89,10 +88,6 @@ public class PaymentController {
             return new RedirectView(successUrl);
 
         } else {
-            responseData.setData(null);
-            responseData.setDesc("Failed");
-            responseData.setStatus(404);
-
             return new RedirectView(failureUrl);
         }
     }
@@ -106,7 +101,7 @@ public class PaymentController {
         order.setExternalMomoTransactionCode("CASH" + orderId);
         OrderStatus orderStatus = orderStatusRepository.findById(3);
         order.setOrderStatus(orderStatus);
-        Payments payments = paymentMethodRepository.findById(1).get();
+        Payments payments = paymentMethodRepository.findById(1);
         order.setPayments(payments);
         orderRepository.save(order);
         orderServiceImp.sendOrderEmail(order);
@@ -143,7 +138,7 @@ public class PaymentController {
 
 
     @GetMapping("/paypal/success")
-    public RedirectView successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, @RequestParam int orderId)throws MessagingException, IOException {
+    public RedirectView successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, @RequestParam int orderId)throws  IOException {
         try {
             Payment payment = paypalServiceImp.executePayment(paymentId, payerId);
             if (payment.getState().equals("approved")) {
@@ -153,7 +148,7 @@ public class PaymentController {
                 order.setExternalMomoTransactionCode(paymentId);
                 OrderStatus orderStatus = orderStatusRepository.findById(3);
                 order.setOrderStatus(orderStatus);
-                Payments payments = paymentMethodRepository.findById(3).get();
+                Payments payments = paymentMethodRepository.findById(3);
                 order.setPayments(payments);
                 orderRepository.save(order);
                 orderServiceImp.sendOrderEmail(order);

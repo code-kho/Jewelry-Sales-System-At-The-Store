@@ -1,14 +1,12 @@
 package com.example.salesystematthestore.controller;
 
 
-import com.example.salesystematthestore.entity.Product;
 import com.example.salesystematthestore.payload.ResponseData;
 import com.example.salesystematthestore.service.imp.GoldTokenServiceImp;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.token.TokenService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,8 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @Hidden
 public class TokenController {
 
+    private final GoldTokenServiceImp goldTokenServiceImp;
+
     @Autowired
-    GoldTokenServiceImp goldTokenServiceImp;
+    public TokenController(GoldTokenServiceImp goldTokenServiceImp) {
+        this.goldTokenServiceImp = goldTokenServiceImp;
+    }
 
     @GetMapping("/get-token")
     public ResponseEntity<?> getToken() {
