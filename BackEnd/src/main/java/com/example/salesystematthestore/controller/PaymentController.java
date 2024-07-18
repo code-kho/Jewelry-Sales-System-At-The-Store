@@ -16,8 +16,6 @@ import com.paypal.base.rest.PayPalRESTException;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,33 +26,36 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("/payment")
-@RequiredArgsConstructor
 @Hidden
 public class PaymentController {
 
 
-    @Autowired
-    VNPayServiceImp paymentService;
+    private final VNPayServiceImp paymentService;
 
-    @Autowired
-    PaypalServiceImp paypalServiceImp;
+    private final PaypalServiceImp paypalServiceImp;
+
+    private final OrderStatusRepository orderStatusRepository;
+
+    private final OrderServiceImp orderServiceImp;
+
+    private final OrderRepository orderRepository;
 
 
-    @Autowired
-    OrderStatusRepository orderStatusRepository;
+    private final  PaymentMethodRepository paymentMethodRepository;
 
-    @Autowired
-    OrderServiceImp orderServiceImp;
-
-    @Autowired
-    OrderRepository orderRepository;
+    public PaymentController(VNPayServiceImp paymentService,PaypalServiceImp paypalServiceImp,OrderStatusRepository orderStatusRepository,OrderServiceImp orderServiceImp,OrderRepository orderRepository,PaymentMethodRepository paymentMethodRepository){
+        this.paymentService = paymentService;
+        this.paypalServiceImp = paypalServiceImp;
+        this.orderStatusRepository = orderStatusRepository;
+        this.orderServiceImp = orderServiceImp;
+        this.orderRepository = orderRepository;
+        this.paymentMethodRepository = paymentMethodRepository;
+    }
 
     private final String successUrl = "http://localhost:3000/order-success";
 
     private final String failureUrl = "https://www.facebook.com/";
 
-    @Autowired
-    private PaymentMethodRepository paymentMethodRepository;
 
 
     @PostMapping("/vn-pay")

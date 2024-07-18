@@ -6,7 +6,6 @@ import com.example.salesystematthestore.payload.request.OrderRequest;
 import com.example.salesystematthestore.repository.OrderRepository;
 import com.example.salesystematthestore.service.imp.OrderServiceImp;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +19,14 @@ import java.util.Objects;
 public class OrderController {
 
 
-    @Autowired
-    OrderServiceImp orderServiceImp;
-    @Autowired
-    private OrderRepository orderRepository;
+    private final OrderServiceImp orderServiceImp;
 
+    private final OrderRepository orderRepository;
+
+    public OrderController(OrderServiceImp orderServiceImp,OrderRepository orderRepository) {
+        this.orderServiceImp = orderServiceImp;
+        this.orderRepository = orderRepository;
+    }
 
     @GetMapping
     public ResponseEntity<?> getOrders(@RequestParam(required = false) Integer counterId) {

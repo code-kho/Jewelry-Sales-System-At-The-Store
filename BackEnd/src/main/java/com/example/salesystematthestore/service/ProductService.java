@@ -597,7 +597,6 @@ public class ProductService implements ProductServiceImp {
                     productDTO.setTypeId(product.getProductType().getId());
                     productDTO.setActive(product.isActive());
                     productDTO.setGoldTypeName(product.getGoldType().getTypeName());
-                    productDTO.setGoldTypeName(product.getGoldType().getTypeName());
                     double cost = product.getGoldType().getPrice() * product.getWeight() + product.getStonePrice() + product.getLaborCost();
 
                     double totalPrice = (cost * product.getRatioPrice() / 100) + cost;
@@ -628,6 +627,8 @@ public class ProductService implements ProductServiceImp {
                 productDTO.setTypeId(product.getProductType().getId());
                 productDTO.setActive(product.isActive());
 
+                productDTO.setGoldTypeName(product.getGoldType().getTypeName());
+                
                 double cost = product.getGoldType().getPrice() * product.getWeight() + product.getStonePrice() + product.getLaborCost();
 
                 double totalPrice = (cost * product.getRatioPrice() / 100) + cost;
