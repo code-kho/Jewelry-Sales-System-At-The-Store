@@ -1,6 +1,5 @@
 package com.example.salesystematthestore.dto;
 
-import com.example.salesystematthestore.entity.ProductRequests;
 import lombok.Data;
 
 import java.io.Serializable;

@@ -13,8 +13,12 @@ import java.util.UUID;
 @RequestMapping("/voucher")
 public class VoucherController {
 
+    private final VoucherServiceImp voucherServiceImp;
+
     @Autowired
-    VoucherServiceImp voucherServiceImp;
+    public VoucherController(VoucherServiceImp voucherServiceImp) {
+        this.voucherServiceImp = voucherServiceImp;
+    }
 
     @PostMapping
     public ResponseEntity<?> createVoucher(@RequestParam double discountPercent) {

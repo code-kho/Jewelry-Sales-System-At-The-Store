@@ -2,8 +2,6 @@ package com.example.salesystematthestore.config.payment.vnpay;
 
 import com.example.salesystematthestore.utils.VNPayUtil;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Value;
 import org.springframework.context.annotation.Configuration;
 
 import java.text.SimpleDateFormat;

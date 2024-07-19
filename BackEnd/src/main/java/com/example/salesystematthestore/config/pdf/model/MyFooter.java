@@ -17,10 +17,10 @@ import lombok.SneakyThrows;
 import java.util.List;
 
 public class MyFooter implements IEventHandler {
-    float fullwidth[] = {500f};
+    float[] fullwidth = {500f};
     protected Document doc;
-    private List<String> tncList;
-    private String imagePath;
+    private final List<String> tncList;
+    private final String imagePath;
 
     public MyFooter(Document doc, List<String> tncList, String imagePath) {
         this.doc = doc;
@@ -37,12 +37,7 @@ public class MyFooter implements IEventHandler {
         Document document = new Document(pdfDocument);
 
 
-//        float coordX = ((pageSize.getLeft() + doc.getLeftMargin())
-//                + (pageSize.getRight() - doc.getRightMargin())) / 2;
-//        float headerY = pageSize.getTop() - doc.getTopMargin() + 10;
         float footerY = doc.getBottomMargin();
-        //System.out.println("footerY" + footerY);
-        //PdfCanvas pdfCanvas = new PdfCanvas(docEvent.getPage());
         Table tb = new Table(fullwidth);
         tb.addCell(new Cell().add("TERMS AND CONDITIONS\n").setBold().setBorder(Border.NO_BORDER));
         for (String tnc : tncList) {

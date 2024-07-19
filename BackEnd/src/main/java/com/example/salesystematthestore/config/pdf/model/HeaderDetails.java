@@ -19,20 +19,6 @@ public class HeaderDetails {
     String invoiceDate=ConstantUtil.EMPTY;
     Color borderColor=Color.GRAY;
 
-    public HeaderDetails setInvoiceTitle(String invoiceTitle) {
-        this.invoiceTitle = invoiceTitle;
-        return this;
-    }
-
-    public HeaderDetails setInvoiceNoText(String invoiceNoText) {
-        this.invoiceNoText = invoiceNoText;
-        return this;
-    }
-
-    public HeaderDetails setInvoiceDateText(String invoiceDateText) {
-        this.invoiceDateText = invoiceDateText;
-        return this;
-    }
 
     public HeaderDetails setInvoiceNo(String invoiceNo) {
         this.invoiceNo = invoiceNo;
@@ -41,11 +27,6 @@ public class HeaderDetails {
 
     public HeaderDetails setInvoiceDate(String invoiceDate) {
         this.invoiceDate = invoiceDate;
-        return this;
-    }
-
-    public HeaderDetails setBorderColor(Color borderColor) {
-        this.borderColor = borderColor;
         return this;
     }
     public HeaderDetails build()

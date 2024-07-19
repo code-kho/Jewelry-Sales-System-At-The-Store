@@ -35,6 +35,7 @@ public class CustomerService implements CustomerServiceImp {
         customerDTO.setPhoneNumber(customer.getPhoneNumber());
         customerDTO.setLoyaltyPoints(customer.getLoyaltyPoints());
         customerDTO.setMemberShipTier(customer.getMemberShipTier().getMembershipName());
+        customerDTO.setPrecent_discount(customer.getMemberShipTier().getDiscountPercent());
         return customerDTO;
     }
 

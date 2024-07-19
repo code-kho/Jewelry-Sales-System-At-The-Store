@@ -31,14 +31,18 @@ public class JwtCustom extends OncePerRequestFilter {
     @Value("${jwt.secretkey}")
     private String key;
 
+    private final JwtTokenHelper jwtTokenHelper;
+
     @Autowired
-    JwtTokenHelper jwtTokenHelper;
+    public JwtCustom(JwtTokenHelper jwtTokenHelper) {
+        this.jwtTokenHelper = jwtTokenHelper;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = getTokenFromHeader(request);
-        if(token!=null){
-            if(jwtTokenHelper.verifyToken(token)){
+        if (token != null) {
+            if (jwtTokenHelper.verifyToken(token)) {
                 SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(key));
 
                 Claims claims = Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token).getPayload();
@@ -46,18 +50,18 @@ public class JwtCustom extends OncePerRequestFilter {
                 String role = String.valueOf(claims.get("role"));
                 ArrayList<GrantedAuthority> grantedAuthorities = new ArrayList<>();
                 grantedAuthorities.add(new SimpleGrantedAuthority(role.toUpperCase()));
-                Authentication usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username,"", grantedAuthorities);
+                Authentication usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, "", grantedAuthorities);
                 SecurityContext securityContext = SecurityContextHolder.getContext();
                 securityContext.setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 
-    protected String getTokenFromHeader(HttpServletRequest request){
+    protected String getTokenFromHeader(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
         String token = "";
-        if(StringUtils.hasText(header)&&header.startsWith("Bearer ")){
+        if (StringUtils.hasText(header) && header.startsWith("Bearer ")) {
             token = header.substring(7);
         }
         return token;

@@ -1,10 +1,8 @@
 package com.example.salesystematthestore.dto;
 
-import com.example.salesystematthestore.entity.Counter;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 @Data
