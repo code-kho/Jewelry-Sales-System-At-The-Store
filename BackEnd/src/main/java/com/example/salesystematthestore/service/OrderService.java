@@ -16,6 +16,7 @@ import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.context.Context;
 
 import java.io.IOException;
@@ -399,8 +400,14 @@ public class OrderService implements OrderServiceImp {
         return transferOrder(order);
     }
 
+    private boolean checkValidQuantity(ProductCounter productCounter, int quantityCheck) {
+
+        return productCounter.getQuantity() >= quantityCheck;
+    }
+
 
     @Override
+    @Transactional
     public OrderDTO createOrder(OrderRequest orderRequest) {
 
         Order order = new Order();
@@ -416,6 +423,11 @@ public class OrderService implements OrderServiceImp {
             keyProductCouter.setProductId(productItemRequest.getProductId());
             keyProductCouter.setCouterId(userRepository.findById(orderRequest.getUserId()).getCounter().getId());
             ProductCounter productCounter = productCounterRepository.findByKeyProductCouter(keyProductCouter);
+
+            if (!checkValidQuantity(productCounter, productItemRequest.getQuantity())) {
+                throw new RuntimeException("Not enough quantity for product: " + productCounter.getQuantity());
+            }
+
             productCounter.setQuantity(productCounter.getQuantity() - productItemRequest.getQuantity());
             productCounterRepository.save(productCounter);
 
@@ -443,7 +455,7 @@ public class OrderService implements OrderServiceImp {
 
         Customer customer = customerRepository.findById(orderRequest.getCustomerId());
 
-        if (customer!=null) {
+        if (customer != null) {
             int point = (int) orderRequest.getAmount();
             customer.setLoyaltyPoints(customer.getLoyaltyPoints() + point);
             customerServiceImp.updateMembershipTier(customer.getLoyaltyPoints(), customer.getId());
@@ -464,6 +476,8 @@ public class OrderService implements OrderServiceImp {
                 }
             }
         }
+
+        order.setDiscountPercentMembership(customer.getMemberShipTier().getDiscountPercent());
 
 
         Users user = userRepository.findById(orderRequest.getUserId());
@@ -509,7 +523,7 @@ public class OrderService implements OrderServiceImp {
         order.setOrderStatus(orderStatusRepository.findById(4));
 
         orderRepository.save(order);
-       return true;
+        return true;
     }
 
     @Override

@@ -124,6 +124,7 @@ public class PdfService implements PdfServiceImp {
 
         //Create Address start
         AddressDetails addressDetails = new AddressDetails();
+
         addressDetails
                 .setBillingCompany("FOUR GEM")
                 .setBillingName(order.getCustomer().getName())

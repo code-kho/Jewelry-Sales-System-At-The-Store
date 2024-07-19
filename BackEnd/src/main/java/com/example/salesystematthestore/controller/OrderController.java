@@ -23,7 +23,7 @@ public class OrderController {
 
     private final OrderRepository orderRepository;
 
-    public OrderController(OrderServiceImp orderServiceImp,OrderRepository orderRepository) {
+    public OrderController(OrderServiceImp orderServiceImp, OrderRepository orderRepository) {
         this.orderServiceImp = orderServiceImp;
         this.orderRepository = orderRepository;
     }
@@ -113,11 +113,16 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest) {
+
         ResponseData responseData = new ResponseData();
+        try {
+            responseData.setData(orderServiceImp.createOrder(orderRequest));
+            return new ResponseEntity<>(responseData, HttpStatus.OK);
 
-        responseData.setData(orderServiceImp.createOrder(orderRequest));
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(responseData, HttpStatus.BAD_REQUEST);
+        }
 
-        return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
     @GetMapping("/get-number-item-by-date")
