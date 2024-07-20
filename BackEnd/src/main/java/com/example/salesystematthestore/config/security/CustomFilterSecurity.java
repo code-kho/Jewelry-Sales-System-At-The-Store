@@ -44,6 +44,8 @@ public class CustomFilterSecurity {
         http.cors(Customizer.withDefaults()).sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).csrf(csrf -> csrf.disable()).authorizeHttpRequests(request -> {
             request.requestMatchers("/user/signin/**", "/payment/vn-pay-callback/**", "/payment/paypal/success/**", "/user/verify-code/**").permitAll();
             request.requestMatchers(url).permitAll();
+            request.requestMatchers("/warranty-card/view-warranty-customer/**").permitAll();
+            request.requestMatchers("/warranty-card/**").hasAnyAuthority("ADMIN", "MANAGER", "STAFF", "QC");
             request.requestMatchers("/product/**").hasAnyAuthority("ADMIN", "MANAGER", "STAFF", "QC");
             request.requestMatchers("/user/get-info-by-token").hasAnyAuthority("ADMIN", "MANAGER", "STAFF");
             request.requestMatchers("/user/get-staff-list").hasAnyAuthority("ADMIN", "MANAGER");

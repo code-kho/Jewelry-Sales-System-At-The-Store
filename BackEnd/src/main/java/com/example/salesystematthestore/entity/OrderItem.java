@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "order_item")
 @Setter
@@ -19,16 +21,16 @@ public class OrderItem {
     KeyOrderItem keys;
 
     @ManyToOne(cascade = {
-            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
     })
-    @JoinColumn(name = "product_id",insertable=false, updatable=false)
+    @JoinColumn(name = "product_id", insertable = false, updatable = false)
     private Product product;
 
 
     @ManyToOne(cascade = {
-            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
     })
-    @JoinColumn(name = "order_id",insertable=false, updatable=false)
+    @JoinColumn(name = "order_id", insertable = false, updatable = false)
     private Order order;
 
     @Column(name = "quantity")
@@ -42,4 +44,9 @@ public class OrderItem {
 
     @Column(name = "discount_percent")
     private Double discountPercent;
+
+    @OneToMany(mappedBy = "orderItem", fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
+    })
+    private List<WarrantyCard> warrantyCard;
 }

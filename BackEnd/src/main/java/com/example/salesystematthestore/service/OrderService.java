@@ -8,10 +8,7 @@ import com.example.salesystematthestore.entity.key.KeyProductCouter;
 import com.example.salesystematthestore.payload.request.OrderRequest;
 import com.example.salesystematthestore.payload.request.ProductItemRequest;
 import com.example.salesystematthestore.repository.*;
-import com.example.salesystematthestore.service.imp.CustomerServiceImp;
-import com.example.salesystematthestore.service.imp.EmailServiceImp;
-import com.example.salesystematthestore.service.imp.OrderServiceImp;
-import com.example.salesystematthestore.service.imp.PdfServiceImp;
+import com.example.salesystematthestore.service.imp.*;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +37,7 @@ public class OrderService implements OrderServiceImp {
     private final VoucherRepository voucherRepository;
     @Value("${spring.mail.username}")
     private String fromMail;
+    private WarrantyCardServiceImp warrantyCardServiceImp;
 
     @Autowired
     public OrderService(OrderRepository orderRepository,
@@ -51,7 +49,8 @@ public class OrderService implements OrderServiceImp {
                         ProductRepository productRepository,
                         EmailServiceImp emailServiceImp,
                         PdfServiceImp pdfServiceImp,
-                        VoucherRepository voucherRepository
+                        VoucherRepository voucherRepository,
+                        WarrantyCardServiceImp warrantyCardServiceImp
     ) {
         this.orderRepository = orderRepository;
         this.orderStatusRepository = orderStatusRepository;
@@ -63,6 +62,7 @@ public class OrderService implements OrderServiceImp {
         this.emailServiceImp = emailServiceImp;
         this.pdfServiceImp = pdfServiceImp;
         this.voucherRepository = voucherRepository;
+        this.warrantyCardServiceImp = warrantyCardServiceImp;
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.example.salesystematthestore.service.imp.OrderServiceImp;
 import com.example.salesystematthestore.service.imp.PaypalServiceImp;
 import com.example.salesystematthestore.service.imp.VNPayServiceImp;
 import com.example.salesystematthestore.entity.Payments;
+import com.example.salesystematthestore.service.imp.WarrantyCardServiceImp;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
@@ -40,16 +41,19 @@ public class PaymentController {
 
     private final OrderRepository orderRepository;
 
+    private final WarrantyCardServiceImp warrantyCardServiceImp;
+
 
     private final  PaymentMethodRepository paymentMethodRepository;
 
-    public PaymentController(VNPayServiceImp paymentService,PaypalServiceImp paypalServiceImp,OrderStatusRepository orderStatusRepository,OrderServiceImp orderServiceImp,OrderRepository orderRepository,PaymentMethodRepository paymentMethodRepository){
+    public PaymentController(VNPayServiceImp paymentService,PaypalServiceImp paypalServiceImp,OrderStatusRepository orderStatusRepository,OrderServiceImp orderServiceImp,OrderRepository orderRepository,PaymentMethodRepository paymentMethodRepository, WarrantyCardServiceImp warrantyCardServiceImp){
         this.paymentService = paymentService;
         this.paypalServiceImp = paypalServiceImp;
         this.orderStatusRepository = orderStatusRepository;
         this.orderServiceImp = orderServiceImp;
         this.orderRepository = orderRepository;
         this.paymentMethodRepository = paymentMethodRepository;
+        this.warrantyCardServiceImp = warrantyCardServiceImp;
     }
 
     private final String successUrl = "http://localhost:3000/order-success";
@@ -97,6 +101,7 @@ public class PaymentController {
     public ResponseEntity<?> paymentByCash(@RequestParam int orderId) throws MessagingException, IOException {
 
         Order order = orderRepository.findById(orderId);
+        warrantyCardServiceImp.createWarrantyCardForOrder(order);
         order.setPayTime(new Date());
         order.setExternalMomoTransactionCode("CASH" + orderId);
         OrderStatus orderStatus = orderStatusRepository.findById(3);
@@ -144,6 +149,7 @@ public class PaymentController {
             if (payment.getState().equals("approved")) {
 
                 Order order = orderRepository.findById(orderId);
+                warrantyCardServiceImp.createWarrantyCardForOrder(order);
                 order.setPayTime(new Date());
                 order.setExternalMomoTransactionCode(paymentId);
                 OrderStatus orderStatus = orderStatusRepository.findById(3);

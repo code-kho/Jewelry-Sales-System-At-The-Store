@@ -16,7 +16,7 @@ public class Warranty {
     private int id;
 
     @Column(name = "terms")
-    private double terms;
+    private int terms;
 
     @OneToOne
     @JoinColumn(name = "product_id")

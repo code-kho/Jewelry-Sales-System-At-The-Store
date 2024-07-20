@@ -80,5 +80,4 @@ public class Order {
     @JoinColumn(name = "payment_id")
     private Payments payments;
 
-
 }
