@@ -1,0 +1,53 @@
+export default [
+  {
+    id: "691f55a9-3a8e-4544-a482-2d99d0d3fad0",
+    slug: "eastman-westburry-cello",
+    shop: {
+      id: "43196d35-a8d0-4f7d-9c05-b10dc4f145af",
+      slug: "constant-shoppers",
+      user: {
+        id: "bdfc07fa-3ec2-4b63-a221-21cf65d9968e",
+        email: "Eileen.Langosh99@yahoo.com",
+        phone: "980.409.1017 x6833",
+        avatar:
+          "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/809.jpg",
+        password: "shYo3rkQqRkg9VM",
+        dateOfBirth: "1972-03-29T14:31:41.272Z",
+        verified: true,
+        name: {
+          firstName: "Lucinda",
+          lastName: "Smith",
+        },
+      },
+      email: "Sonia69@yahoo.com",
+      name: "Constant Shoppers",
+      phone: "(613) 343-9004",
+      address: "845 N. Stonybrook Ave. Tonawanda, NY 14210, Denmark",
+      verified: false,
+      coverPicture: "/assets/images/banners/banner-4.png",
+      profilePicture: "/assets/images/faces/propic(3).png",
+      socialLinks: {
+        facebook: null,
+        youtube: null,
+        twitter: null,
+        instagram: null,
+      },
+    },
+    title: "Eastman Westburry Cello",
+    brand: null,
+    price: 7,
+    size: null,
+    colors: [],
+    discount: 0,
+    thumbnail: "/assets/images/products/Music/31.EastmanWestburryCello.png",
+    images: [
+      "/assets/images/products/Music/31.EastmanWestburryCello.png",
+      "/assets/images/products/Music/31.EastmanWestburryCello.png",
+    ],
+    categories: ["music"],
+    status: null,
+    reviews: [],
+    rating: 4,
+    unit: null,
+  },
+];
