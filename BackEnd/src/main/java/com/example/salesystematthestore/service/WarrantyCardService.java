@@ -12,6 +12,7 @@ import com.example.salesystematthestore.service.imp.OrderServiceImp;
 import com.example.salesystematthestore.service.imp.ProductServiceImp;
 import com.example.salesystematthestore.service.imp.WarrantyCardServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +29,7 @@ public class WarrantyCardService implements WarrantyCardServiceImp {
     private final OrderRepository orderRepository;
 
     @Autowired
-    public WarrantyCardService(WarrantyCardRepository warrantyCardRepository,ProductServiceImp productServiceImp,OrderServiceImp orderServiceImp,OrderRepository orderRepository) {
+    public WarrantyCardService(WarrantyCardRepository warrantyCardRepository, ProductServiceImp productServiceImp, @Lazy OrderServiceImp orderServiceImp, OrderRepository orderRepository) {
         this.warrantyCardRepository = warrantyCardRepository;
         this.productServiceImp = productServiceImp;
         this.orderServiceImp = orderServiceImp;
@@ -99,6 +100,8 @@ public class WarrantyCardService implements WarrantyCardServiceImp {
             warrantyCardDTO.setExpiredDate(warrantyCard.getExpiredDate().toString());
             warrantyCardDTO.setExpired(warrantyCard.getExpiredDate().after(warrantyCard.getOrderDate()));
             warrantyCardDTO.setUrl(warrantyCard.getUrlCard());
+
+            warrantyCardDTOList.add(warrantyCardDTO);
         }
 
         return warrantyCardDTOList;

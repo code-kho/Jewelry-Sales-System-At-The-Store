@@ -36,9 +36,6 @@ public class WarrantyCardCreator {
     PdfDocument pdfDocument;
     String pdfName;
 
-    @Autowired
-    private WarrantyCardRepository warrantyCardRepository;
-
     public WarrantyCardCreator(String pdfName) {
         this.pdfName = pdfName;
     }
