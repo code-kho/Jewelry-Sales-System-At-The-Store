@@ -125,6 +125,15 @@ public class OrderController {
 
     }
 
+    @GetMapping("/get-order-by-user")
+    public ResponseEntity<?> createOrder(@RequestParam int userId) {
+
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(orderServiceImp.getAllOrderForUser(userId));
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
     @GetMapping("/get-number-item-by-date")
     public ResponseEntity<?> getNumberOfItemByDate(@RequestParam int countId, @RequestParam String startDate, @RequestParam String endDate) {
 

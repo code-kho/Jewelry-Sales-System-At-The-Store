@@ -45,4 +45,6 @@ public interface OrderServiceImp {
     void sendOrderEmail(Order order) throws MessagingException, IOException;
 
     String getInvoiceForOrder(Order order) throws IOException;
+
+    List<OrderDTO> getAllOrderForUser(int userId);
 }

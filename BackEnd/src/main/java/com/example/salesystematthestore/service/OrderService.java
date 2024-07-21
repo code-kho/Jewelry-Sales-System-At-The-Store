@@ -377,6 +377,18 @@ public class OrderService implements OrderServiceImp {
     }
 
     @Override
+    public List<OrderDTO> getAllOrderForUser(int userId) {
+        List<Order> orderList = orderRepository.findByUser_Id(userId);
+        List<OrderDTO> result = new ArrayList<>();
+
+        for(Order order : orderList){
+            OrderDTO orderDTO = transferOrder(order);
+            result.add(orderDTO);
+        }
+        return result;
+    }
+
+    @Override
     public List<OrderDTO> getAllOrder(int counterId) {
         List<OrderDTO> result = new ArrayList<>();
         List<Order> orderList;
