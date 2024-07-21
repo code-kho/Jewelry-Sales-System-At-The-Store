@@ -31,4 +31,6 @@ public class ProductDTO implements Serializable {
     private int quantityRequest;
     private LinkedHashMap<Integer, Integer> quantityInCounter;
     private double warrantyYear;
+    private boolean isPromotion;
+    private double discountPercent;
 }

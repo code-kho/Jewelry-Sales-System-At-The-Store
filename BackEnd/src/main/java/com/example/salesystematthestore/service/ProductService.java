@@ -320,7 +320,7 @@ public class ProductService implements ProductServiceImp {
             product.setLaborCost(productRequest.getLaborCost());
             product.setCostPrice(0.0);
             product.setStonePrice(productRequest.getStonePrice());
-            
+
             product.setGem(productRequest.getIsGem() == 1);
 
             product.setActive(productRequest.getIsActive() == 1);
@@ -342,7 +342,7 @@ public class ProductService implements ProductServiceImp {
                 Optional<Collection> collection = collectionRepository.findById(productRequest.getCollectionId());
                 collection.ifPresent(product::setCollection);
             }
-            
+
             Warranty warranty = new Warranty();
 
             warrantyRepository.save(warranty);
@@ -457,6 +457,16 @@ public class ProductService implements ProductServiceImp {
         productDTO.setGoldTypeName(product.getGoldType().getTypeName());
         productDTO.setAvailableRotate(quantityInStock > 0);
         productDTO.setWarrantyYear(product.getWarranty().getTerms());
+
+        if(checkValidPromotion(product)){
+            productDTO.setPromotion(true);
+            productDTO.setDiscountPercent(product.getPromotion().getDiscount());
+        } else{
+            productDTO.setPromotion(false);
+            productDTO.setDiscountPercent(0);
+        }
+
+
         double cost = product.getGoldType().getPrice() * product.getWeight() + product.getStonePrice() + product.getLaborCost();
 
         double totalPrice = (cost * product.getRatioPrice() / 100) + cost;
