@@ -487,7 +487,7 @@ public class OrderService implements OrderServiceImp {
         }
 
         assert customer != null;
-        if (customer.getMemberShipTier().getId() == 6) {
+        if (customer.getMemberShipTier().getId() != 6) {
             order.setOrderStatus(orderStatusRepository.findById(1));
         } else {
             order.setOrderStatus(orderStatusRepository.findById(2));
