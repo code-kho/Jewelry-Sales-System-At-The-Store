@@ -285,7 +285,7 @@ public class ProductService implements ProductServiceImp {
         productDTO.setLaborCost(product.getLaborCost());
         productDTO.setCostPrice(product.getCostPrice());
         productDTO.setStonePrice(product.getStonePrice());
-        productDTO.setRatioPrice(productDTO.getRatioPrice());
+        productDTO.setRatioPrice(product.getRatioPrice());
         productDTO.setGem(product.isGem());
         productDTO.setImage(product.getImage());
         productDTO.setQuantityInStock(product.getQuantityInStock());
@@ -601,64 +601,13 @@ public class ProductService implements ProductServiceImp {
 
                 if (product.getProductType().getName().equals(categoryName)) {
 
-                    ProductDTO productDTO = new ProductDTO();
-                    productDTO.setProductId(product.getProductId());
-                    productDTO.setBarCode(product.getBarCode());
-                    productDTO.setProductName(product.getProductName());
-                    productDTO.setWeight(product.getWeight());
-                    productDTO.setPrice(product.getPrice());
-                    productDTO.setLaborCost(product.getLaborCost());
-                    productDTO.setCostPrice(product.getCostPrice());
-                    productDTO.setStonePrice(product.getStonePrice());
-                    productDTO.setRatioPrice(productDTO.getRatioPrice());
-                    productDTO.setGem(product.isGem());
-                    productDTO.setImage(product.getImage());
-                    productDTO.setQuantityInStock(product.getQuantityInStock());
-                    productDTO.setDescription(product.getDescription());
-                    productDTO.setCategoryName(product.getProductType().getName());
-                    productDTO.setGoldId(product.getGoldType().getId());
-                    productDTO.setTypeId(product.getProductType().getId());
-                    productDTO.setActive(product.isActive());
-                    productDTO.setGoldTypeName(product.getGoldType().getTypeName());
-                    double cost = product.getGoldType().getPrice() * product.getWeight() + product.getStonePrice() + product.getLaborCost();
-
-                    double totalPrice = (cost * product.getRatioPrice() / 100) + cost;
-
-                    productDTO.setPrice(totalPrice);
-
-                    productDTOS.add(productDTO);
+                    productDTOS.add(getProductInWarehouseById(product.getProductId()));
 
                 }
             } else {
 
-                ProductDTO productDTO = new ProductDTO();
-                productDTO.setProductId(product.getProductId());
-                productDTO.setBarCode(product.getBarCode());
-                productDTO.setProductName(product.getProductName());
-                productDTO.setWeight(product.getWeight());
-                productDTO.setPrice(product.getPrice());
-                productDTO.setLaborCost(product.getLaborCost());
-                productDTO.setCostPrice(product.getCostPrice());
-                productDTO.setStonePrice(product.getStonePrice());
-                productDTO.setRatioPrice(productDTO.getRatioPrice());
-                productDTO.setGem(product.isGem());
-                productDTO.setImage(product.getImage());
-                productDTO.setQuantityInStock(product.getQuantityInStock());
-                productDTO.setDescription(product.getDescription());
-                productDTO.setCategoryName(product.getProductType().getName());
-                productDTO.setGoldId(product.getGoldType().getId());
-                productDTO.setTypeId(product.getProductType().getId());
-                productDTO.setActive(product.isActive());
 
-                productDTO.setGoldTypeName(product.getGoldType().getTypeName());
-
-                double cost = product.getGoldType().getPrice() * product.getWeight() + product.getStonePrice() + product.getLaborCost();
-
-                double totalPrice = (cost * product.getRatioPrice() / 100) + cost;
-
-                productDTO.setPrice(totalPrice);
-
-                productDTOS.add(productDTO);
+                productDTOS.add(getProductInWarehouseById(product.getProductId()));
             }
 
         }
