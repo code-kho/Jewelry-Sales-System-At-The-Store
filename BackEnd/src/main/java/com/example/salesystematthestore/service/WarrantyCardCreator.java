@@ -59,9 +59,13 @@ public class WarrantyCardCreator {
         document.add(titleParagraph);
     }
 
-    public void createWarrantyDetails(String customerName, String productName, String warrantyPeriod, String serialNumber, String purchaseDate) {
+    public void createWarrantyDetails(String customerName, String productName, String warrantyPeriod, String serialNumber, String purchaseDate, String expiredDate, String orderId) {
         float[] columnWidths = {200f, 250f};
         Table table = new Table(columnWidths);
+
+        table.addCell(new Cell().add("Order ID:").setBold().setBorder(Border.NO_BORDER).setBackgroundColor(new DeviceRgb(224, 224, 224)));
+        table.addCell(new Cell().add(orderId).setBorder(Border.NO_BORDER).setBackgroundColor(new DeviceRgb(240, 240, 240)));
+
 
         table.addCell(new Cell().add("Customer Name:").setBold().setBorder(Border.NO_BORDER).setBackgroundColor(new DeviceRgb(224, 224, 224)));
         table.addCell(new Cell().add(customerName).setBorder(Border.NO_BORDER).setBackgroundColor(new DeviceRgb(240, 240, 240)));
@@ -77,6 +81,9 @@ public class WarrantyCardCreator {
 
         table.addCell(new Cell().add("Purchase Date:").setBold().setBorder(Border.NO_BORDER).setBackgroundColor(new DeviceRgb(224, 224, 224)));
         table.addCell(new Cell().add(purchaseDate).setBorder(Border.NO_BORDER).setBackgroundColor(new DeviceRgb(240, 240, 240)));
+
+        table.addCell(new Cell().add("Expired Date:").setBold().setBorder(Border.NO_BORDER).setBackgroundColor(new DeviceRgb(224, 224, 224)));
+        table.addCell(new Cell().add(expiredDate).setBorder(Border.NO_BORDER).setBackgroundColor(new DeviceRgb(240, 240, 240)));
 
         table.setBorder(new SolidBorder(1));  // Add border around the table
         document.add(table);
@@ -133,8 +140,26 @@ public class WarrantyCardCreator {
             WarrantyCardCreator creator = new WarrantyCardCreator(warrantyCard.getId() + ".pdf");
             creator.createDocument();
             creator.createHeader("Warranty Card");
-            creator.createWarrantyDetails(order.getCustomer().getName(), product.getProductName(), product.getWarranty().getTerms() + " Years", warrantyCard.getId() + "", order.getOrderDate().toString());
-            creator.createFooter("Terms and conditions apply.");
+            creator.createWarrantyDetails(order.getCustomer().getName(), product.getProductName(), product.getWarranty().getTerms() + " Years", warrantyCard.getId() + "", order.getOrderDate().toString(), warrantyCard.getExpiredDate().toString(),""+order.getId());
+            creator.createFooter("### Warranty Terms and Conditions\n" +
+                    "1. **Warranty Coverage:** This product is warranted free from manufacturing defects for a period of [number of years] years from the date of purchase.\n" +
+                    "2. **Warranty Conditions:** The warranty applies only to products that are intact, with no signs of external or third-party tampering. The product must be used properly according to the usage instructions.\n" +
+                    "3. **Exclusions from Warranty:**\n" +
+                    "   - Damage caused by strong impact, dropping, exposure to chemicals, high temperatures, or adverse environmental conditions.\n" +
+                    "   - Natural wear and tear due to daily use.\n" +
+                    "   - Altered, non-authorized repaired, or lost products.\n" +
+                    "4. **Warranty Procedure:**\n" +
+                    "   - Customers must present the warranty card and purchase receipt when requesting warranty service.\n" +
+                    "   - The product will be sent to the store for inspection and evaluation.\n" +
+                    "   - The warranty process usually takes [number of days] to [number of days] working days.\n" +
+                    "5. **Customer Rights:**\n" +
+                    "   - Free repair or replacement for technical defects covered by the warranty.\n" +
+                    "   - In case the product cannot be repaired or is no longer in production, the customer will be exchanged for an equivalent product or refunded the current value of the product.\n" +
+                    "6. **Customer Responsibilities:**\n" +
+                    "   - Carefully maintain the product, avoid impacts, exposure to chemicals, and adverse environmental conditions.\n" +
+                    "   - Read and follow the product usage instructions.\n" +
+                    "7. **Warranty Contact:**\n" +
+                    "   - For support, please contact our customer service department at +84988998249 or email antdnse170571@fpt.edu.vn.");
             creator.addLogo("src/main/resources/ce_logo_circle_transparent.png");
             creator.save(warrantyCard.getId() + ".pdf");
             url = "https://firebasestorage.googleapis.com/v0/b/four-gems.appspot.com/o/" + warrantyCard.getId() + ".pdf" + "?alt=media";
