@@ -272,7 +272,6 @@ public class UserService implements UserServiceImp {
         userAdd.setPassword(encodePasword.encode(user.getPassword()));
         userAdd.setAddress(user.getAddress());
         userAdd.setPhoneNumber(user.getPhoneNumber());
-        userAdd.setLoginCode("");
         userAdd.setRole(roleRepository.findById(user.getRoleId()));
         userAdd.setCounter(counterRepository.findById(user.getCounterId()));
 

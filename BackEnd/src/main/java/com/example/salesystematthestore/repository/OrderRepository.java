@@ -25,4 +25,7 @@ public interface OrderRepository extends JpaRepository<Order,Integer> {
 
     List<Order> findByUser_Id(int id);
 
+    List<Order> findByOrderStatus_IdAndOrderDateBefore(int id, Date orderDate);
+
+
 }

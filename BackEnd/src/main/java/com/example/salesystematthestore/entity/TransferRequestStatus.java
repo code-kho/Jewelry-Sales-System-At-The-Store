@@ -19,7 +19,7 @@ public class TransferRequestStatus {
     private int statusId;
 
 
-    @Column(name = "status_name")
+    @Column(name = "status_name", length = 50)
     private String statusName;
 
     @OneToMany(mappedBy = "transferRequestStatus", fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.REFRESH,CascadeType.MERGE,CascadeType.PERSIST})

@@ -23,7 +23,7 @@ public class Counter {
     @Column(name = "counter_id")
     private int id;
 
-    @Column(name = "address")
+    @Column(name = "address", length = 50)
     private String address;
 
 

@@ -23,7 +23,7 @@ public class Product {
     @Lob
     private String barCode;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 50)
     private String productName;
 
     @Column(name = "ratio_price")

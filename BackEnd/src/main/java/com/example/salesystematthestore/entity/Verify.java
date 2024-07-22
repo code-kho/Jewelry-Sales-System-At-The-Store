@@ -20,7 +20,7 @@ public class Verify {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "code")
+    @Column(name = "code", length = 10)
     private String code;
 
     @Column(name = "expired_date")

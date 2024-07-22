@@ -59,7 +59,7 @@ public class ProductService implements ProductServiceImp {
 
     private boolean checkValidPromotion(Product product) {
         if (product.getPromotion() == null) {
-            return true;
+            return false;
         }
         Date endDate = product.getPromotion().getEndDate();
         return endDate.after(getVietNameDateNow());

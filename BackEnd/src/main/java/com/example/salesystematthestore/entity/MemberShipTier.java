@@ -21,7 +21,7 @@ public class MemberShipTier {
     @Column(name = "membership_id")
     private int id;
 
-    @Column(name="membership_name")
+    @Column(name="membership_name", length = 50)
     private String membershipName;
 
     @Column(name = "discount_percent")

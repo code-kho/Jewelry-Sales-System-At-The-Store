@@ -23,26 +23,23 @@ public class Users {
     @Column(name = "user_id")
     private int id;
 
-    @Column(name = "full_name")
+    @Column(name = "full_name", length = 50)
     private String fullName;
 
-    @Column(name = "username")
+    @Column(name = "username", length = 50)
     private String username;
 
-    @Column(name = "email")
+    @Column(name = "email", length = 50)
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "password", length = 150)
     private String password;
 
-    @Column(name = "address")
+    @Column(name = "address", length = 60)
     private String address;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", length = 20)
     private String phoneNumber;
-
-    @Column(name = "login_code")
-    private String loginCode;
 
     @ManyToOne(cascade = {
             CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH

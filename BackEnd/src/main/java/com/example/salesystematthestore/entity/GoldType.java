@@ -22,7 +22,7 @@ public class GoldType {
     @Column(name = "gold_id")
     private int id;
 
-    @Column(name = "type_name")
+    @Column(name = "type_name", length = 50)
     private String typeName;
 
     @Column(name = "update_date")

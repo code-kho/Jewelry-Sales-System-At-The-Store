@@ -23,7 +23,7 @@ public class Collection {
     @Column(name = "collection_id")
     private int id;
 
-    @Column(name = "collection_name")
+    @Column(name = "collection_name",length = 50)
     private String collectionName;
 
     @Column(name = "create_date")

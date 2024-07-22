@@ -19,10 +19,7 @@ public class Order {
     @Column(name = "order_date")
     private Date orderDate;
 
-    @Column(name = "status")
-    private String status;
-
-    @Column(name = "address")
+    @Column(name = "address", length = 60)
     private String address;
 
     @Column(name = "total_price")
@@ -43,7 +40,7 @@ public class Order {
     @Column(name = "discount_percent_membership")
     private double discountPercentMembership;
 
-    @Column(name = "external_momo_transaction_code")
+    @Column(name = "external_momo_transaction_code", length = 50)
     private String externalMomoTransactionCode;
 
 

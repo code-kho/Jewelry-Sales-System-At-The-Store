@@ -23,7 +23,7 @@ public class ProductType {
     @Column(name = "type_id")
     private int id;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 50)
     private String name;
 
     @Column(name = "created_date")

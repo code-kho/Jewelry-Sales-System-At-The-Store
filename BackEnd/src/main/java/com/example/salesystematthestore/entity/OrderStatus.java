@@ -16,7 +16,7 @@ public class OrderStatus {
     @Column(name = "status_id")
     private int id;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 50)
     private String name;
 
     @Column(name = "descripion", columnDefinition = "TEXT")

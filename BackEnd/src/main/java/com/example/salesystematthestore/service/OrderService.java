@@ -12,6 +12,7 @@ import com.example.salesystematthestore.service.imp.*;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.context.Context;
@@ -386,6 +387,16 @@ public class OrderService implements OrderServiceImp {
             result.add(orderDTO);
         }
         return result;
+    }
+
+    @Transactional
+    @Scheduled(fixedRate = 60000)
+    public void cancelOldOrders() {
+        Date tenMinutesAgo = new Date(System.currentTimeMillis() - 10 * 60 * 1000);
+        List<Order> orders = orderRepository.findByOrderStatus_IdAndOrderDateBefore(1, tenMinutesAgo);
+        for (Order order : orders) {
+            cancelOrder(order.getId());
+        }
     }
 
     @Override

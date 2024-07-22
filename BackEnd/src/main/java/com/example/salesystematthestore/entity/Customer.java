@@ -22,19 +22,19 @@ public class Customer {
     @Column(name = "customer_id")
     private int id;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 50)
     private String name;
 
-    @Column(name = "gender")
+    @Column(name = "gender", length = 10)
     private String gender;
 
-    @Column(name = "email")
+    @Column(name = "email", length = 50)
     private String email;
 
-    @Column(name = "address")
+    @Column(name = "address", length = 50)
     private String address;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", length = 50)
     private String phoneNumber;
 
     @Column(name = "loyalty_points")
