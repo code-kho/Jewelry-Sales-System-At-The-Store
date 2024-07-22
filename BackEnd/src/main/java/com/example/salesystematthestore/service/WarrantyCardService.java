@@ -3,11 +3,11 @@ package com.example.salesystematthestore.service;
 import com.example.salesystematthestore.dto.OrderDTO;
 import com.example.salesystematthestore.dto.ProductDTO;
 import com.example.salesystematthestore.dto.WarrantyCardDTO;
-import com.example.salesystematthestore.entity.Order;
-import com.example.salesystematthestore.entity.OrderItem;
-import com.example.salesystematthestore.entity.WarrantyCard;
+import com.example.salesystematthestore.entity.*;
 import com.example.salesystematthestore.repository.OrderRepository;
+import com.example.salesystematthestore.repository.UserRepository;
 import com.example.salesystematthestore.repository.WarrantyCardRepository;
+import com.example.salesystematthestore.repository.WarrantyHistoryRepository;
 import com.example.salesystematthestore.service.imp.OrderServiceImp;
 import com.example.salesystematthestore.service.imp.ProductServiceImp;
 import com.example.salesystematthestore.service.imp.WarrantyCardServiceImp;
@@ -16,10 +16,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class WarrantyCardService implements WarrantyCardServiceImp {
@@ -28,14 +25,19 @@ public class WarrantyCardService implements WarrantyCardServiceImp {
     private final ProductServiceImp productServiceImp;
     private final OrderServiceImp orderServiceImp;
     private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
+    private final WarrantyHistoryRepository warrantyHistoryRepository;
 
     @Autowired
-    public WarrantyCardService(WarrantyCardRepository warrantyCardRepository, ProductServiceImp productServiceImp, @Lazy OrderServiceImp orderServiceImp, OrderRepository orderRepository) {
+    public WarrantyCardService(WarrantyCardRepository warrantyCardRepository, ProductServiceImp productServiceImp, @Lazy OrderServiceImp orderServiceImp, OrderRepository orderRepository, UserRepository userRepository,WarrantyHistoryRepository warrantyHistoryRepository) {
         this.warrantyCardRepository = warrantyCardRepository;
         this.productServiceImp = productServiceImp;
         this.orderServiceImp = orderServiceImp;
         this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
+        this.warrantyHistoryRepository = warrantyHistoryRepository;
     }
+
 
     @Override
     @Transactional
@@ -81,6 +83,39 @@ public class WarrantyCardService implements WarrantyCardServiceImp {
         }
 
         return warrantyCardDTOList;
+    }
+
+    @Override
+    @Transactional
+    public boolean makeWarranty(int userId, UUID warrantyCardCode) {
+        WarrantyHistory warrantyHistory = new WarrantyHistory();
+
+        if(userRepository.existsById(userId)){
+            Users users = userRepository.findById(userId);
+            if(!users.getRole().getName().equals("QC")){
+                throw new RuntimeException("You are not allowed to make warranty");
+            } else{
+
+                Optional<WarrantyCard> warrantyCard = warrantyCardRepository.findById(warrantyCardCode);
+                if(warrantyCard.isPresent()){
+                    warrantyHistory.setWarrantyCard(warrantyCard.get());
+                    warrantyHistory.setUser(users);
+                    warrantyHistory.setWarrantyDate(new Date());
+                    warrantyHistoryRepository.save(warrantyHistory);
+                    return true;
+                } else{
+                    throw new RuntimeException("Warranty card not found");
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public List<WarrantyHistory> viewAllWarrantyHistory(int userId, UUID cardCode) {
+        List<WarrantyHistory> warrantyHistories = warrantyHistoryRepository.findByUser_IdAndWarrantyCard_Id(userId, cardCode);
+
+        return warrantyHistories;
     }
 
     @Override

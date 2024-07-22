@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/warranty-card")
 public class WarrantyCardController {
@@ -38,6 +40,30 @@ public class WarrantyCardController {
 
             return new ResponseEntity<>(responseData, HttpStatus.OK);
         } else {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/make-warranty")
+    public ResponseEntity<?> makeWarranty(@RequestParam int userId, @RequestParam UUID warrantyCardCode) {
+        try {
+            ResponseData responseData = new ResponseData();
+            responseData.setData(warrantyCardServiceImp.makeWarranty(userId, warrantyCardCode));
+
+            return new ResponseEntity<>(responseData, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/view-warranty-history")
+    public ResponseEntity<?> viewAllWarrantyHistory(@RequestParam int userId, @RequestParam UUID warrantyCardCode) {
+        try {
+            ResponseData responseData = new ResponseData();
+            responseData.setData(warrantyCardServiceImp.viewAllWarrantyHistory(userId, warrantyCardCode));
+
+            return new ResponseEntity<>(responseData, HttpStatus.OK);
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }

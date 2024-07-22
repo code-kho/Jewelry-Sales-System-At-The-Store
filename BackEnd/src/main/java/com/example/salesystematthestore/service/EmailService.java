@@ -39,7 +39,7 @@ public class EmailService implements EmailServiceImp {
 
     public void sendThankYouOrder(String from, String to, String subject, Context context) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
-       
+
         String process = templateEngine.process("new-email.html", context);
         MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
 
@@ -52,5 +52,5 @@ public class EmailService implements EmailServiceImp {
         emailSender.send(message);
     }
 
-    
+
 }

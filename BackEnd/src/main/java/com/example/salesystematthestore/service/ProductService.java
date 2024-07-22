@@ -693,5 +693,17 @@ public class ProductService implements ProductServiceImp {
         return true;
     }
 
+    public void updateProduct(){
+        List<Product> productList = productRepository.findAll();
+        for(Product product : productList){
+            double cost = product.getGoldType().getPrice() * product.getWeight() + product.getStonePrice() + product.getLaborCost();
+
+            double totalPrice = (cost * product.getRatioPrice() / 100) + cost;
+
+            product.setPrice(totalPrice);
+            productRepository.save(product);
+        }
+
+    }
 
 }

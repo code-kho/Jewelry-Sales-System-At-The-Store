@@ -614,15 +614,13 @@ public class OrderService implements OrderServiceImp {
 
         values.put("orderId", orderId);
         values.put("orderDate", orderDate);
-        values.put("amount", amount);
         values.put("products", products);
         values.put("customerName", customerName);
         values.put("customerAddress", customerAddress);
         values.put("customerEmail", customerEmail);
         values.put("subtotal", subtotal);
         values.put("discountPercent", order.getVoucherPercent());
-        values.put("priceAfterVoucher", (float) (subtotal - subtotal * (order.getVoucherPercent() / 100)));
-
+        values.put("memberShipDiscount",order.getCustomer().getMemberShipTier());
         values.put("invoice", pdfServiceImp.createPdfAndUpload(order));
 
 
