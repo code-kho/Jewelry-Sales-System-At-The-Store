@@ -21,4 +21,6 @@ public class CustomerDTO implements Serializable {
     private int loyaltyPoints;
 
     private String memberShipTier;
+
+    private double precent_discount;
 }

@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class PromotionService implements PromotionServiceImp {
@@ -44,11 +41,6 @@ public class PromotionService implements PromotionServiceImp {
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date endDate = formatter.parse(promotionRequest.getEndDate());
-
-            Date initialDate = new Date();
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(initialDate);
-            calendar.add(Calendar.HOUR_OF_DAY, 7);
 
             Date startDate = new Date();
 
@@ -103,10 +95,9 @@ public class PromotionService implements PromotionServiceImp {
     }
 
     @Override
-    public List<PromotionDTO> getAllPromotion(String startDate,String endDate,String description,double discount,int page,int size, String sort, String sortType) {
+    public LinkedHashMap<String, Object> getAllPromotion(String startDate, String endDate, String description, double discount, int page, int size, String sort, String sortType) {
         Sort sortPage;
         if (sortType.equals("DESC")) {
-
             sortPage = Sort.by(Sort.Direction.DESC, sort);
         } else{
             sortPage = Sort.by(Sort.Direction.ASC, sort);
@@ -119,6 +110,8 @@ public class PromotionService implements PromotionServiceImp {
 
         Page<Promotion> promotions = promotionRepository.findByDiscountLessThanEqualAndDescriptionContainsAndStartDateAfterAndEndDateBefore(discount, description, startDateInput, endDateInput,pageable);
 
+        LinkedHashMap<String, Object> resultHash = new LinkedHashMap<>();
+
         List<PromotionDTO> result = new ArrayList<>();
 
         if (!promotions.isEmpty()) {
@@ -128,7 +121,16 @@ public class PromotionService implements PromotionServiceImp {
             }
         }
 
-        return result;
+        resultHash.put("content", result);
+        long totalElements = promotions.getTotalElements();
+        resultHash.put("totalElements", totalElements);
+        resultHash.put("currentPage", page);
+        if(totalElements % size==0){
+            resultHash.put("totalPages", Math.ceil((totalElements / size)));
+        } else {
+            resultHash.put("totalPages", Math.ceil((totalElements / size)+1));
+        }
+        return resultHash;
     }
 
     private Date convertStringToDate(String dateString) {
@@ -149,6 +151,40 @@ public class PromotionService implements PromotionServiceImp {
         return transferPromotion(promotion);
     }
 
+    @Override
+    public boolean updatePromotion(PromotionRequest promotionRequest) {
+        boolean result = true;
+
+        Promotion promotion = promotionRepository.findById(promotionRequest.getId()).get();
+        try {
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date endDate = formatter.parse(promotionRequest.getEndDate());
+
+            Date startDate = formatter.parse(promotionRequest.getStartDate());
+
+            promotion.setDiscount(promotionRequest.getDiscount());
+            promotion.setDescription(promotionRequest.getDescription());
+            promotion.setStartDate(startDate);
+            promotion.setEndDate(endDate);
+            promotionRepository.save(promotion);
+
+            for (Integer productId : promotionRequest.getProductIdList()) {
+                Product product = productRepository.findByProductId(productId);
+                product.setPromotion(promotion);
+            }
+
+            for (Integer productId : promotionRequest.getRemoveProductList()) {
+                Product product = productRepository.findByProductId(productId);
+                product.setPromotion(null);
+            }
+
+            promotionRepository.save(promotion);
+        } catch (ParseException e) {
+            result = false;
+        }
+        return result;
+    }
 
 
 }

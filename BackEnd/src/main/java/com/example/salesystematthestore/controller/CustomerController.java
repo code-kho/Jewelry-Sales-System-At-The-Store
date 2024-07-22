@@ -15,20 +15,23 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Customer", description = "Operations related to customer management ")
 public class CustomerController {
 
-    @Autowired
-    CustomerServiceImp customerServiceImp;
+    private final CustomerServiceImp customerServiceImp;
+    private final CustomerRepository customerRepository;
 
     @Autowired
-    CustomerRepository customerRepository;
+    public CustomerController(CustomerServiceImp customerServiceImp, CustomerRepository customerRepository) {
+        this.customerServiceImp = customerServiceImp;
+        this.customerRepository = customerRepository;
+    }
 
     @GetMapping
     public ResponseEntity<?> getCustomers(@RequestParam(required = false) String phoneNumber) {
         ResponseData responseData = new ResponseData();
-        if(phoneNumber != null){
+        if (phoneNumber != null) {
             responseData.setData(customerServiceImp.getCustomerByPhoneNumber(phoneNumber));
             responseData.setStatus(200);
             return new ResponseEntity<>(responseData, HttpStatus.OK);
-        } else{
+        } else {
             responseData.setData(customerServiceImp.getAllCustomers());
             responseData.setStatus(200);
             return new ResponseEntity<>(responseData, HttpStatus.OK);
@@ -36,14 +39,13 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createCustomer(@RequestBody CustomerRequest customerRequest){
+    public ResponseEntity<?> createCustomer(@RequestBody CustomerRequest customerRequest) {
         ResponseData responseData = new ResponseData();
 
-        if(customerRepository.existsByEmailOrPhoneNumber(customerRequest.getEmail(), customerRequest.getPhoneNumber())){
+        if (customerRepository.existsByEmailOrPhoneNumber(customerRequest.getEmail(), customerRequest.getPhoneNumber())) {
             responseData.setData(0);
             responseData.setDesc("Email or phone number already exists");
-        }
-        else {
+        } else {
             responseData.setData(customerServiceImp.createCustomer(customerRequest));
         }
         return new ResponseEntity<>(responseData, HttpStatus.CREATED);
@@ -53,9 +55,9 @@ public class CustomerController {
     public ResponseEntity<?> getCustomerById(@PathVariable int id) {
         ResponseData responseData = new ResponseData();
 
-        if(customerRepository.existsById(id)){
+        if (customerRepository.existsById(id)) {
             responseData.setData(customerServiceImp.getCustomerById(id));
-        } else{
+        } else {
             responseData.setData("Not found");
             responseData.setStatus(404);
         }

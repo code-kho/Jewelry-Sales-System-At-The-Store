@@ -21,9 +21,12 @@ import java.util.List;
 @EnableWebSecurity
 public class CustomFilterSecurity {
 
+    private final JwtCustom jwtCustom;
 
     @Autowired
-    JwtCustom jwtCustom;
+    public CustomFilterSecurity(JwtCustom jwtCustom) {
+        this.jwtCustom = jwtCustom;
+    }
 
 
     public static final String[] url = {
@@ -39,14 +42,20 @@ public class CustomFilterSecurity {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(Customizer.withDefaults()).sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).csrf(csrf -> csrf.disable()).authorizeHttpRequests(request -> {
-            request.requestMatchers("/user/signin/**","/payment/vn-pay-callback/**","/payment/paypal/success/**","/user/verify-code/**").permitAll();
+            request.requestMatchers("/user/signin/**", "/payment/vn-pay-callback/**", "/payment/paypal/success/**", "/user/verify-code/**").permitAll();
             request.requestMatchers(url).permitAll();
-            request.requestMatchers("/product/**").hasAnyAuthority("ADMIN", "MANAGER", "STAFF");
+            request.requestMatchers("/warranty-card/view-warranty-customer/**").permitAll();
+            request.requestMatchers("/warranty-card/**").hasAnyAuthority("ADMIN", "MANAGER", "STAFF", "QC");
+            request.requestMatchers("/product/**").hasAnyAuthority("ADMIN", "MANAGER", "STAFF", "QC");
             request.requestMatchers("/user/get-info-by-token").hasAnyAuthority("ADMIN", "MANAGER", "STAFF");
             request.requestMatchers("/user/get-staff-list").hasAnyAuthority("ADMIN", "MANAGER");
             request.requestMatchers("/user/signup/**").hasAnyAuthority("ADMIN");
             request.requestMatchers("/user/update/**").hasAnyAuthority("ADMIN");
-            request.anyRequest().hasAnyAuthority("STAFF","ADMIN", "MANAGER");
+            request.requestMatchers("transfer-request/**").hasAnyAuthority("ADMIN", "MANAGER");
+            request.requestMatchers("counter/**").hasAnyAuthority("ADMIN", "MANAGER");
+            request.requestMatchers("product-type/**").hasAnyAuthority("ADMIN", "MANAGER");
+            request.requestMatchers("voucher/**").hasAnyAuthority("ADMIN", "MANAGER", "STAFF");
+            request.anyRequest().hasAnyAuthority("STAFF", "ADMIN", "MANAGER", "QC");
         });
         http.addFilterBefore(jwtCustom, UsernamePasswordAuthenticationFilter.class);
         return http.build();

@@ -23,7 +23,7 @@ public class Product {
     @Lob
     private String barCode;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 50)
     private String productName;
 
     @Column(name = "ratio_price")
@@ -88,6 +88,11 @@ public class Product {
             CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
     })
     private List<OrderItem> orderItemList;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
+    })
+    private List<ProductRequests> productRequestsList;
 
     @ManyToOne(cascade = {
             CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH

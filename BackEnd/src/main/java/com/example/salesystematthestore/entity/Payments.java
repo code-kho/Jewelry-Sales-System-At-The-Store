@@ -22,7 +22,7 @@ public class Payments {
     @Column(name = "payment_id")
     private int id;
 
-    @Column(name = "payment_mode")
+    @Column(name = "payment_mode", length = 50)
     private String paymentMode;
 
     @OneToMany(mappedBy = "payments", fetch = FetchType.LAZY, cascade = {

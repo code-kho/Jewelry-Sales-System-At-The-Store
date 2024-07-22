@@ -2,23 +2,23 @@ package com.example.salesystematthestore.service;
 
 import com.example.salesystematthestore.dto.OrderDTO;
 import com.example.salesystematthestore.dto.OrderItemDTO;
-import com.example.salesystematthestore.dto.ProductDTO;
 import com.example.salesystematthestore.entity.*;
 import com.example.salesystematthestore.entity.key.KeyOrderItem;
 import com.example.salesystematthestore.entity.key.KeyProductCouter;
 import com.example.salesystematthestore.payload.request.OrderRequest;
 import com.example.salesystematthestore.payload.request.ProductItemRequest;
 import com.example.salesystematthestore.repository.*;
-import com.example.salesystematthestore.service.imp.CustomerServiceImp;
-import com.example.salesystematthestore.service.imp.OrderServiceImp;
-import jakarta.persistence.Id;
+import com.example.salesystematthestore.service.imp.*;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.context.Context;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -26,29 +26,45 @@ import java.util.*;
 @Service
 public class OrderService implements OrderServiceImp {
 
-    @Autowired
-    OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
+    private final OrderStatusRepository orderStatusRepository;
+    private final ProductCounterRepository productCounterRepository;
+    private final UserRepository userRepository;
+    private final CustomerRepository customerRepository;
+    private final CustomerServiceImp customerServiceImp;
+    private final ProductRepository productRepository;
+    private final EmailServiceImp emailServiceImp;
+    private final PdfServiceImp pdfServiceImp;
+    private final VoucherRepository voucherRepository;
+    @Value("${spring.mail.username}")
+    private String fromMail;
+    private WarrantyCardServiceImp warrantyCardServiceImp;
 
     @Autowired
-    OrderStatusRepository orderStatusRepository;
-
-    @Autowired
-    ProductCounterRepository productCounterRepository;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    WarrantyRepository warrantyRepository;
-
-    @Autowired
-    CustomerRepository customerRepository;
-
-    @Autowired
-    CustomerServiceImp customerServiceImp;
-    @Autowired
-    private ProductRepository productRepository;
-
+    public OrderService(OrderRepository orderRepository,
+                        OrderStatusRepository orderStatusRepository,
+                        ProductCounterRepository productCounterRepository,
+                        UserRepository userRepository,
+                        CustomerRepository customerRepository,
+                        CustomerServiceImp customerServiceImp,
+                        ProductRepository productRepository,
+                        EmailServiceImp emailServiceImp,
+                        PdfServiceImp pdfServiceImp,
+                        VoucherRepository voucherRepository,
+                        WarrantyCardServiceImp warrantyCardServiceImp
+    ) {
+        this.orderRepository = orderRepository;
+        this.orderStatusRepository = orderStatusRepository;
+        this.productCounterRepository = productCounterRepository;
+        this.userRepository = userRepository;
+        this.customerRepository = customerRepository;
+        this.productRepository = productRepository;
+        this.customerServiceImp = customerServiceImp;
+        this.emailServiceImp = emailServiceImp;
+        this.pdfServiceImp = pdfServiceImp;
+        this.voucherRepository = voucherRepository;
+        this.warrantyCardServiceImp = warrantyCardServiceImp;
+    }
 
     @Override
     public Double getTotalMoneyByDate(int counterId, String startDate, String endDate) {
@@ -63,6 +79,7 @@ public class OrderService implements OrderServiceImp {
         for (String date : dates) {
             for (Order order : orderList) {
                 if (order.getOrderDate().toString().split(" ")[0].equals(date)) {
+                    System.out.println(order.getTotalPrice());
                     totalMoney += order.getTotalPrice();
                 }
             }
@@ -109,21 +126,30 @@ public class OrderService implements OrderServiceImp {
 
             for (Order order : orderList) {
                 if (order.getOrderDate().toString().split(" ")[0].equals(date)) {
-                    for (OrderItem orderItem : order.getOrderItemList()) {
-                        double price = (orderItem.getPrice() - (orderItem.getPrice() / orderItem.getProduct().getRatioPrice())) * orderItem.getQuantity();
-
-                        totalMoney += price;
-
-                    }
+                    totalMoney += getProfitByOrder(order);
                 }
             }
             result.put(date, totalMoney);
 
         }
 
-        return null;
+        return result;
     }
 
+    private double getProfitByOrder(Order order) {
+        double result = 0;
+
+        for (OrderItem orderItem : order.getOrderItemList()) {
+            double price = orderItem.getPrice() / (orderItem.getProduct().getRatioPrice() * (1 - order.getCustomer().getMemberShipTier().getDiscountPercent() + order.getVoucherPercent() + orderItem.getDiscountPercent()));
+
+            double profit = orderItem.getPrice() - price;
+
+            result += profit;
+
+        }
+
+        return result;
+    }
 
     private List<String> getDatesInRange(String startDate, String endDate) {
         List<String> dates = new ArrayList<>();
@@ -185,7 +211,6 @@ public class OrderService implements OrderServiceImp {
     public LinkedHashMap<String, Integer> getNumberOfOrderEachDate(int counterId, String startDate, String endDate) {
 
         LinkedHashMap<String, Integer> result = new LinkedHashMap<>();
-        int totalOfNumber = 0;
 
         List<String> dates = getDatesInRange(startDate, endDate);
 
@@ -212,9 +237,8 @@ public class OrderService implements OrderServiceImp {
         int firstDay = calendar.get(Calendar.DAY_OF_MONTH);
         int firstMonth = calendar.get(Calendar.MONTH) + 1;
         int firstYear = calendar.get(Calendar.YEAR);
-        String startDate = String.format("%04d-%02d-%02d", firstYear, firstMonth, firstDay);
 
-        return startDate;
+        return String.format("%04d-%02d-%02d", firstYear, firstMonth, firstDay);
     }
 
 
@@ -225,9 +249,8 @@ public class OrderService implements OrderServiceImp {
         int lastDay = calendar.get(Calendar.DAY_OF_MONTH);
         int lastMonth = calendar.get(Calendar.MONTH) + 1;
         int lastYear = calendar.get(Calendar.YEAR);
-        String endDate = String.format("%04d-%02d-%02d", lastYear, lastMonth, lastDay);
 
-        return endDate;
+        return String.format("%04d-%02d-%02d", lastYear, lastMonth, lastDay);
     }
 
     public LinkedHashMap<Integer, Double> getTotalMoneyEachMonth(int counterId, int year) {
@@ -285,9 +308,9 @@ public class OrderService implements OrderServiceImp {
         return result;
     }
 
+
     @Override
     public OrderDTO transferOrder(Order order) {
-
 
         OrderDTO result = new OrderDTO();
 
@@ -295,38 +318,85 @@ public class OrderService implements OrderServiceImp {
         result.setOrderDate(order.getOrderDate());
         result.setStatus(order.getOrderStatus().getName());
         result.setCustomerName(order.getCustomer().getName());
+        result.setCustomerPhone(order.getCustomer().getPhoneNumber());
         result.setUserId(order.getUser().getId());
         result.setStaffName(order.getUser().getFullName());
         result.setTotalAmount(order.getTotalPrice());
         result.setTax(order.getTax());
-        result.setVoucherPercent(0);
+
+        if (order.getVoucherPercent() != 0) {
+            result.setVoucherPercent(order.getVoucherPercent());
+        } else {
+            result.setVoucherPercent(0);
+        }
+
+        if (order.getVoucherPercent() != 0) {
+            result.setDiscountPercentForMemberShip(order.getDiscountPercentMembership());
+        } else {
+            result.setVoucherPercent(0);
+        }
+
         result.setPriceBeforeVoucher(order.getTotalPrice());
 
+        if (order.getPayments() != null) {
+            result.setPaymentMethod(order.getPayments().getPaymentMode());
+        }
+        List<OrderItemDTO> orderItemDTOList = getOrderItemDTOS(order);
+
+        result.setOrderItemList(orderItemDTOList);
+
+        return result;
+
+    }
+
+    private static List<OrderItemDTO> getOrderItemDTOS(Order order) {
         List<OrderItemDTO> orderItemDTOList = new ArrayList<>();
 
         for (OrderItem orderItem : order.getOrderItemList()) {
-            double discountPercent = 0;
-            if(orderItem.getProduct().getPromotion()!=null && checkValidPromotion(orderItem.getProduct())){
-                discountPercent = orderItem.getProduct().getPromotion().getDiscount();
-            }
+            double discountPercent = orderItem.getDiscountPercent();
 
-            double price = orderItem.getPrice()/((1+(discountPercent/100)));
+            double price = orderItem.getPrice() / ((1 - (discountPercent / 100)));
 
             OrderItemDTO orderItemDTO = new OrderItemDTO();
             orderItemDTO.setProductId(orderItem.getProduct().getProductId());
+            orderItemDTO.setProductName(orderItem.getProduct().getProductName());
             orderItemDTO.setQuantity(orderItem.getQuantity());
             orderItemDTO.setPrice(price);
+            orderItemDTO.setPromotion(orderItem.getProduct().getPromotion() != null);
             orderItemDTO.setDiscountPrice(orderItem.getPrice());
             orderItemDTO.setAvailableBuyBack(orderItem.getAvalibleBuyBack());
             orderItemDTO.setImg(orderItem.getProduct().getImage());
             orderItemDTOList.add(orderItemDTO);
         }
+        return orderItemDTOList;
+    }
 
-        result.setOrderItemList(orderItemDTOList);
+    @Override
+    public String getInvoiceForOrder(Order order) throws IOException {
 
+        return pdfServiceImp.createPdfAndUpload(order);
+    }
 
+    @Override
+    public List<OrderDTO> getAllOrderForUser(int userId) {
+        List<Order> orderList = orderRepository.findByUser_Id(userId);
+        List<OrderDTO> result = new ArrayList<>();
+
+        for(Order order : orderList){
+            OrderDTO orderDTO = transferOrder(order);
+            result.add(orderDTO);
+        }
         return result;
+    }
 
+    @Transactional
+    @Scheduled(fixedRate = 60000)
+    public void cancelOldOrders() {
+        Date tenMinutesAgo = new Date(System.currentTimeMillis() - 10 * 60 * 1000);
+        List<Order> orders = orderRepository.findByOrderStatus_IdAndOrderDateBefore(1, tenMinutesAgo);
+        for (Order order : orders) {
+            cancelOrder(order.getId());
+        }
     }
 
     @Override
@@ -348,14 +418,19 @@ public class OrderService implements OrderServiceImp {
 
     @Override
     public OrderDTO getOrder(int orderId) {
-        Order order = orderRepository.findById(orderId).get();
-        OrderDTO result = transferOrder(order);
+        Order order = orderRepository.findById(orderId);
 
-        return result;
+        return transferOrder(order);
+    }
+
+    private boolean checkValidQuantity(ProductCounter productCounter, int quantityCheck) {
+
+        return productCounter.getQuantity() >= quantityCheck;
     }
 
 
     @Override
+    @Transactional
     public OrderDTO createOrder(OrderRequest orderRequest) {
 
         Order order = new Order();
@@ -371,6 +446,11 @@ public class OrderService implements OrderServiceImp {
             keyProductCouter.setProductId(productItemRequest.getProductId());
             keyProductCouter.setCouterId(userRepository.findById(orderRequest.getUserId()).getCounter().getId());
             ProductCounter productCounter = productCounterRepository.findByKeyProductCouter(keyProductCouter);
+
+            if (!checkValidQuantity(productCounter, productItemRequest.getQuantity())) {
+                throw new RuntimeException("Not enough quantity for product: " + productCounter.getQuantity());
+            }
+
             productCounter.setQuantity(productCounter.getQuantity() - productItemRequest.getQuantity());
             productCounterRepository.save(productCounter);
 
@@ -381,42 +461,59 @@ public class OrderService implements OrderServiceImp {
             keyOrderItem.setProductId(productItemRequest.getProductId());
             orderItem.setKeys(keyOrderItem);
 
+            if (checkValidPromotion(productCounter.getProduct())) {
+                orderItem.setDiscountPercent(productCounter.getProduct().getPromotion().getDiscount());
+            } else {
+                orderItem.setDiscountPercent(0.0);
+            }
+
+
             orderItem.setQuantity(productItemRequest.getQuantity());
             orderItem.setPrice(productItemRequest.getPrice());
+            orderItem.setAvalibleBuyBack(productItemRequest.getQuantity());
 
             orderItemList.add(orderItem);
         }
         order.setOrderItemList(orderItemList);
 
-        Optional<Customer> customer = customerRepository.findById(orderRequest.getCustomerId());
+        Customer customer = customerRepository.findById(orderRequest.getCustomerId());
 
-        if (customer.isPresent()) {
+        if (customer != null) {
             int point = (int) orderRequest.getAmount();
-            customer.get().setLoyaltyPoints(customer.get().getLoyaltyPoints() + point);
-            customerServiceImp.updateMembershipTier(customer.get().getLoyaltyPoints(), customer.get().getId());
-            order.setCustomer(customer.get());
-            customerRepository.save(customer.get());
+            customer.setLoyaltyPoints(customer.getLoyaltyPoints() + point);
+            customerServiceImp.updateMembershipTier(customer.getLoyaltyPoints(), customer.getId());
+            order.setCustomer(customer);
+            customerRepository.save(customer);
         }
 
-        if (customer.get().getMemberShipTier().getId() == 6) {
-            order.setOrderStatus(orderStatusRepository.findById(1).get());
+        assert customer != null;
+        if (customer.getMemberShipTier().getId() == 6) {
+            order.setOrderStatus(orderStatusRepository.findById(1));
         } else {
-            order.setOrderStatus(orderStatusRepository.findById(2).get());
+            order.setOrderStatus(orderStatusRepository.findById(2));
             for (ProductItemRequest productItemRequest : productItemRequestList) {
                 Product product = productRepository.findByProductId(productItemRequest.getProductId());
                 if (checkValidPromotion(product)) {
-                    order.setOrderStatus(orderStatusRepository.findById(1).get());
+                    order.setOrderStatus(orderStatusRepository.findById(1));
                     break;
                 }
             }
         }
 
+        order.setDiscountPercentMembership(customer.getMemberShipTier().getDiscountPercent());
+
 
         Users user = userRepository.findById(orderRequest.getUserId());
         order.setUser(user);
         order.setTotalPrice(orderRequest.getAmount());
-        order.setTax(7);
+        order.setTax(8);
         order.setOrderDate(new Date());
+
+        if (voucherRepository.findByCode(orderRequest.getCode()) != null) {
+            Voucher voucher = voucherRepository.findByCode(orderRequest.getCode());
+            voucher.setUsed(true);
+            order.setVoucherPercent(voucher.getDiscountPercent());
+        }
         orderRepository.save(order);
 
         OrderDTO orderDTO = new OrderDTO();
@@ -426,50 +523,41 @@ public class OrderService implements OrderServiceImp {
 
     }
 
+
     @Override
     public boolean cancelOrder(int orderId) {
 
-        Optional<Order> order = orderRepository.findById(orderId);
+        Order order = orderRepository.findById(orderId);
 
-        boolean result = false;
 
-        if (order.isPresent()) {
+        List<OrderItem> orderItemList = order.getOrderItemList();
 
-            List<OrderItem> orderItemList = order.get().getOrderItemList();
+        for (OrderItem orderItem : orderItemList) {
+            KeyProductCouter keyProductCouter = new KeyProductCouter();
+            keyProductCouter.setCouterId(order.getUser().getCounter().getId());
+            keyProductCouter.setProductId(orderItem.getProduct().getProductId());
 
-            for (OrderItem orderItem : orderItemList) {
-                KeyProductCouter keyProductCouter = new KeyProductCouter();
-                keyProductCouter.setCouterId(order.get().getUser().getCounter().getId());
-                keyProductCouter.setProductId(orderItem.getProduct().getProductId());
+            ProductCounter productCounter = productCounterRepository.findByKeyProductCouter(keyProductCouter);
 
-                ProductCounter productCounter = productCounterRepository.findByKeyProductCouter(keyProductCouter);
+            productCounter.setQuantity(productCounter.getQuantity() + orderItem.getQuantity());
 
-                productCounter.setQuantity(productCounter.getQuantity() + orderItem.getQuantity());
-
-                productCounterRepository.save(productCounter);
-            }
-
-            order.get().setOrderStatus(orderStatusRepository.findById(4).get());
-
-            orderRepository.save(order.get());
-            result = true;
+            productCounterRepository.save(productCounter);
         }
 
-        return result;
+        order.setOrderStatus(orderStatusRepository.findById(4));
+
+        orderRepository.save(order);
+        return true;
     }
 
     @Override
     public boolean confirmOrder(int orderId) {
-        Optional<Order> order = orderRepository.findById(orderId);
-        boolean result = false;
+        Order order = orderRepository.findById(orderId);
 
-        if (order.isPresent()) {
-            order.get().setOrderStatus(orderStatusRepository.findById(2).get());
-            orderRepository.save(order.get());
-            result = true;
-        }
+        order.setOrderStatus(orderStatusRepository.findById(2));
+        orderRepository.save(order);
 
-        return result;
+        return true;
     }
 
     private boolean checkValidPromotion(Product product) {
@@ -482,33 +570,64 @@ public class OrderService implements OrderServiceImp {
 
 
     @Override
-    public List<OrderDTO> searchOrderBuyBack(int orderId, String productName, String customerEmail, String customerName, String customerPhoneNumber, int page, int size, String sort, String column) {
+    public List<OrderDTO> searchOrderBuyBack(int orderId, String productName, String customerEmail, String customerName, String customerPhoneNumber) {
 
         List<OrderDTO> result = new ArrayList<>();
 
-        if(orderId!=0){
-            Order order = orderRepository.findById(orderId).get();
+        if (orderId != 0) {
+            Order order = orderRepository.findById(orderId);
             OrderDTO orderDTO = transferOrder(order);
             result.add(orderDTO);
-        } else{
-            Sort sortPage;
-            if (sort.equals("DESC")) {
+        } else {
 
-                sortPage = Sort.by(Sort.Direction.DESC, column);
-            } else{
-                sortPage = Sort.by(Sort.Direction.ASC, column);
-            }
-            Pageable pageable = PageRequest.of(page, size, sortPage);
+            List<Order> orderPage = orderRepository.findByOrderStatus_IdAndOrderItemList_Product_ProductNameContainsAndCustomer_NameContainsAndCustomer_EmailContainsAndCustomer_PhoneNumberContains(3, productName, customerName, customerEmail, customerPhoneNumber);
 
-            Page<Order> orderPage = orderRepository.findByOrderItemList_Product_ProductNameContainsAndCustomer_NameContainsAndCustomer_EmailContainsAndCustomer_PhoneNumberContains(productName, customerName, customerEmail, customerPhoneNumber, pageable);
-
-            for(Order order : orderPage){
+            for (Order order : orderPage) {
                 result.add(transferOrder(order));
             }
 
         }
 
         return result;
+    }
+
+
+    public void sendOrderEmail(Order order) throws MessagingException, IOException {
+
+        Context context = new Context();
+        Map<String, Object> values = new HashMap<>();
+        int orderId = order.getId();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = order.getOrderDate();
+        String orderDate = formatter.format(date);
+
+        float amount = (float) order.getTotalPrice();
+        OrderDTO orderDTO = transferOrder(order);
+        List<OrderItemDTO> products = orderDTO.getOrderItemList();
+
+        Customer customer = order.getCustomer();
+        String customerName = customer.getName();
+        String customerAddress = customer.getAddress();
+        String customerEmail = customer.getEmail();
+        float subtotal = (float) (amount / (1 + order.getTax()));
+
+        values.put("orderId", orderId);
+        values.put("orderDate", orderDate);
+        values.put("amount", amount);
+        values.put("products", products);
+        values.put("customerName", customerName);
+        values.put("customerAddress", customerAddress);
+        values.put("customerEmail", customerEmail);
+        values.put("subtotal", subtotal);
+        values.put("discountPercent", order.getVoucherPercent());
+        values.put("priceAfterVoucher", (float) (subtotal - subtotal * (order.getVoucherPercent() / 100)));
+
+        values.put("invoice", pdfServiceImp.createPdfAndUpload(order));
+
+
+        context.setVariables(values);
+        emailServiceImp.sendThankYouOrder(fromMail, customerEmail, "Thank You For Your Order", context);
     }
 
 }

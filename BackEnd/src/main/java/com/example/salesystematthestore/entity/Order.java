@@ -19,10 +19,7 @@ public class Order {
     @Column(name = "order_date")
     private Date orderDate;
 
-    @Column(name = "status")
-    private String status;
-
-    @Column(name = "address")
+    @Column(name = "address", length = 60)
     private String address;
 
     @Column(name = "total_price")
@@ -37,8 +34,13 @@ public class Order {
     @Column(name = "tax")
     private double tax;
 
+    @Column(name = "voucher_percent")
+    private double voucherPercent;
 
-    @Column(name = "external_momo_transaction_code")
+    @Column(name = "discount_percent_membership")
+    private double discountPercentMembership;
+
+    @Column(name = "external_momo_transaction_code", length = 50)
     private String externalMomoTransactionCode;
 
 
@@ -74,6 +76,5 @@ public class Order {
     @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.REFRESH,CascadeType.PERSIST,CascadeType.MERGE})
     @JoinColumn(name = "payment_id")
     private Payments payments;
-
 
 }

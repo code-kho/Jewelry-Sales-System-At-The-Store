@@ -8,9 +8,11 @@ import java.util.List;
 
 @Data
 public class PromotionRequest {
+    private int id;
     private String description;
     private double discount;
+    private String startDate;
     private String endDate;
     List<Integer> productIdList;
-
+    List<Integer> removeProductList;
 }

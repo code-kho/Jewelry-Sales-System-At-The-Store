@@ -11,7 +11,7 @@ public interface GoldTokenServiceImp {
 
     Map<String,Object> getGoldPrice();
 
-    public void updateGoldPrice();
+    void updateGoldPrice();
 
     boolean addToken(String token);
 }

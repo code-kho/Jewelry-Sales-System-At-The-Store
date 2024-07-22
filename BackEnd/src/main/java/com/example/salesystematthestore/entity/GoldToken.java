@@ -12,7 +12,7 @@ public class GoldToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "token")
+    @Column(name = "token", length = 100)
     private String token;
 
     @Column(name = "is_active")

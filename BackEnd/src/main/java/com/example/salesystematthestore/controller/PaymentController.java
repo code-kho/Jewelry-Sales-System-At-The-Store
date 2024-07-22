@@ -10,49 +10,57 @@ import com.example.salesystematthestore.service.imp.OrderServiceImp;
 import com.example.salesystematthestore.service.imp.PaypalServiceImp;
 import com.example.salesystematthestore.service.imp.VNPayServiceImp;
 import com.example.salesystematthestore.entity.Payments;
+import com.example.salesystematthestore.service.imp.WarrantyCardServiceImp;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 import io.swagger.v3.oas.annotations.Hidden;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.io.IOException;
 import java.util.Date;
 
 @RestController
 @RequestMapping("/payment")
-@RequiredArgsConstructor
 @Hidden
 public class PaymentController {
 
 
-    @Autowired
-    VNPayServiceImp paymentService;
+    private final VNPayServiceImp paymentService;
 
-    @Autowired
-    PaypalServiceImp paypalServiceImp;
+    private final PaypalServiceImp paypalServiceImp;
+
+    private final OrderStatusRepository orderStatusRepository;
+
+    private final OrderServiceImp orderServiceImp;
+
+    private final OrderRepository orderRepository;
+
+    private final WarrantyCardServiceImp warrantyCardServiceImp;
 
 
-    @Autowired
-    OrderStatusRepository orderStatusRepository;
+    private final  PaymentMethodRepository paymentMethodRepository;
 
-    @Autowired
-    OrderServiceImp orderServiceImp;
-
-    @Autowired
-    OrderRepository orderRepository;
+    public PaymentController(VNPayServiceImp paymentService,PaypalServiceImp paypalServiceImp,OrderStatusRepository orderStatusRepository,OrderServiceImp orderServiceImp,OrderRepository orderRepository,PaymentMethodRepository paymentMethodRepository, WarrantyCardServiceImp warrantyCardServiceImp){
+        this.paymentService = paymentService;
+        this.paypalServiceImp = paypalServiceImp;
+        this.orderStatusRepository = orderStatusRepository;
+        this.orderServiceImp = orderServiceImp;
+        this.orderRepository = orderRepository;
+        this.paymentMethodRepository = paymentMethodRepository;
+        this.warrantyCardServiceImp = warrantyCardServiceImp;
+    }
 
     private final String successUrl = "http://localhost:3000/order-success";
 
     private final String failureUrl = "https://www.facebook.com/";
 
-    @Autowired
-    private PaymentMethodRepository paymentMethodRepository;
+
 
     @PostMapping("/vn-pay")
     public ResponseEntity<?> pay(HttpServletRequest request, @RequestParam int orderId) {
@@ -67,44 +75,41 @@ public class PaymentController {
     }
 
     @GetMapping("/vn-pay-callback")
-    public RedirectView payCallbackHandler(@RequestParam String vnp_TransactionStatus, @RequestParam String vnp_TransactionNo, @RequestParam int orderId) {
-        ResponseData responseData = new ResponseData();
+    public RedirectView payCallbackHandler(@RequestParam String vnp_TransactionStatus, @RequestParam String vnp_TransactionNo, @RequestParam int orderId) throws MessagingException, IOException {
 
         if (vnp_TransactionStatus.equals("00")) {
 
-            Order order = orderRepository.findById(orderId).get();
+            Order order = orderRepository.findById(orderId);
             order.setPayTime(new Date());
             order.setExternalMomoTransactionCode(vnp_TransactionNo);
-            OrderStatus orderStatus = orderStatusRepository.findById(3).get();
+            OrderStatus orderStatus = orderStatusRepository.findById(3);
             order.setOrderStatus(orderStatus);
-            Payments payments = paymentMethodRepository.findById(2).get();
+            Payments payments = paymentMethodRepository.findById(2);
             order.setPayments(payments);
             orderRepository.save(order);
+            orderServiceImp.sendOrderEmail(order);
 
             return new RedirectView(successUrl);
 
         } else {
-            responseData.setData(null);
-            responseData.setDesc("Failed");
-            responseData.setStatus(404);
-
             return new RedirectView(failureUrl);
         }
     }
 
 
     @PostMapping("/cash")
-    public ResponseEntity<?> paymentByCash(@RequestParam int orderId) {
+    public ResponseEntity<?> paymentByCash(@RequestParam int orderId) throws MessagingException, IOException {
 
-        Order order = orderRepository.findById(orderId).get();
+        Order order = orderRepository.findById(orderId);
+        warrantyCardServiceImp.createWarrantyCardForOrder(order);
         order.setPayTime(new Date());
         order.setExternalMomoTransactionCode("CASH" + orderId);
-        OrderStatus orderStatus = orderStatusRepository.findById(3).get();
+        OrderStatus orderStatus = orderStatusRepository.findById(3);
         order.setOrderStatus(orderStatus);
-        Payments payments = paymentMethodRepository.findById(1).get();
+        Payments payments = paymentMethodRepository.findById(1);
         order.setPayments(payments);
         orderRepository.save(order);
-
+        orderServiceImp.sendOrderEmail(order);
         ResponseData responseData = new ResponseData();
         responseData.setData(true);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
@@ -118,7 +123,7 @@ public class PaymentController {
         ResponseData responseData = new ResponseData();
 
         try {
-            String baseUrl = "https://four-gems-api-c21adc436e90.herokuapp.com";
+            String baseUrl = "https://four-gems-system-790aeec3afd8.herokuapp.com";
             String cancelUrl = baseUrl +"/payment/paypal/cancel";
             String successUrl = baseUrl +"/payment/paypal/success?orderId=" + orderId;
             Payment payments = paypalServiceImp.createPayment(total, "USD", "paypal", "sale", "description", cancelUrl, successUrl);
@@ -138,24 +143,28 @@ public class PaymentController {
 
 
     @GetMapping("/paypal/success")
-    public RedirectView successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, @RequestParam int orderId) {
+    public RedirectView successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId, @RequestParam int orderId)throws  IOException {
         try {
             Payment payment = paypalServiceImp.executePayment(paymentId, payerId);
             if (payment.getState().equals("approved")) {
 
-                Order order = orderRepository.findById(orderId).get();
+                Order order = orderRepository.findById(orderId);
+                warrantyCardServiceImp.createWarrantyCardForOrder(order);
                 order.setPayTime(new Date());
                 order.setExternalMomoTransactionCode(paymentId);
-                OrderStatus orderStatus = orderStatusRepository.findById(3).get();
+                OrderStatus orderStatus = orderStatusRepository.findById(3);
                 order.setOrderStatus(orderStatus);
-                Payments payments = paymentMethodRepository.findById(3).get();
+                Payments payments = paymentMethodRepository.findById(3);
                 order.setPayments(payments);
                 orderRepository.save(order);
+                orderServiceImp.sendOrderEmail(order);
 
                 return new RedirectView(successUrl);
             }
         } catch (PayPalRESTException e) {
             System.out.println(e.getMessage());
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
         }
         return new RedirectView(failureUrl);
     }

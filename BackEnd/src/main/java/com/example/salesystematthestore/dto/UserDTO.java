@@ -20,5 +20,6 @@ public class UserDTO implements Serializable {
     private String email;
     private int roleId;
     private int counterId;
+    private double KPI;
 
 }

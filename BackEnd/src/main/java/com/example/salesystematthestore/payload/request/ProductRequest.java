@@ -19,4 +19,5 @@ public class ProductRequest {
     private int collectionId;
     private int isActive;
     private int isJewel;
+    private int warrantyYear;
 }

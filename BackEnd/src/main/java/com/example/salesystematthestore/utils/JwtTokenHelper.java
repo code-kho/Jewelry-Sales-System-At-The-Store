@@ -29,7 +29,7 @@ public class JwtTokenHelper {
                 .claim("phoneNumber", users.getPhoneNumber())
                 .claim("counterId", users.getCounter().getId())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date().getTime()) + 300000000))
+                .setExpiration(new Date((new Date().getTime()) + 28800000))
                 .signWith(secretKey).compact();
         return token;
     }

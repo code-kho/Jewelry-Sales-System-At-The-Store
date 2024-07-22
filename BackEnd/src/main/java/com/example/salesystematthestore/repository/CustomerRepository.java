@@ -11,11 +11,14 @@ import java.util.Optional;
 public interface CustomerRepository extends JpaRepository<Customer,Integer> {
     boolean existsByEmailOrPhoneNumber(String email, String phoneNumber);
 
+    Customer findById(int id);
 
     @Override
     boolean existsById(Integer integer);
 
     List<Customer> findByPhoneNumberContains(String phoneNumber);
+
+    boolean existsByPhoneNumber(String phoneNumber);
 
 
 }

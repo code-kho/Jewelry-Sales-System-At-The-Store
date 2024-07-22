@@ -6,16 +6,12 @@ import com.example.salesystematthestore.payload.request.OrderRequest;
 import com.example.salesystematthestore.repository.OrderRepository;
 import com.example.salesystematthestore.service.imp.OrderServiceImp;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/order")
@@ -23,21 +19,20 @@ import java.util.HashMap;
 public class OrderController {
 
 
-    @Autowired
-    OrderServiceImp orderServiceImp;
-    @Autowired
-    private OrderRepository orderRepository;
+    private final OrderServiceImp orderServiceImp;
 
+    private final OrderRepository orderRepository;
+
+    public OrderController(OrderServiceImp orderServiceImp, OrderRepository orderRepository) {
+        this.orderServiceImp = orderServiceImp;
+        this.orderRepository = orderRepository;
+    }
 
     @GetMapping
     public ResponseEntity<?> getOrders(@RequestParam(required = false) Integer counterId) {
         ResponseData responseData = new ResponseData();
 
-        if (counterId == null) {
-            responseData.setData(orderServiceImp.getAllOrder(0));
-        } else {
-            responseData.setData(orderServiceImp.getAllOrder(counterId));
-        }
+        responseData.setData(orderServiceImp.getAllOrder(Objects.requireNonNullElse(counterId, 0)));
 
 
         return new ResponseEntity<>(responseData, HttpStatus.OK);
@@ -49,14 +44,10 @@ public class OrderController {
                                                  @RequestParam(required = false, defaultValue = "") String productName,
                                                  @RequestParam(required = false, defaultValue = "") String customerEmail,
                                                  @RequestParam(required = false, defaultValue = "") String customerName,
-                                                 @RequestParam(required = false, defaultValue = "") String customerPhoneNumber,
-                                                 @RequestParam(required = false, defaultValue = "0") int page,
-                                                 @RequestParam(required = false, defaultValue = "10") int size,
-                                                 @RequestParam(required = false, defaultValue = "ASC") String sort,
-                                                 @RequestParam(required = false, defaultValue = "id") String column) {
+                                                 @RequestParam(required = false, defaultValue = "") String customerPhoneNumber) {
         ResponseData responseData = new ResponseData();
 
-        responseData.setData(orderServiceImp.searchOrderBuyBack(orderId, productName, customerEmail, customerName, customerPhoneNumber, page, size, sort, column));
+        responseData.setData(orderServiceImp.searchOrderBuyBack(orderId, productName, customerEmail, customerName, customerPhoneNumber));
 
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
@@ -79,7 +70,7 @@ public class OrderController {
     @GetMapping("/status/{id}")
     public ResponseEntity<?> getOrderStatus(@PathVariable int id) {
         ResponseData responseData = new ResponseData();
-        responseData.setData(orderRepository.findById(id).get().getOrderStatus().getName());
+        responseData.setData(orderRepository.findById(id).getOrderStatus().getName());
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
@@ -122,10 +113,24 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest) {
+
+        ResponseData responseData = new ResponseData();
+        try {
+            responseData.setData(orderServiceImp.createOrder(orderRequest));
+            return new ResponseEntity<>(responseData, HttpStatus.OK);
+
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(responseData, HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @GetMapping("/get-order-by-user")
+    public ResponseEntity<?> createOrder(@RequestParam int userId) {
+
         ResponseData responseData = new ResponseData();
 
-        responseData.setData(orderServiceImp.createOrder(orderRequest));
-
+        responseData.setData(orderServiceImp.getAllOrderForUser(userId));
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 

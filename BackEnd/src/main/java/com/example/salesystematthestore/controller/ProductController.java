@@ -4,6 +4,7 @@ package com.example.salesystematthestore.controller;
 import com.example.salesystematthestore.entity.Product;
 import com.example.salesystematthestore.payload.ResponseData;
 import com.example.salesystematthestore.payload.request.ProductRequest;
+import com.example.salesystematthestore.payload.request.TransferRequest;
 import com.example.salesystematthestore.repository.ProductRepository;
 import com.example.salesystematthestore.service.imp.ProductServiceImp;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,16 +13,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/product")
 @Tag(name = "Product", description = "Operations related to product management ")
 public class ProductController {
 
-    @Autowired
-    ProductServiceImp productServiceImp;
+    private final ProductServiceImp productServiceImp;
+
+    private final ProductRepository productRepository;
 
     @Autowired
-    private ProductRepository productRepository;
+    public ProductController(ProductServiceImp productServiceImp, ProductRepository productRepository) {
+        this.productServiceImp = productServiceImp;
+        this.productRepository = productRepository;
+    }
 
     @GetMapping("/get-product-out-of-stock")
     public ResponseEntity<?> getProductOutOfStock(@RequestParam int countId) {
@@ -35,7 +42,13 @@ public class ProductController {
     }
 
     @GetMapping("/show-product")
-    public ResponseEntity<?> showProduct(@RequestParam int countId, @RequestParam int pageSize, @RequestParam int page, @RequestParam String sortKeyword, @RequestParam String sortType, @RequestParam String categoryName, @RequestParam String searchKeyword) {
+    public ResponseEntity<?> showProduct(@RequestParam(required = false, defaultValue = "1") int countId,
+                                         @RequestParam(required = false, defaultValue = "10") int pageSize,
+                                         @RequestParam(required = false, defaultValue = "0") int page,
+                                         @RequestParam(required = false, defaultValue = "productId") String sortKeyword,
+                                         @RequestParam(required = false, defaultValue = "ASC") String sortType,
+                                         @RequestParam(required = false, defaultValue = "") String categoryName,
+                                         @RequestParam(required = false, defaultValue = "") String searchKeyword) {
 
         ResponseData responseData = new ResponseData();
 
@@ -147,6 +160,14 @@ public class ProductController {
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
+    @PutMapping("/import-list-product-from-warehouse")
+    public ResponseEntity<?> importListProductInWarehouse(@RequestBody TransferRequest transferRequest) {
+        ResponseData responseData = new ResponseData();
+        responseData.setData(productServiceImp.importListProductFromWarehouse(transferRequest));
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
     @GetMapping("/show-all-product-from-warehouse")
     public ResponseEntity<?> showAllProductFromWarehouse(@RequestParam int pageSize, @RequestParam int page, @RequestParam String sortKeyword, @RequestParam String sortType, @RequestParam String categoryName, @RequestParam String searchKeyword) {
         ResponseData responseData = new ResponseData();
@@ -166,6 +187,57 @@ public class ProductController {
     }
 
 
+    @GetMapping("/get-top-sell-product-by-category")
+    public ResponseEntity<?> getTopSellerProduct(@RequestParam String typeName, @RequestParam int countId) {
+        ResponseData responseData = new ResponseData();
 
+        responseData.setData(productServiceImp.getTopSellProduct(typeName, countId));
 
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-product-available-for-buy-back")
+    public ResponseEntity<?> getProductAvailableForBuyBack(@RequestParam int orderId) {
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(productServiceImp.getProductAvailableBuyBack(orderId));
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-product-quantity-less-than")
+    public ResponseEntity<?> getProductQuantityLessThan(@RequestParam int counterid, @RequestParam int quantity) {
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(productServiceImp.getProductQuantityLessThan(counterid, quantity));
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+    @PostMapping("/get-product-check-request")
+    public ResponseEntity<?> getProductCheckRequest(@RequestParam int counterId, @RequestBody List<Integer> listId) {
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(productServiceImp.getProductCheckRequest(counterId, listId));
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+    @GetMapping("/show-all-product-with-quantity-counter")
+    public ResponseEntity<?> showAllProductWithQuantityCounter() {
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(productServiceImp.showAllProductWithQuantityCounter());
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+    @GetMapping("/show-all-product-not-in-counter")
+    public ResponseEntity<?> showAllProductNotInCounter(@RequestParam int counterId) {
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(productServiceImp.showProductNotInCounter(counterId));
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
 }

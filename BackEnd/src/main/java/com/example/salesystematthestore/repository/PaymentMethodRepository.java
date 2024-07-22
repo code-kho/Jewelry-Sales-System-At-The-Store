@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PaymentMethodRepository extends JpaRepository<Payments,Integer> {
+
+    Payments findById(int id);
 }

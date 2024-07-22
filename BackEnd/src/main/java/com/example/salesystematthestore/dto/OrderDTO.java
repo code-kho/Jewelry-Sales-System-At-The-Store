@@ -12,6 +12,7 @@ public class OrderDTO implements Serializable {
     private Date orderDate;
     private String status;
     private String customerName;
+    private String customerPhone;
     private String staffName;
     private int userId;
     private Date paymentDate;
@@ -19,7 +20,8 @@ public class OrderDTO implements Serializable {
     private double priceBeforeVoucher;
     private double voucherPercent;
     private double tax;
-
-    List<OrderItemDTO> orderItemList;
+    private String paymentMethod;
+    private double discountPercentForMemberShip;
+    private List<OrderItemDTO> orderItemList;
 }
 
