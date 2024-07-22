@@ -102,7 +102,6 @@ const DataListTable = ({ dataList, tableHeading, type }) => {
           {type === "STOCK_OUT" && (
             <TableBody>
               {filteredList.map((row, index) => {
-                // console.log(filteredList);
                 const { price, quantityInStock, productName } = row;
                 return (
                   <StyledTableRow key={index}>

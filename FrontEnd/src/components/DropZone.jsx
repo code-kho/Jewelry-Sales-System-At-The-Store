@@ -22,10 +22,10 @@ const DropZone = ({
     const onDrop = useCallback(
         async (acceptedFiles) => {
             if (acceptedFiles.length > 0) {
+                const file = acceptedFiles[0];
+                const storageRef = ref(storage, `images/${file.name}`);
+                setLoading(true);
                 try {
-                    const file = acceptedFiles[0];
-                    const storageRef = ref(storage, `images/${file.name}`);
-                    setLoading(true);
                     await uploadBytes(storageRef, file);
                     const url = await getDownloadURL(storageRef);
                     setImgUrl(url);
@@ -130,6 +130,7 @@ const DropZone = ({
                             variant="outlined"
                             color="error"
                             onClick={handleDelete}
+                            sx={{ mt: 2 }}
                         >
                             Delete
                         </Button>

@@ -1,48 +1,67 @@
 import { Box, Card, Stack, Table, TableContainer } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
-import { H3 } from "components/Typography";
-import Scrollbar from "components/Scrollbar";
-import SearchArea from "components/dashboard/SearchArea";
 import TableHeader from "components/data-table/TableHeader";
 import TablePagination from "components/data-table/TablePagination";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
+import { H3 } from "components/Typography";
+import Scrollbar from "components/Scrollbar";
 import useMuiTable from "hooks/useMuiTable";
-import PromotionRow from "pages-sections/admin/promotions/PromotionsRow";
-import { useRouter } from "next/router";
+import api from "utils/__api__/dashboard";
+import CustomerOrderRow from "../../../src/pages-sections/admin/customers/CustomerOrderRow";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import SearchCustomer from "../../../src/components/dashboard/SearchCustomer";
+import PromotionRow from "../../../src/pages-sections/admin/promotion/PromotionRow";
+import SearchPromotion from "../../../src/components/dashboard/SearchPromotion";
+import {useRouter} from "next/router"; // table column list
 
 const tableHeading = [
-    { id: "promotionId", label: "Promotion ID", align: "left" },
-    { id: "description", label: "Description", align: "left" },
-    { id: "discount", label: "Discount", align: "left" },
-    { id: "endDate", label: "End Date", align: "left" },
-    { id: "action", label: "Action", align: "center" },
-];
+    {
+        id: "id",
+        label: "Id",
+        align: "left",
+    },
+    {
+        id: "description",
+        label: "Description",
+        align: "left",
+    },
+    {
+        id: "discount",
+        label: "Discount",
+        align: "left",
+    },
+    {
+        id: "startDate",
+        label: "Start Date",
+        align: "left",
+    },
+    {
+        id: "endDate",
+        label: "End Date",
+        align: "left",
+    },
+]; // =============================================================================
 
-PromotionList.getLayout = function getLayout(page) {
+SellerList.getLayout = function getLayout(page) {
     return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
-};
+}; // =============================================================================
 
-export default function PromotionList() {
-    const [promotions, setPromotions] = useState();
+// =============================================================================
+export default function SellerList() {
+    const [promotionInfo, setPromotionInfo] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [dataSearch, setDataSearch] = useState();
+    const [promotionSearch, setPromotionSearch] = useState([]);
     const router = useRouter();
-    const [dataSearch, setDataSearch] = useState("");
-
     let token = "";
     if (typeof localStorage !== "undefined") {
         token = localStorage.getItem("token");
     } else if (typeof sessionStorage !== "undefined") {
-        // Fallback to sessionStorage if localStorage is not supported
         token = localStorage.getItem("token");
     } else {
-        // If neither localStorage nor sessionStorage is supported
-        console.log("Web Storage is not supported in this environment.");
+        
     }
-    const handleNav = () => {
-        router.push("/admin/promotions/create");
-    };
     const {
         order,
         orderBy,
@@ -54,87 +73,88 @@ export default function PromotionList() {
         page,
         handleChangeRowsPerPage,
     } = useMuiTable({
-        listData: promotions,
+        listData: promotionInfo,
     });
-
+    const handleAddPromotion = async => {
+        router.push("/admin/promotions/create")
+    }
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchDataPromotion = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(
-                    "https://four-gems-system-790aeec3afd8.herokuapp.com/promotions",
+                const responePromotionInfo = await axios.get(
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/promotions`,
                     {
                         headers: {
                             Authorization: "Bearer " + token,
                         },
                     }
                 );
-                setPromotions(response.data.data);
-                console.log(response.data.data);
+                setPromotionInfo(responePromotionInfo.data.data.content);
             } catch (error) {
-                console.error("Failed to fetch promotions:", error);
+                console.error("Failed to fetch promotion info:", error);
             } finally {
                 setLoading(false);
             }
         };
-        fetchData();
+        fetchDataPromotion();
     }, []);
-
     useEffect(() => {
-        const fetchDataSearch = async () => {
-            if (!dataSearch) return;
+        const fetchDataPromotionSearch = async () => {
             try {
-                const response = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/promotions/search?query=${dataSearch}`,
+                const responeSearchPromotion = await axios.get(
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/promotions?description=${dataSearch}`,
                     {
                         headers: {
                             Authorization: "Bearer " + token,
                         },
                     }
                 );
-                setPromotions(response.data.data);
+                setPromotionSearch(responeSearchPromotion.data.data.content);
+                setPromotionInfo(responeSearchPromotion.data.data.content);
             } catch (error) {
-                console.error("Failed to search promotions:", error);
+                console.error("Failed to search data customers:", error);
             }
         };
-        fetchDataSearch();
+        fetchDataPromotionSearch();
     }, [dataSearch]);
-
     if (loading) {
         return <div>Loading...</div>;
     }
-
     return (
         <Box py={4}>
-            <H3 mb={2}>Promotions</H3>
-
-            <SearchArea
+            <H3 mb={2}>Promotion</H3>
+            <SearchPromotion
                 dataSearch={dataSearch}
                 setDataSearch={setDataSearch}
                 buttonText="Add Promotion"
-                handleBtnClick={handleNav}
+                handleBtnClick={() => {handleAddPromotion()}}
                 searchPlaceholder="Search Promotion..."
             />
 
             <Card>
                 <Scrollbar>
-                    <TableContainer sx={{ minWidth: 900 }}>
+                    <TableContainer
+                        sx={{
+                            minWidth: 1100,
+                        }}
+                    >
                         <Table>
                             <TableHeader
                                 order={order}
                                 hideSelectBtn
                                 orderBy={orderBy}
                                 heading={tableHeading}
-                                numSelected={selected.length}
                                 rowCount={filteredList.length}
+                                numSelected={selected.length}
                                 onRequestSort={handleRequestSort}
                             />
 
                             <TableBody>
-                                {filteredList.map((promotion) => (
+                                {filteredList.map((seller, index) => (
                                     <PromotionRow
-                                        promotion={promotion}
-                                        key={promotion.promotionId}
+                                        seller={seller}
+                                        key={index}
                                     />
                                 ))}
                             </TableBody>
@@ -145,7 +165,7 @@ export default function PromotionList() {
                 <Stack alignItems="center" my={4}>
                     <TablePagination
                         onChange={handleChangePage}
-                        count={Math.ceil(promotions?.length / rowsPerPage)}
+                        count={Math.ceil(promotionInfo?.length / rowsPerPage)}
                         page={page + 1}
                         rowsPerPage={rowsPerPage}
                         onPageChange={handleChangePage}
@@ -156,20 +176,11 @@ export default function PromotionList() {
         </Box>
     );
 }
-
 export const getStaticProps = async () => {
-    try {
-        const promotions = await api.fetchPromotions();
-        return {
-            props: {
-                initialPromotions: promotions,
-            },
-        };
-    } catch (error) {
-        return {
-            props: {
-                initialPromotions: [],
-            },
-        };
-    }
+    const customerInfo = await api.sellers();
+    return {
+        props: {
+            customerInfo,
+        },
+    };
 };

@@ -5,7 +5,7 @@ export const ProductRowImport = ({ product }) => {
     const { productName, image, productId, quantityInCounter } = product;
     if (quantityInCounter && typeof quantityInCounter === "object") {
         Object.entries(quantityInCounter).forEach(([key, value]) => {
-            console.log(`Key: ${key}, Value: ${value}`);
+            
         });
     } else {
         console.error("quantityInCounter is undefined or null");
@@ -17,7 +17,6 @@ export const ProductRowImport = ({ product }) => {
     } else if (typeof sessionStorage !== "undefined") {
         token = sessionStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
     }
 
     return (

@@ -25,7 +25,6 @@ const CategoryRow = ({ category }) => {
     } else if (typeof sessionStorage !== "undefined") {
         token = sessionStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
     }
 
     const handleUpdateCategory = async () => {
@@ -41,7 +40,6 @@ const CategoryRow = ({ category }) => {
                     },
                 }
             );
-            console.log(response.data);
             setEdit(false);
         } catch (error) {
             console.error("There was an error!", error);

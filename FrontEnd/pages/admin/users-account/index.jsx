@@ -69,7 +69,6 @@ export default function CustomerList({ initialCustomers }) {
         token = localStorage.getItem("token");
     } else {
         // If neither localStorage nor sessionStorage is supported
-        console.log("Web Storage is not supported in this environment.");
     }
     const handleNav = () => {
         router.push("/admin/users/create");
@@ -87,7 +86,7 @@ export default function CustomerList({ initialCustomers }) {
     } = useMuiTable({
         listData: customers,
     });
-    //console.log(customers)
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);

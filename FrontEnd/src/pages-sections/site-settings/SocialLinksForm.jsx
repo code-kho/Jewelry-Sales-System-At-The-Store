@@ -16,10 +16,6 @@ const SocialLinksForm = () => {
     app_store: "",
   };
 
-  const handleFormSubmit = async (values) => {
-    // console.log(values);
-  };
-
   return (
     <Formik onSubmit={handleFormSubmit} initialValues={initialValues}>
       {({ values, handleChange, handleSubmit }) => (

@@ -14,8 +14,9 @@ CreateProduct.getLayout = function getLayout(page) {
 export default function CreateProduct() {
     const router = useRouter();
     const [productPublish, setProductPublish] = useState(1);
-    const [files, setFiles] = useState([]); // Files will now contain URLs
+    const [files, setFiles] = useState([]);
     const [imgUrl, setImgUrl] = useState("");
+    
     const INITIAL_VALUES = {
         productName: "",
         description: "",
@@ -30,27 +31,60 @@ export default function CreateProduct() {
         isGem: "",
         isActive: "",
         typeId: "",
+        warrantyYear: 0,
     };
 
     const validationSchema = yup.object().shape({
-        productName: yup.string().required("required"),
-        description: yup.string().required("required"),
-        quantityInStock: yup.number().required("required"),
-        weight: yup.number().required("required"),
-        laborCost: yup.number().required("required"),
-        ratioPrice: yup.number().required("required"),
-        stonePrice: yup.number().required("required"),
+        productName: yup
+            .string()
+            .required("required")
+            .test(
+                "no-start-space",
+                "Cannot start with a space",
+                (value) =>
+                    value && value.trim().length > 0 && !value.startsWith(" ")
+            ),
+        description: yup
+            .string()
+            .required("required")
+            .test(
+                "no-start-space",
+                "Cannot start with a space",
+                (value) =>
+                    value && value.trim().length > 0 && !value.startsWith(" ")
+            ),
+        quantityInStock: yup
+            .number()
+            .required("required")
+            .min(0, "Must be a positive number"),
+        weight: yup
+            .number()
+            .required("required")
+            .min(0, "Must be a positive number"),
+        laborCost: yup
+            .number()
+            .required("required")
+            .min(0, "Must be a positive number"),
+        ratioPrice: yup
+            .number()
+            .required("required")
+            .min(0, "Must be a positive number"),
+        stonePrice: yup
+            .number()
+            .required("required")
+            .min(0, "Must be a positive number"),
+        warrantyYear: yup
+            .number()
+            .required("required")
+            .min(0, "Must be a positive number"),
         goldId: yup.string().required("required"),
-        collectionId: yup.number().required("required"),
         isJewel: yup.number().required("required"),
         isGem: yup.number().required("required"),
         isActive: yup.number().required("required"),
         typeId: yup.number().required("required"),
     });
-    console.log(imgUrl);
-    const handleFormSubmit = async (values) => {
-        const imageUrls = files; // Image URLs from Firebase
 
+    const handleFormSubmit = async (values) => {
         const productNew = {
             productName: values.productName,
             weight: values.weight,
@@ -60,16 +94,18 @@ export default function CreateProduct() {
             isJewel: values.isJewel,
             isGem: values.isGem,
             isActive: values.isActive,
-            image: imgUrl, // Assuming single image for simplicity
+            image: imgUrl,
             quantityInStock: values.quantityInStock,
             description: values.description,
             goldId: values.goldId,
             typeId: values.typeId,
             collectionId: values.collectionId,
+            warrantyYear: values.warrantyYear,
         };
 
         try {
             const token = localStorage.getItem("token");
+
             await axios.post(
                 `https://four-gems-system-790aeec3afd8.herokuapp.com/product/create-product`,
                 productNew,
@@ -79,10 +115,10 @@ export default function CreateProduct() {
                     },
                 }
             );
+            router.push("/admin/products");
         } catch (e) {
-            console.log(e);
+            console.error("Error creating product:", e);
         }
-        router.push("/admin/products");
     };
 
     return (

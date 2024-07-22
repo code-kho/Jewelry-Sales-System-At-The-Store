@@ -19,6 +19,7 @@ import ProductCard9List from "components/products/ProductCard9List";
 import ProductFilterCard from "components/products/ProductFilterCard";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { jwtDecode } from "jwt-decode";
 
 const ProductSearchResult = () => {
     const [view, setView] = useState("grid");
@@ -42,10 +43,11 @@ const ProductSearchResult = () => {
 
     useEffect(() => {
         const fetchShowProduct = async () => {
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
                 const resShowProduct = await axios.get(
-                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=200&page=0&sortKeyword=productId&sortType=${selectedValue}&categoryName=${cateogory}&searchKeyword= `,
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-product?countId=${counterId}&pageSize=200&page=0&sortKeyword=price&sortType=${selectedValue}&categoryName=${cateogory}&searchKeyword= `,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

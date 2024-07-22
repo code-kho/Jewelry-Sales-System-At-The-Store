@@ -44,7 +44,7 @@ const GoldPage = (props) => {
         fetchVNDPrice();
     }, []);
 
-    console.log(VNDPrice);
+   
     const goldData = [
         { type: "24k Gold", price: goldType?.price_gram_24k },
         { type: "22k Gold", price: goldType?.price_gram_22k },

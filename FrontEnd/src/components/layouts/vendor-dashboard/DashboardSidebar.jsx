@@ -19,6 +19,7 @@ import {
     ListIconWrapper,
 } from "./LayoutStyledComponents";
 import { navigations } from "./NavigationList";
+import { jwtDecode } from "jwt-decode";
 const TOP_HEADER_AREA = 70;
 
 // -----------------------------------------------------------------------------
@@ -33,10 +34,20 @@ const DashboardSidebar = (props) => {
     const [onHover, setOnHover] = useState(false);
     const downLg = useMediaQuery((theme) => theme.breakpoints.down("lg"));
     const [role, setRole] = useState(null);
-
+    let token = "";
+    if (typeof localStorage !== "undefined") {
+        token = localStorage.getItem("token");
+    } else if (typeof sessionStorage !== "undefined") {
+        // Fallback to sessionStorage if localStorage is not supported
+        token = localStorage.getItem("token");
+    } else {
+        // If neither localStorage nor sessionStorage is supported
+    }
     useEffect(() => {
         // Assume the role is stored in localStorage
-        const userRole = localStorage.getItem("role");
+        const decoded = jwtDecode(token);
+        const userRole = decoded?.role;
+
         setRole(userRole);
 
         // Redirect based on role
@@ -72,7 +83,11 @@ const DashboardSidebar = (props) => {
 
             if (item.children) {
                 return (
-                    <SidebarAccordion key={index} item={item} sidebarCompact={COMPACT}>
+                    <SidebarAccordion
+                        key={index}
+                        item={item}
+                        sidebarCompact={COMPACT}
+                    >
                         {renderLevels(item.children)}
                     </SidebarAccordion>
                 );
@@ -90,13 +105,19 @@ const DashboardSidebar = (props) => {
                                     <item.icon />
                                 </ListIconWrapper>
                             ) : (
-                                <span className="item-icon icon-text">{item.iconText}</span>
+                                <span className="item-icon icon-text">
+                                    {item.iconText}
+                                </span>
                             )}
 
-                            <StyledText compact={COMPACT}>{item.name}</StyledText>
+                            <StyledText compact={COMPACT}>
+                                {item.name}
+                            </StyledText>
 
                             {item.badge && (
-                                <BadgeValue compact={COMPACT}>{item.badge.value}</BadgeValue>
+                                <BadgeValue compact={COMPACT}>
+                                    {item.badge.value}
+                                </BadgeValue>
                             )}
                         </NavItemButton>
                     </ExternalLink>
@@ -118,10 +139,14 @@ const DashboardSidebar = (props) => {
                                 <BulletIcon active={activeRoute(item.path)} />
                             )}
 
-                            <StyledText compact={COMPACT}>{item.name}</StyledText>
+                            <StyledText compact={COMPACT}>
+                                {item.name}
+                            </StyledText>
 
                             {item.badge && (
-                                <BadgeValue compact={COMPACT}>{item.badge.value}</BadgeValue>
+                                <BadgeValue compact={COMPACT}>
+                                    {item.badge.value}
+                                </BadgeValue>
                             )}
                         </NavItemButton>
                     </Box>
@@ -180,7 +205,11 @@ const DashboardSidebar = (props) => {
                 justifyContent={COMPACT ? "center" : "space-between"}
             >
                 <Avatar
-                    src={COMPACT ? "/assets/images/logo.svg" : "/assets/images/logo.svg"}
+                    src={
+                        COMPACT
+                            ? "/assets/images/logo.svg"
+                            : "/assets/images/logo.svg"
+                    }
                     sx={{
                         borderRadius: 0,
                         width: "auto",

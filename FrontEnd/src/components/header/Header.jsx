@@ -6,6 +6,7 @@ import { useTheme } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { KeyboardArrowDown, MonetizationOn } from "@mui/icons-material";
+import GppGoodIcon from "@mui/icons-material/GppGood";
 import clsx from "clsx";
 import Image from "components/BazaarImage";
 import { FlexBox } from "components/flex-box";
@@ -22,135 +23,172 @@ import SearchBox from "../search-box/SearchBox";
 import { useRouter } from "next/router";
 
 export const HeaderWrapper = styled(Box)(({ theme }) => ({
-  zIndex: 3,
-  position: "relative",
-  height: layoutConstant.headerHeight,
-  transition: "height 250ms ease-in-out",
-  background: "#DD8EB8",
-  [theme.breakpoints.down("sm")]: {
-    height: layoutConstant.mobileHeaderHeight,
-  },
+    zIndex: 3,
+    position: "relative",
+    height: layoutConstant.headerHeight,
+    transition: "height 250ms ease-in-out",
+    background: "#DD8EB8",
+    [theme.breakpoints.down("sm")]: {
+        height: layoutConstant.mobileHeaderHeight,
+    },
 }));
 
 const Header = ({ isFixed, className, searchBoxType = "type1" }) => {
-  const theme = useTheme();
-  const { state } = useAppContext();
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [sidenavOpen, setSidenavOpen] = useState(false);
-  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
-  const downMd = useMediaQuery(theme.breakpoints.down(1150));
-  const router = useRouter();
+    const theme = useTheme();
+    const { state } = useAppContext();
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [sidenavOpen, setSidenavOpen] = useState(false);
+    const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
+    const downMd = useMediaQuery(theme.breakpoints.down(1150));
+    const router = useRouter();
 
-  const handleLink = () => {
-    router.push("/goldpage/goldpage");
-  };
+    const handleLink = () => {
+        router.push("/goldpage/goldpage");
+    };
+    const handleWarranty = () => {
+        router.push("/orderwarrantystaff/warranty");
+    };
 
-  const toggleDialog = () => setDialogOpen(!dialogOpen);
-  const toggleSidenav = () => setSidenavOpen(!sidenavOpen);
+    const toggleDialog = () => setDialogOpen(!dialogOpen);
+    const toggleSidenav = () => setSidenavOpen(!sidenavOpen);
 
-  return (
-    <HeaderWrapper className={clsx(className)}>
-      <Container
-        sx={{
-          gap: 2,
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <FlexBox
-          mr={2}
-          minWidth="170px"
-          alignItems="center"
-          sx={{
-            display: {
-              xs: "none",
-              md: "flex",
-            },
-          }}
-        >
-          <Link href="/">
-            <a>
-              <Image height={44} src="/assets/images/logo2.svg" alt="logo" />
-            </a>
-          </Link>
-
-          {isFixed && (
-            <CategoryMenu>
-              <FlexBox color="grey.600" alignItems="center" ml={2}>
-                <Button color="inherit">
-                  <Category fontSize="small" color="inherit" />
-                  <KeyboardArrowDown fontSize="small" color="inherit" />
-                </Button>
-              </FlexBox>
-            </CategoryMenu>
-          )}
-        </FlexBox>
-
-        <FlexBox justifyContent="center" flex="1 1 0">
-          {searchBoxType === "type1" && <SearchBox />}
-          {searchBoxType === "type2" && <GrocerySearchBox />}
-        </FlexBox>
-
-        <FlexBox
-          alignItems="center"
-          sx={{
-            display: {
-              xs: "none",
-              md: "flex",
-            },
-          }}
-        >
-          <Box
-            component={IconButton}
-            p={1.25}
-            bgcolor="grey.200"
-            onClick={handleLink}
-            sx={{
-              "&:hover": {
-                backgroundColor: "#FFFFFF",
-              },
-            }}
-          >
-            <MonetizationOn />
-          </Box>
-
-          <Badge badgeContent={state.totalQuantity} color="primary">
-            <Box
-              ml={2.5}
-              p={1.25}
-              bgcolor="grey.200"
-              component={IconButton}
-              onClick={toggleSidenav}
-              sx={{
-                "&:hover": {
-                  backgroundColor: "#FFFFFF",
-                },
-              }}
+    return (
+        <HeaderWrapper className={clsx(className)}>
+            <Container
+                sx={{
+                    gap: 2,
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                }}
             >
-              <ShoppingBagOutlined />
-            </Box>
-          </Badge>
-        </FlexBox>
+                <FlexBox
+                    mr={2}
+                    minWidth="170px"
+                    alignItems="center"
+                    sx={{
+                        display: {
+                            xs: "none",
+                            md: "flex",
+                        },
+                    }}
+                >
+                    <Link href="/">
+                        <a>
+                            <Image
+                                height={44}
+                                src="/assets/images/logo2.svg"
+                                alt="logo"
+                            />
+                        </a>
+                    </Link>
 
-        <Dialog
-          scroll="body"
-          open={dialogOpen}
-          fullWidth={isMobile}
-          onClose={toggleDialog}
-        >
-          <Login />
-        </Dialog>
+                    {isFixed && (
+                        <CategoryMenu>
+                            <FlexBox
+                                color="grey.600"
+                                alignItems="center"
+                                ml={2}
+                            >
+                                <Button color="inherit">
+                                    <Category
+                                        fontSize="small"
+                                        color="inherit"
+                                    />
+                                    <KeyboardArrowDown
+                                        fontSize="small"
+                                        color="inherit"
+                                    />
+                                </Button>
+                            </FlexBox>
+                        </CategoryMenu>
+                    )}
+                </FlexBox>
 
-        <Drawer open={sidenavOpen} anchor="right" onClose={toggleSidenav}>
-          <MiniCart toggleSidenav={() => {}} />
-        </Drawer>
+                <FlexBox justifyContent="center" flex="1 1 0">
+                    {searchBoxType === "type1" && <SearchBox />}
+                    {searchBoxType === "type2" && <GrocerySearchBox />}
+                </FlexBox>
 
-        {downMd && <MobileMenu />}
-      </Container>
-    </HeaderWrapper>
-  );
+                <FlexBox
+                    alignItems="center"
+                    sx={{
+                        display: {
+                            xs: "none",
+                            md: "flex",
+                        },
+                    }}
+                >
+                    <Box
+                        component={IconButton}
+                        ml={2.5}
+                        p={1.25}
+                        bgcolor="grey.200"
+                        onClick={handleWarranty}
+                        sx={{
+                            "&:hover": {
+                                backgroundColor: "#FFFFFF",
+                            },
+                        }}
+                    >
+                        <GppGoodIcon />
+                    </Box>
+
+                    <Box
+                        component={IconButton}
+                        ml={2.5}
+                        p={1.25}
+                        bgcolor="grey.200"
+                        onClick={handleLink}
+                        sx={{
+                            "&:hover": {
+                                backgroundColor: "#FFFFFF",
+                            },
+                        }}
+                    >
+                        <MonetizationOn />
+                    </Box>
+
+                    <Badge badgeContent={state.totalQuantity} color="primary">
+                        <Box
+                            ml={2.5}
+                            p={1.25}
+                            bgcolor="grey.200"
+                            component={IconButton}
+                            onClick={toggleSidenav}
+                            sx={{
+                                "&:hover": {
+                                    backgroundColor: "#FFFFFF",
+                                },
+                            }}
+                        >
+                            <ShoppingBagOutlined />
+                        </Box>
+                    </Badge>
+                </FlexBox>
+
+                <Dialog
+                    scroll="body"
+                    open={dialogOpen}
+                    fullWidth={isMobile}
+                    onClose={toggleDialog}
+                >
+                    <Login />
+                </Dialog>
+
+                <Drawer
+                    open={sidenavOpen}
+                    anchor="right"
+                    onClose={toggleSidenav}
+                >
+                    <MiniCart toggleSidenav={() => {}} />
+                </Drawer>
+
+                {downMd && <MobileMenu />}
+            </Container>
+        </HeaderWrapper>
+    );
 };
 
 export default Header;

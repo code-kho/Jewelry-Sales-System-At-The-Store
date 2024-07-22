@@ -18,6 +18,7 @@ import useSettings from "hooks/useSettings";
 import navbarNavigations from "data/navbarNavigations";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { jwtDecode } from "jwt-decode";
 
 const navLinkStyle = {
     cursor: "pointer",
@@ -99,15 +100,24 @@ const LogoutButton = styled("div")(({ theme }) => ({
 }));
 
 const Navbar = ({ navListOpen, hideCategories, elevation, border }) => {
+    let token = "";
+    if (typeof localStorage !== "undefined") {
+        token = localStorage.getItem("token");
+    } else if (typeof sessionStorage !== "undefined") {
+        // Fallback to sessionStorage if localStorage is not supported
+        token = localStorage.getItem("token");
+    } else {
+        // If neither localStorage nor sessionStorage is supported
+    }
     const router = useRouter();
     const { settings } = useSettings();
     const [role, setRole] = useState("");
     useEffect(() => {
-        const role = localStorage.getItem("role");
+        const decoded = jwtDecode(token);
+        const role = decoded?.role;
         setRole(role);
     }, []);
     const handleLogOut = () => {
-        console.log("Logout clicked");
         localStorage.clear();
         router.push("/login");
     };

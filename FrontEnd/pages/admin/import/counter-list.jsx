@@ -40,7 +40,7 @@ export default function ProductList({ initialProducts }) {
     } else if (typeof sessionStorage !== "undefined") {
         token = sessionStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
+
     }
 
     const {
@@ -70,7 +70,7 @@ export default function ProductList({ initialProducts }) {
                             },
                         }
                     );
-                    console.log(response?.data?.data);
+
                     setProducts(response?.data?.data);
                 } else {
                     console.warn(

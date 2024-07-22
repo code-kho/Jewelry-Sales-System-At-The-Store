@@ -11,9 +11,6 @@ export const useGetDate = () => {
   // Tạo startDate và endDate
   let startDate = formattedDate;
   let endDate = formattedDate;
-
-  // console.log("Start Date: " + startDate);
-  // console.log("End Date: " + endDate);
   return { startDate, endDate };
 };
 export const useYesterdayDate = () => {
@@ -35,9 +32,6 @@ export const useYesterdayDate = () => {
   // Tạo startDate và endDate
   let yesStartDate = formattedDate;
   let yesEndDate = formattedDate;
-
-  // console.log("Start Date: " + yesStartDate);
-  // console.log("End Date: " + yesEndDate);
   return { yesStartDate, yesEndDate };
 };
 export const useLast7Days = () => {
@@ -61,9 +55,6 @@ export const useLast7Days = () => {
   // Định dạng ngày theo mẫu YYYY-MM-DD
   let startDate7 = `${startYear}-${startMonth}-${startDay}`;
   let endDate7 = `${endYear}-${endMonth}-${endDay}`;
-
-  // console.log("Start Date: " + startDate7);
-  // console.log("End Date: " + endDate7);
 
   return { startDate7, endDate7 };
 };

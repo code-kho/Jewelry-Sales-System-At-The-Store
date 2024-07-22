@@ -21,8 +21,7 @@ const ReviewRow = ({showRotate}) => {
         // Fallback to sessionStorage if localStorage is not supported
         token = localStorage.getItem('token');
     } else {
-        // If neither localStorage nor sessionStorage is supported
-        console.log('Web Storage is not supported in this environment.');
+
     }
     const decoded = jwtDecode(token);
     const handleConfirmRotate = async (id) => {
@@ -40,7 +39,6 @@ const ReviewRow = ({showRotate}) => {
                             },
                         }
                     );
-                    console.log(resConfirmRotate.data.data);
                     window.location.reload();
                 } catch (e) {
                     console.log("Can not confirm rotate request" + e);
@@ -63,7 +61,6 @@ const ReviewRow = ({showRotate}) => {
                         },
                     }
                 );
-                console.log(resCancelRotate.data.data);
                 window.location.reload();
             } catch (e) {
                 console.log("Can not confirm rotate request" + e);

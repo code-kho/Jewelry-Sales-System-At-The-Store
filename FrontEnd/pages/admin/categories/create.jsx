@@ -25,7 +25,6 @@ export default function CreateCategory() {
     });
 
     const handleFormSubmit = async (values) => {
-        console.log(values.categoryName);
         const categorytNew = {
             productTypeName: values.categoryName,
         };

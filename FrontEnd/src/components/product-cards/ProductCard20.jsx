@@ -10,121 +10,130 @@ import { Paragraph, H4 } from "components/Typography";
 import ProductViewDialog from "components/products/ProductViewDialog";
 
 const Card = styled(Box)(({ theme }) => ({
-  fontFamily: "Ubuntu",
-  borderRadius: "3px",
-  transition: "all 0.3s",
-  backgroundColor: theme.palette.common.white,
-  border: `1px solid ${theme.palette.grey[100]}`,
-  ":hover": {
-    "& .product-actions": {
-      right: 5,
+    fontFamily: "Ubuntu",
+    borderRadius: "3px",
+    transition: "all 0.3s",
+    backgroundColor: theme.palette.common.white,
+    border: `1px solid ${theme.palette.grey[100]}`,
+    ":hover": {
+        "& .product-actions": {
+            right: 5,
+        },
+        "& img": {
+            transform: "scale(1.1)",
+        },
+        border: `1px solid ${theme.palette.dark.main}`,
     },
-    "& img": {
-      transform: "scale(1.1)",
-    },
-    border: `1px solid ${theme.palette.dark.main}`,
-  },
 }));
 
 const CardMedia = styled(Box)(() => ({
-  width: "100%",
-  maxHeight: 300,
-  cursor: "pointer",
-  overflow: "hidden",
-  position: "relative",
-  "& img": {
-    transition: "0.3s",
-  },
+    width: "100%",
+    maxHeight: 300,
+    cursor: "pointer",
+    overflow: "hidden",
+    position: "relative",
+    "& img": {
+        transition: "0.3s",
+    },
 }));
 
 const AddToCartButton = styled(IconButton)(() => ({
-  top: 10,
-  right: -40,
-  position: "absolute",
-  transition: "right 0.3s .1s",
+    top: 10,
+    right: -40,
+    position: "absolute",
+    transition: "right 0.3s .1s",
 }));
 
 const ProductCard20 = ({ product }) => {
-  const { enqueueSnackbar } = useSnackbar();
-  const { state, dispatch } = useAppContext();
-  const [openDialog, setOpenDialog] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const cartItem = state.cart.find((item) => item.id === product.productId);
+    const { enqueueSnackbar } = useSnackbar();
+    const { state, dispatch } = useAppContext();
+    const [openDialog, setOpenDialog] = useState(false);
+    const [isFavorite, setIsFavorite] = useState(false);
+    const cartItem = state.cart.find(
+        (item) => item.productId === product.productId
+    );
 
-  const handleFavorite = () => setIsFavorite((fav) => !fav);
+    const handleFavorite = () => setIsFavorite((fav) => !fav);
 
-  const handleAddToCart = (product) => {
-    const payload = {
-      id: product.productId,
-      name: product.productName,
-      price: product.price,
-      imgUrl: product.image,
-      qty: (cartItem?.qty || 0) + 1,
+    const handleAddToCart = (product) => {
+        const currentQty = cartItem?.qty || 0;
+        if (currentQty >= product.quantityInStock) {
+            enqueueSnackbar("Cannot add more than available stock", {
+                variant: "warning",
+            });
+            return;
+        }
+        const payload = {
+            productId: product.productId,
+            name: product.productName,
+            price: product.price,
+            imgUrl: product.image,
+            qty: currentQty + 1,
+        };
+        dispatch({
+            type: "CHANGE_CART_AMOUNT",
+            payload,
+        });
+        enqueueSnackbar("Added to Cart", {
+            variant: "success",
+        });
     };
-    dispatch({
-      type: "CHANGE_CART_AMOUNT",
-      payload,
-    });
-    enqueueSnackbar("Added to Cart", {
-      variant: "success",
-    });
-  };
 
-  return (
-    <Card height="100%">
-      <CardMedia>
-        <Link href={`/product/${product.productId}`} passHref>
-          <a>
-            <Image
-              width={300}
-              height={300}
-              objectFit="cover"
-              layout="responsive"
-              className="product-img"
-              src={product.image}
-              alt="Loading"
+    return (
+        <Card height="100%">
+            <CardMedia>
+                <Link href={`/product/${product.productId}`} passHref>
+                    <a>
+                        <Image
+                            width={300}
+                            height={300}
+                            objectFit="cover"
+                            layout="responsive"
+                            className="product-img"
+                            src={product.image}
+                            alt="Loading"
+                        />
+                    </a>
+                </Link>
+
+                <AddToCartButton
+                    className="product-actions"
+                    onClick={() => setOpenDialog(true)}
+                >
+                    <RemoveRedEye color="disabled" fontSize="small" />
+                </AddToCartButton>
+            </CardMedia>
+
+            <ProductViewDialog
+                openDialog={openDialog}
+                handleCloseDialog={() => setOpenDialog(false)}
+                product={{
+                    productId: product.productId,
+                    slug: product.productName,
+                    title: product.productName,
+                    price: product.price,
+                    categoryItem: product.categoryItem,
+                    imgGroup: [product.image, product.image],
+                    description: product.description,
+                }}
             />
-          </a>
-        </Link>
+            <Box p={2} textAlign="center">
+                <Paragraph>{product.productName}</Paragraph>
+                <H4 fontWeight={700} py={0.5}>
+                    {currency(product.price)}
+                </H4>
 
-        <AddToCartButton
-          className="product-actions"
-          onClick={() => setOpenDialog(true)}
-        >
-          <RemoveRedEye color="disabled" fontSize="small" />
-        </AddToCartButton>
-      </CardMedia>
-
-      <ProductViewDialog
-        openDialog={openDialog}
-        handleCloseDialog={() => setOpenDialog(false)}
-        product={{
-          id: product.productId,
-          slug: product.productName,
-          title: product.productName,
-          price: product.price,
-          categoryItem: product.categoryItem,
-          imgGroup: [product.image, product.image],
-          description: product.description,
-        }}
-      />
-      <Box p={2} textAlign="center">
-        <Paragraph>{product.productName}</Paragraph>
-        <H4 fontWeight={700} py={0.5}>
-          {currency(product.price)}
-        </H4>
-
-        <Button
-          fullWidth
-          color="dark"
-          variant="outlined"
-          onClick={() => handleAddToCart(product)}
-        >
-          Add To Cart
-        </Button>
-      </Box>
-    </Card>
-  );
+                <Button
+                    fullWidth
+                    color="dark"
+                    variant="outlined"
+                    onClick={() => handleAddToCart(product)}
+                >
+                    Add To Cart
+                </Button>
+            </Box>
+        </Card>
+    );
 };
 
 export default ProductCard20;

@@ -20,11 +20,9 @@ const WishCard = () => {
         token = localStorage.getItem("token");
     } else {
         // If neither localStorage nor sessionStorage is supported
-        console.log("Web Storage is not supported in this environment.");
     }
     useEffect(() => {
         const decoded = jwtDecode(token);
-        // console.log(decoded)
         const fetchDataName = async () => {
             try {
                 const resName = await axios.post(
@@ -45,7 +43,8 @@ const WishCard = () => {
     }, []);
     useEffect(() => {
         const fetchData = async () => {
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
                 //http://localhost:8080/order/get-money-by-date?countId=1&startDate=2021-05-29&endDate=2024-05-29
                 const res = await axios.get(
@@ -56,7 +55,6 @@ const WishCard = () => {
                         },
                     }
                 );
-                // console.log(res.data)
                 setStart(res.data.data);
             } catch (e) {
                 console.log(e);
@@ -64,7 +62,6 @@ const WishCard = () => {
         };
         fetchData();
     }, []);
-    // console.log(name)
     return (
         <Card
             sx={{

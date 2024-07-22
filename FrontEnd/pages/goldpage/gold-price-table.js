@@ -46,7 +46,7 @@ const GoldPriceTable = (props) => {
                                 },
                             }
                         );
-                        console.log(accessToken.error);
+
                         setGoldApiToken(accessToken.data);
                     } catch (goldApiToken) {}
                 } else {
@@ -59,7 +59,7 @@ const GoldPriceTable = (props) => {
         };
         getAccessToken();
     }, []);
-    console.log(goldApiToken);
+   
 
     useEffect(() => {
         const fetchGoldPrice = async () => {

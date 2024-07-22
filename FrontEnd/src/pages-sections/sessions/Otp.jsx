@@ -42,7 +42,6 @@ const Otp = () => {
                 }
             );
             if (response.data !== null) {
-                console.log("successfully logged in");
                 localStorage.setItem("token", response.data.data);
                 nav.push("/");
             } else {

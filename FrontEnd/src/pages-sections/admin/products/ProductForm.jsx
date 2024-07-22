@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     Button,
     Card,
@@ -11,10 +11,9 @@ import {
 } from "@mui/material";
 import { Clear } from "@mui/icons-material";
 import { Formik } from "formik";
-import DropZone from "components/DropZone";
-
-import { FlexBox } from "components/flex-box";
-import BazaarImage from "components/BazaarImage";
+import DropZone from "../../../components/DropZone";
+import BazaarImage from "../../../components/BazaarImage";
+import { FlexBox } from "../../../components/flex-box";
 
 const UploadImageBox = styled(Box)(({ theme }) => ({
     width: 70,
@@ -27,48 +26,34 @@ const UploadImageBox = styled(Box)(({ theme }) => ({
     justifyContent: "center",
     backgroundColor: alpha(theme.palette.info.light, 0.1),
 }));
+
 const StyledClear = styled(Clear)(() => ({
     top: 5,
     right: 5,
     fontSize: 14,
     cursor: "pointer",
     position: "absolute",
-})); // ================================================================
+}));
 
-// ================================================================
-const ProductForm = (props) => {
-    const {
-        initialValues,
-        validationSchema,
-        handleFormSubmit,
-        files,
-        setFiles,
-        imgUrl,
-        setImgUrl,
-    } = props;
+const ProductForm = ({
+    initialValues,
+    validationSchema,
+    handleFormSubmit,
+    imgUrl,
+    setImgUrl,
+}) => {
+    const [files, setFiles] = useState([]);
 
-    const handleChangeDropZone = (incomingFiles) => {
-        incomingFiles.forEach((file) => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setFiles((prevFiles) => [
-                    ...prevFiles,
-                    {
-                        file,
-                        preview: URL.createObjectURL(file),
-                    },
-                ]);
-            };
-            reader.readAsDataURL(file);
-        });
+    const handleChangeDropZone = (url) => {
+        setImgUrl(url);
+        setFiles([{ preview: url }]);
     };
 
-    const handleFileDelete = (fileToDelete) => {
-        setFiles((files) =>
-            files.filter((item) => item.file.name !== fileToDelete.file.name)
-        );
+    const handleFileDelete = () => {
+        setFiles([]);
+        setImgUrl(null);
     };
-    console.log(imgUrl);
+
     return (
         <Card
             sx={{
@@ -116,32 +101,31 @@ const ProductForm = (props) => {
                                 <DropZone
                                     setImgUrl={setImgUrl}
                                     imgUrl={imgUrl}
-                                    accept="image/jpeg"
-                                    onChange={(files) =>
-                                        handleChangeDropZone(files)
+                                    onChange={(url) =>
+                                        handleChangeDropZone(url)
                                     }
                                 />
 
-                                <FlexBox
-                                    flexDirection="row"
-                                    mt={2}
-                                    flexWrap="wrap"
-                                    gap={1}
-                                >
-                                    {files.map((file, index) => (
-                                        <UploadImageBox key={index}>
-                                            <BazaarImage
-                                                src={file.preview}
-                                                width="100%"
-                                            />
-                                            <StyledClear
-                                                onClick={() =>
-                                                    handleFileDelete(file)
-                                                }
-                                            />
-                                        </UploadImageBox>
-                                    ))}
-                                </FlexBox>
+                                {files.length > 0 && (
+                                    <FlexBox
+                                        flexDirection="row"
+                                        mt={2}
+                                        flexWrap="wrap"
+                                        gap={1}
+                                    >
+                                        {files.map((file, index) => (
+                                            <UploadImageBox key={index}>
+                                                <BazaarImage
+                                                    src={file.preview}
+                                                    width="100%"
+                                                />
+                                                <StyledClear
+                                                    onClick={handleFileDelete}
+                                                />
+                                            </UploadImageBox>
+                                        ))}
+                                    </FlexBox>
+                                )}
                             </Grid>
 
                             <Grid item xs={12}>
@@ -268,6 +252,28 @@ const ProductForm = (props) => {
                                     }
                                 />
                             </Grid>
+                            <Grid item sm={6} xs={12}>
+                                <TextField
+                                    fullWidth
+                                    color="info"
+                                    size="medium"
+                                    type="number"
+                                    name="warrantyYear"
+                                    label="Year of Warranty"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    placeholder="Year of Warranty"
+                                    value={values.warrantyYear}
+                                    error={
+                                        !!touched.warrantyYear &&
+                                        !!errors.warrantyYear
+                                    }
+                                    helperText={
+                                        touched.warrantyYear &&
+                                        errors.warrantyYear
+                                    }
+                                />
+                            </Grid>
 
                             <Grid item sm={6} xs={12}>
                                 <TextField
@@ -292,34 +298,6 @@ const ProductForm = (props) => {
                                     <MenuItem value="56">Gold 21K</MenuItem>
                                     <MenuItem value="57">Gold 22K</MenuItem>
                                     <MenuItem value="52">Gold 24K</MenuItem>
-                                </TextField>
-                            </Grid>
-
-                            <Grid item sm={6} xs={12}>
-                                <TextField
-                                    select
-                                    fullWidth
-                                    color="info"
-                                    size="medium"
-                                    name="collectionId"
-                                    onBlur={handleBlur}
-                                    placeholder="Collection"
-                                    onChange={handleChange}
-                                    value={values.collectionId}
-                                    label="Collection"
-                                    error={
-                                        !!touched.collectionId &&
-                                        !!errors.collectionId
-                                    }
-                                    helperText={
-                                        touched.collectionId &&
-                                        errors.collectionId
-                                    }
-                                >
-                                    <MenuItem value="1">Spring</MenuItem>
-                                    <MenuItem value="2">Summer</MenuItem>
-                                    <MenuItem value="3">Fall</MenuItem>
-                                    <MenuItem value="4">Winter</MenuItem>
                                 </TextField>
                             </Grid>
 

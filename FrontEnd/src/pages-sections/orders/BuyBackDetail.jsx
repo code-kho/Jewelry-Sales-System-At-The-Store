@@ -17,7 +17,6 @@ import {token} from "stylis";
 
 // ===================================================================
 const OrderDetails = ({ order }) => {
-    console.log(order);
     let token = '';
     if (typeof localStorage !== 'undefined') {
         token = localStorage.getItem('token');
@@ -25,11 +24,9 @@ const OrderDetails = ({ order }) => {
         // Fallback to sessionStorage if localStorage is not supported
         token = localStorage.getItem('token');
     } else {
-        // If neither localStorage nor sessionStorage is supported
-        console.log('Web Storage is not supported in this environment.');
+
     }
     const decoded = jwtDecode(token);
-    console.log(decoded)
     order.orderItemList.map((item) => console.log(item.img));
 
     return (

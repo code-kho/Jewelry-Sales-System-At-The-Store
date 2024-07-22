@@ -32,6 +32,7 @@ const ProductCard1List = ({ products }) => {
                             title={item.productName}
                             price={item.price}
                             imgUrl={item.image}
+                            quantityInStock={item.quantityInStock}
                         />
                     </Grid>
                 ))}

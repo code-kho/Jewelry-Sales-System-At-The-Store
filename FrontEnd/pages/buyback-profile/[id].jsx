@@ -30,7 +30,7 @@ const CartBuyBack = () => {
                         },
                     }
                 );
-                console.log("Full response:", response.data);
+
                 setCartBuyBack(response.data.data);
             } catch (error) {
                 console.error("Failed to fetch data:", error);
@@ -41,7 +41,7 @@ const CartBuyBack = () => {
         fetchProductBuyBack();
     }, []);
 
-    console.log("cartBuyBack:", cartBuyBack);
+
 
     if (loading) {
         return <h1>Loading...</h1>;

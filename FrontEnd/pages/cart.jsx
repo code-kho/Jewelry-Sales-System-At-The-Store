@@ -1,22 +1,29 @@
 import Link from "next/link";
-import {Box, Button, Divider, Grid, TextField, Typography} from "@mui/material";
+import {
+    Box,
+    Button,
+    Divider,
+    Grid,
+    TextField,
+    Typography,
+} from "@mui/material";
 import SEO from "components/SEO";
-import {FlexBetween} from "components/flex-box";
+import { FlexBetween } from "components/flex-box";
 import ProductCard7 from "components/product-cards/ProductCard7";
 import CheckoutNavLayout from "components/layouts/CheckoutNavLayout";
-import {useAppContext} from "contexts/AppContext";
-import {currency} from "lib";
+import { useAppContext } from "contexts/AppContext";
+import { currency } from "lib";
 import Card1 from "../src/components/Card1";
-import {SearchOutlinedIcon} from "../src/components/search-box/styled";
-import {H5, Span} from "../src/components/Typography";
-import {useRouter} from "next/router";
-import {useState} from "react";
+import { SearchOutlinedIcon } from "../src/components/search-box/styled";
+import { H5, Span } from "../src/components/Typography";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import axios from "axios";
-import {Formik} from "formik";
+import { Formik } from "formik";
 import * as yup from "yup";
 
 const Cart = () => {
-    const {state} = useAppContext();
+    const { state } = useAppContext();
     const cartList = state.cart;
     const router = useRouter();
     const getTotalPrice = () =>
@@ -24,19 +31,20 @@ const Cart = () => {
     const [customerInfo, setCustomerInfo] = useState("");
     const [voucher, setVoucher] = useState("");
     const [discountPrice, setDiscountPrice] = useState(0);
+    const [discountMemberPrice, setDiscountMemberPrice] = useState(0);
+
     const handleFormSubmit = async (values) => {
         router.push("/payment");
     };
     const [dataNumSearch, setDataNumSearch] = useState("");
-    let token = '';
-    if (typeof localStorage !== 'undefined') {
-        token = localStorage.getItem('token');
-    } else if (typeof sessionStorage !== 'undefined') {
+    let token = "";
+    if (typeof localStorage !== "undefined") {
+        token = localStorage.getItem("token");
+    } else if (typeof sessionStorage !== "undefined") {
         // Fallback to sessionStorage if localStorage is not supported
-        token = localStorage.getItem('token');
+        token = localStorage.getItem("token");
     } else {
-        // If neither localStorage nor sessionStorage is supported
-        console.log('Web Storage is not supported in this environment.');
+        
     }
     const SEARCH_BUTTON = (
         <Button
@@ -53,21 +61,26 @@ const Cart = () => {
             Search
         </Button>
     );
+
     const handleBtnSearch = async () => {
         const fetchSearchCustomInfo = async () => {
             try {
-                const resCusInfo = await axios.get(`https://four-gems-system-790aeec3afd8.herokuapp.com/customers?phoneNumber=${dataNumSearch}`,
+                const resCusInfo = await axios.get(
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/customers?phoneNumber=${dataNumSearch}`,
                     {
                         headers: {
-                            Authorization: 'Bearer ' + token //the token is a variable which holds the token
-                        }
-                    });
+                            Authorization: "Bearer " + token, //the token is a variable which holds the token
+                        },
+                    }
+                );
                 if (resCusInfo.data.data.length === 0) {
                     await router.push("/admin/customerInfo/create");
                 } else {
                     setCustomerInfo(resCusInfo.data.data[0]);
+                    setDiscountMemberPrice(
+                        resCusInfo.data.data[0].precent_discount
+                    );
                 }
-                console.log(resCusInfo.data.data[0]);
             } catch (error) {
                 console.error("Failed to fetch customer:", error);
             }
@@ -77,26 +90,34 @@ const Cart = () => {
     const handleApplyVoucher = async () => {
         const fetchPriceApplyVoucher = async () => {
             try {
-                const resPriceByVoucher = await axios.get(`https://four-gems-system-790aeec3afd8.herokuapp.com/voucher/f6b8b798-67cf-46c6-9553-bca7a1a69c05?code=${voucher}`,
+                const resPriceByVoucher = await axios.get(
+                    `https://four-gems-system-790aeec3afd8.herokuapp.com/voucher/${voucher}`,
                     {
                         headers: {
-                            Authorization: 'Bearer ' + token //the token is a variable which holds the token
-                        }
-                    });
-                localStorage.setItem( "percentDiscount", resPriceByVoucher.data.data.discountPercent);
+                            Authorization: "Bearer " + token, //the token is a variable which holds the token
+                        },
+                    }
+                );
+                localStorage.setItem(
+                    "percentDiscount",
+                    resPriceByVoucher.data.data.discountPercent
+                );
                 setDiscountPrice(resPriceByVoucher.data.data.discountPercent);
             } catch (error) {
                 console.error("Failed to fetch discount price:", error);
             }
         };
         fetchPriceApplyVoucher();
-    }
-    const handleCheckout = async() =>{
-        localStorage.setItem( "percentDiscount", discountPrice);
-    }
+    };
+    const handleCheckout = async () => {
+        localStorage.setItem("code", voucher);
+        localStorage.setItem("percentDiscount", discountPrice);
+        localStorage.setItem("percentMemberDiscount", discountMemberPrice);
+    };
+
     return (
         <CheckoutNavLayout>
-            <SEO title="Cart"/>
+            <SEO title="Cart" />
 
             <Grid container spacing={3}>
                 {/* CART PRODUCT LIST */}
@@ -119,12 +140,17 @@ const Cart = () => {
                         </Grid>
 
                         <Grid item sm={6} xs={12}>
-                            <Link href={`/checkout?customerId=${customerInfo.id}`} passHref>
-                                <Button variant="outlined"
-                                        color="primary"
-                                        type="button"
-                                        onClick={handleCheckout()}
-                                        fullWidth>
+                            <Link
+                                href={`/checkout?customerId=${customerInfo.id}`}
+                                passHref
+                            >
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    type="button"
+                                    onClick={handleCheckout()}
+                                    fullWidth
+                                >
                                     Checkout Now
                                 </Button>
                             </Link>
@@ -138,14 +164,14 @@ const Cart = () => {
                         onSubmit={handleFormSubmit}
                     >
                         {({
-                              values,
-                              errors,
-                              touched,
-                              handleChange,
-                              handleBlur,
-                              handleSubmit,
-                              setFieldValue,
-                          }) => (
+                            values,
+                            errors,
+                            touched,
+                            handleChange,
+                            handleBlur,
+                            handleSubmit,
+                            setFieldValue,
+                        }) => (
                             <form onSubmit={handleSubmit}>
                                 <Box className="searchBox">
                                     <TextField
@@ -164,9 +190,13 @@ const Cart = () => {
                                                 },
                                             },
                                             endAdornment: SEARCH_BUTTON,
-                                            startAdornment: <SearchOutlinedIcon fontSize="small"/>,
+                                            startAdornment: (
+                                                <SearchOutlinedIcon fontSize="small" />
+                                            ),
                                         }}
-                                        onChange={(e) => setDataNumSearch(e.target.value)}
+                                        onChange={(e) =>
+                                            setDataNumSearch(e.target.value)
+                                        }
                                     />
                                 </Box>
                                 <Card1
@@ -180,78 +210,182 @@ const Cart = () => {
 
                                     <Grid container spacing={6}>
                                         <Grid item sm={6} xs={12}>
-                                            <Grid sx={{
-                                                display: "flex",
-                                                marginBottom: "7px",
-                                            }}><H5 sx={{
-                                                marginRight: "10px",
-                                                marginTop: "1px",
-                                            }}>Full Name:</H5>
+                                            <Grid
+                                                sx={{
+                                                    display: "flex",
+                                                    marginBottom: "7px",
+                                                }}
+                                            >
+                                                <H5
+                                                    sx={{
+                                                        marginRight: "10px",
+                                                        marginTop: "1px",
+                                                    }}
+                                                >
+                                                    Full Name:
+                                                </H5>
                                                 {customerInfo.name}
                                             </Grid>
-                                            <Grid sx={{
-                                                display: "flex",
-                                                marginBottom: "7px",
-                                            }}><H5 sx={{
-                                                marginRight: "10px",
-                                                marginTop: "1px",
-                                            }}>Phone Number:</H5>
+                                            <Grid
+                                                sx={{
+                                                    display: "flex",
+                                                    marginBottom: "7px",
+                                                }}
+                                            >
+                                                <H5
+                                                    sx={{
+                                                        marginRight: "10px",
+                                                        marginTop: "1px",
+                                                    }}
+                                                >
+                                                    Phone Number:
+                                                </H5>
                                                 {customerInfo.phoneNumber}
                                             </Grid>
-                                            <Grid sx={{
-                                                display: "flex",
-                                                marginBottom: "7px",
-                                            }}><H5 sx={{
-                                                marginRight: "10px",
-                                                marginTop: "1px",
-                                            }}>Address:</H5>
+                                            <Grid
+                                                sx={{
+                                                    display: "flex",
+                                                    marginBottom: "7px",
+                                                }}
+                                            >
+                                                <H5
+                                                    sx={{
+                                                        marginRight: "10px",
+                                                        marginTop: "1px",
+                                                    }}
+                                                >
+                                                    Address:
+                                                </H5>
                                                 {customerInfo.address}
                                             </Grid>
                                         </Grid>
 
                                         <Grid item sm={6} xs={12}>
-                                            <Grid sx={{
-                                                display: "flex",
-                                                marginBottom: "7px",
-                                            }}><H5 sx={{
-                                                marginRight: "10px",
-                                                marginTop: "1px",
-                                            }}>Email:</H5>
+                                            <Grid
+                                                sx={{
+                                                    display: "flex",
+                                                    marginBottom: "7px",
+                                                }}
+                                            >
+                                                <H5
+                                                    sx={{
+                                                        marginRight: "10px",
+                                                        marginTop: "1px",
+                                                    }}
+                                                >
+                                                    Email:
+                                                </H5>
                                                 {customerInfo.email}
                                             </Grid>
-                                            <Grid sx={{
-                                                display: "flex",
-                                                marginBottom: "7px",
-                                            }}><H5 sx={{
-                                                marginRight: "10px",
-                                                marginTop: "1px",
-                                            }}>Gender:</H5>
-                                                {customerInfo.gender}
+                                            <Grid
+                                                sx={{
+                                                    display: "flex",
+                                                    marginBottom: "7px",
+                                                }}
+                                            >
+                                                <H5
+                                                    sx={{
+                                                        marginRight: "10px",
+                                                        marginTop: "1px",
+                                                    }}
+                                                >
+                                                    Point:
+                                                </H5>
+                                                {customerInfo.loyaltyPoints}
                                             </Grid>
-
+                                            <Grid
+                                                sx={{
+                                                    display: "flex",
+                                                    marginBottom: "7px",
+                                                }}
+                                            >
+                                                <H5
+                                                    sx={{
+                                                        marginRight: "10px",
+                                                        marginTop: "1px",
+                                                    }}
+                                                >
+                                                    MemberShip:
+                                                </H5>
+                                                {customerInfo.memberShipTier}
+                                            </Grid>
                                         </Grid>
                                     </Grid>
                                 </Card1>
                                 <Grid item md={12} xs={12}>
                                     <Card1>
                                         <FlexBetween mb={1}>
-                                            <Typography color="grey.600">Subtotal:</Typography>
-                                            <Typography fontSize="18px" fontWeight="600" lineHeight="1">
+                                            <Typography color="grey.600">
+                                                Subtotal:
+                                            </Typography>
+                                            <Typography
+                                                fontSize="18px"
+                                                fontWeight="600"
+                                                lineHeight="1"
+                                            >
                                                 {currency(getTotalPrice())}
                                             </Typography>
                                         </FlexBetween>
 
                                         <FlexBetween mb={1}>
-                                            <Typography color="grey.600">Discount <Span sx={{color: "green"}}>(-{discountPrice}%)</Span>:</Typography>
-                                            <Typography fontSize="18px" fontWeight="600" lineHeight="1">
-                                                {currency(discountPrice/100 * getTotalPrice())}
+                                            <Typography color="grey.600">
+                                                Discount{" "}
+                                                <Span sx={{ color: "green" }}>
+                                                    (-{discountPrice}%)
+                                                </Span>
+                                                :
+                                            </Typography>
+                                            <Typography
+                                                fontSize="18px"
+                                                fontWeight="600"
+                                                lineHeight="1"
+                                            >
+                                                {currency(
+                                                    (discountPrice / 100) *
+                                                        getTotalPrice()
+                                                )}
+                                            </Typography>
+                                        </FlexBetween>
+                                        <FlexBetween mb={1}>
+                                            <Typography color="grey.600">
+                                                Discount of MemberShip{" "}
+                                                <Span sx={{ color: "green" }}>
+                                                    (-{discountMemberPrice}%)
+                                                </Span>
+                                                :
+                                            </Typography>
+                                            <Typography
+                                                fontSize="18px"
+                                                fontWeight="600"
+                                                lineHeight="1"
+                                            >
+                                                {currency(
+                                                    (discountMemberPrice /
+                                                        100) *
+                                                        getTotalPrice()
+                                                )}
                                             </Typography>
                                         </FlexBetween>
 
                                         <FlexBetween mb={2}>
-                                            <Typography color="grey.600">Tax <Span sx={{color: "red"}}>(+8%)</Span>:</Typography>
-                                            <Typography fontSize="18px" fontWeight="600" lineHeight="1">
-                                                {currency((getTotalPrice() - (discountPrice/100 * getTotalPrice())) * 0.08)}
+                                            <Typography color="grey.600">
+                                                Tax{" "}
+                                                <Span sx={{ color: "red" }}>
+                                                    (+8%)
+                                                </Span>
+                                                :
+                                            </Typography>
+                                            <Typography
+                                                fontSize="18px"
+                                                fontWeight="600"
+                                                lineHeight="1"
+                                            >
+                                                {currency(
+                                                    (getTotalPrice() -
+                                                        (discountPrice / 100) *
+                                                            getTotalPrice()) *
+                                                        0.08
+                                                )}
                                             </Typography>
                                         </FlexBetween>
 
@@ -261,24 +395,49 @@ const Cart = () => {
                                             }}
                                         />
                                         <FlexBetween mb={2}>
-                                            <Typography color="grey.600">Total:</Typography>
+                                            <Typography color="grey.600">
+                                                Total:
+                                            </Typography>
                                             <Typography
                                                 fontSize="25px"
                                                 fontWeight="600"
                                                 lineHeight="1"
                                                 textAlign="right"
                                             >
-                                                {currency((getTotalPrice() - (discountPrice/100 * getTotalPrice())) + ((getTotalPrice() - (discountPrice/100 * getTotalPrice())) * 0.08))}
+                                                {currency(
+                                                    getTotalPrice() -
+                                                        (discountPrice / 100) *
+                                                            getTotalPrice() -
+                                                        (discountMemberPrice /
+                                                            100) *
+                                                            getTotalPrice() +
+                                                        (getTotalPrice() -
+                                                            (discountPrice /
+                                                                100) *
+                                                                getTotalPrice() -
+                                                            (discountMemberPrice /
+                                                                100) *
+                                                                getTotalPrice()) *
+                                                            0.08
+                                                )}
                                             </Typography>
                                         </FlexBetween>
-                                        <Grid container alignItems="center" spacing={2}>
+                                        <Grid
+                                            container
+                                            alignItems="center"
+                                            spacing={2}
+                                        >
                                             <Grid item sm={8} xs={12}>
                                                 <TextField
                                                     placeholder="Voucher"
                                                     variant="outlined"
                                                     size="small"
                                                     fullWidth
-                                                    onChange={(e) => setVoucher(e.target.value)}
+                                                    onChange={(e) =>
+                                                        setVoucher(
+                                                            e.target.value
+                                                        )
+                                                    }
                                                 />
                                             </Grid>
                                             <Grid item sm={4} xs={12}>
@@ -287,9 +446,14 @@ const Cart = () => {
                                                     color="primary"
                                                     fullWidth
                                                     sx={{
-                                                        mt: {xs: "1rem", sm: 0},
+                                                        mt: {
+                                                            xs: "1rem",
+                                                            sm: 0,
+                                                        },
                                                     }}
-                                                    onClick={() => handleApplyVoucher()}
+                                                    onClick={(e) =>
+                                                        handleApplyVoucher()
+                                                    }
                                                 >
                                                     Apply Voucher
                                                 </Button>

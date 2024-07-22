@@ -87,10 +87,6 @@ const linkList = [
         title: "DASHBOARD",
         list: [
             {
-                href: "/support-tickets",
-                title: "Support Tickets",
-            },
-            {
                 href: "/buy-back",
                 title: "Buy Back",
             },

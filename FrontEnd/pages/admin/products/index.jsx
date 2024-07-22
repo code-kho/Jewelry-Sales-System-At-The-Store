@@ -51,7 +51,7 @@ export default function ProductList({ initialProducts }) {
     } else if (typeof sessionStorage !== "undefined") {
         token = sessionStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
+
     }
 
     const {
@@ -71,11 +71,10 @@ export default function ProductList({ initialProducts }) {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const counterId = localStorage.getItem("counterId");
             try {
                 if (token) {
                     const response = await axios.get(
-                        `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-all-product-from-warehouse?pageSize=200&page=0&sortKeyword=productId&sortType=DESC&categoryName= &searchKeyword=a`,
+                        `https://four-gems-system-790aeec3afd8.herokuapp.com/product/show-all-product-from-warehouse?pageSize=200&page=0&sortKeyword=productId&sortType=DESC&categoryName= &searchKeyword=`,
                         {
                             headers: {
                                 Authorization: `Bearer ` + token,
@@ -96,7 +95,7 @@ export default function ProductList({ initialProducts }) {
         };
         fetchData();
     }, [products]);
-    console.log(filteredList.length);
+
     return (
         <Box py={4}>
             <H3>Product List</H3>

@@ -17,7 +17,6 @@ const GeneralForm = () => {
   };
 
   const handleFormSubmit = async (values) => {
-    // console.log(values);
   };
 
   return (

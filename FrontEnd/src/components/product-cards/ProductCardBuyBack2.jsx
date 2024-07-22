@@ -39,12 +39,10 @@ const ProductCardBuyBack2 = (props) => {
         // Fallback to sessionStorage if localStorage is not supported
         token = localStorage.getItem('token');
     } else {
-        // If neither localStorage nor sessionStorage is supported
-        console.log('Web Storage is not supported in this environment.');
+
     }
     const router = useRouter();
     const decoded = jwtDecode(token);
-    console.log(decoded.id)
     const handleCartAmountChange = (id) => {
         localStorage.setItem("productId", id);
         localStorage.setItem("userId", decoded.id);

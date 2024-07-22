@@ -1,21 +1,6 @@
 import Link from "next/link";
-import {
-    Add,
-    Remove,
-    Favorite,
-    FavoriteBorder,
-    RemoveRedEye,
-} from "@mui/icons-material";
-import {
-    Box,
-    Button,
-    Card,
-    Chip,
-    Grid,
-    IconButton,
-    Rating,
-    styled,
-} from "@mui/material";
+import { Add, Remove } from "@mui/icons-material";
+import { Box, Button, Card, Grid, styled } from "@mui/material";
 import { useSnackbar } from "notistack";
 import Image from "components/BazaarImage";
 import { H5, Span } from "components/Typography";
@@ -23,7 +8,7 @@ import { FlexBetween, FlexBox } from "components/flex-box";
 import { useAppContext } from "contexts/AppContext";
 import ProductViewDialog from "components/products/ProductViewDialog";
 import { calculateDiscount, currency } from "lib";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const Wrapper = styled(Card)(() => ({
     width: "100%",
@@ -33,22 +18,38 @@ const Wrapper = styled(Card)(() => ({
 }));
 
 const ProductCard9 = (props) => {
-    const { imgUrl, title, price, off, rating, id, slug } = props;
+    const { imgUrl, title, price, off, id, slug, quantityInStock } = props;
     const { state, dispatch } = useAppContext();
     const { enqueueSnackbar } = useSnackbar();
     const [openModal, setOpenModal] = useState(false);
-    const [isFavorite, setIsFavorite] = useState(false);
+    const [cartItem, setCartItem] = useState(null);
 
     const toggleDialog = useCallback(() => setOpenModal((open) => !open), []);
-    const toggleIsFavorite = () => setIsFavorite((fav) => !fav);
-    const cartItem = state.cart.find((item) => item.id === id);
+
+    useEffect(() => {
+        setCartItem(state.cart.find((item) => item.productId === id));
+    }, [state.cart, id]);
 
     const handleCartAmountChange = (product, type) => () => {
+        const currentQty = cartItem?.qty || 0;
+        if (type === "add" && currentQty >= quantityInStock) {
+            enqueueSnackbar("Cannot add more than available stock", {
+                variant: "warning",
+            });
+            return;
+        }
+
+        const object = {
+            price: product.price,
+            qty: product.qty,
+            name: product.name,
+            imgUrl: product.imgUrl,
+            productId: product.id,
+        };
         dispatch({
             type: "CHANGE_CART_AMOUNT",
-            payload: product,
+            payload: object,
         });
-
         if (type === "remove") {
             enqueueSnackbar("Removed from Cart", {
                 variant: "error",
@@ -62,41 +63,9 @@ const ProductCard9 = (props) => {
 
     return (
         <Wrapper>
-            <IconButton
-                size="small"
-                sx={{
-                    position: "absolute",
-                    top: 15,
-                    right: 15,
-                }}
-                onClick={toggleIsFavorite}
-            >
-                {isFavorite ? (
-                    <Favorite color="primary" fontSize="small" />
-                ) : (
-                    <FavoriteBorder fontSize="small" />
-                )}
-            </IconButton>
-
             <Grid container spacing={1}>
                 <Grid item sm={3} xs={12}>
                     <Box position="relative">
-                        {!!off && (
-                            <Chip
-                                size="small"
-                                color="primary"
-                                label={`${off}% off`}
-                                sx={{
-                                    top: 15,
-                                    left: 15,
-                                    px: "5px",
-                                    fontSize: 10,
-                                    fontWeight: 600,
-                                    position: "absolute",
-                                }}
-                            />
-                        )}
-
                         <Image src={imgUrl} alt={title} width="100%" />
                     </Box>
                 </Grid>
@@ -108,7 +77,7 @@ const ProductCard9 = (props) => {
                         height="100%"
                         p={2}
                     >
-                        <Link href={`/product/${slug}`}>
+                        <Link href={`/product/${props.id}`}>
                             <a>
                                 <H5 fontWeight="600" my="0.5rem">
                                     {title}
@@ -116,16 +85,14 @@ const ProductCard9 = (props) => {
                             </a>
                         </Link>
 
-                        <Rating value={rating || 0} color="warn" readOnly />
-
                         <FlexBox mt={1} mb={2} alignItems="center">
                             <H5 fontWeight={600} color="primary.main" mr={1}>
-                                {currency(price)}
+                                {calculateDiscount(price, off)}
                             </H5>
 
                             {off && (
                                 <Span fontWeight="600" color="grey.600">
-                                    <del>{calculateDiscount(price, off)}</del>
+                                    <del>{currency(price)}</del>
                                 </Span>
                             )}
                         </FlexBox>
@@ -144,7 +111,7 @@ const ProductCard9 = (props) => {
                                         price,
                                         imgUrl,
                                         name: title,
-                                        qty: 1,
+                                        qty: (cartItem?.qty || 0) + 1,
                                     })}
                                 >
                                     Add To Cart
@@ -166,14 +133,13 @@ const ProductCard9 = (props) => {
                                                 price,
                                                 imgUrl,
                                                 name: title,
-                                                qty: cartItem.qty + 1,
+                                                qty: cartItem.qty - 1,
                                             },
-                                            "add"
+                                            "remove"
                                         )}
                                     >
-                                        <Add fontSize="small" />
+                                        <Remove fontSize="small" />
                                     </Button>
-
                                     <H5
                                         fontWeight="600"
                                         fontSize="15px"
@@ -181,7 +147,6 @@ const ProductCard9 = (props) => {
                                     >
                                         {cartItem.qty}
                                     </H5>
-
                                     <Button
                                         color="primary"
                                         variant="outlined"
@@ -195,12 +160,12 @@ const ProductCard9 = (props) => {
                                                 price,
                                                 imgUrl,
                                                 name: title,
-                                                qty: cartItem.qty - 1,
+                                                qty: cartItem.qty + 1,
                                             },
-                                            "remove"
+                                            "add"
                                         )}
                                     >
-                                        <Remove fontSize="small" />
+                                        <Add fontSize="small" />
                                     </Button>
                                 </FlexBetween>
                             )}

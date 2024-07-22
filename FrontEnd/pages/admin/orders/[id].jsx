@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box } from "@mui/material";
+import {Box, Button} from "@mui/material";
 import { useRouter } from "next/router";
 import { H3 } from "components/Typography";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
@@ -14,6 +14,7 @@ export default function OrderEdit() {
   const { query } = useRouter();
   const [orderDetails, setOrderDetails] = useState(null);
   const orderId = localStorage.getItem("orderId");
+  const router = useRouter();
   let token = "";
   if (typeof localStorage !== "undefined") {
     token = localStorage.getItem("token");
@@ -21,8 +22,10 @@ export default function OrderEdit() {
     // Fallback to sessionStorage if localStorage is not supported
     token = localStorage.getItem("token");
   } else {
-    // If neither localStorage nor sessionStorage is supported
-    console.log("Web Storage is not supported in this environment.");
+    
+  }
+  const handleBack = () => {
+    router.push("/admin/orders");
   }
   useEffect(() => {
     const fetchOrderDetail = async () => {
@@ -39,14 +42,20 @@ export default function OrderEdit() {
     }
     fetchOrderDetail();
   }, []);
-  console.log(orderDetails)
   if (!orderDetails) {
     return <h1>Loading...</h1>;
   }
 
   return (
     <Box py={4}>
-      <H3 mb={2}>Order Details</H3>
+      <Box  sx={{
+        display: "flex",
+      }}>
+        <H3 mb={2}>Order Details</H3>
+        <Button sx={{
+          ml: 100
+        }} onClick={() => handleBack()} variant="body1">Back to Order</Button>
+      </Box>
       <OrderDetails order={orderDetails} />
     </Box>
   );

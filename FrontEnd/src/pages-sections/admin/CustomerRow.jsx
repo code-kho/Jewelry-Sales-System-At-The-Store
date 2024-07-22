@@ -38,7 +38,6 @@ const CustomerRow = ({ customer }) => {
     } else if (typeof sessionStorage !== "undefined") {
         token = localStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
     }
     const handleUpdateUser = async () => {
         try {
@@ -62,7 +61,6 @@ const CustomerRow = ({ customer }) => {
                 }
             );
             window.location.reload();
-            console.log(resUpdateAccount.data.data);
         } catch (e) {
             console.log(e);
         }

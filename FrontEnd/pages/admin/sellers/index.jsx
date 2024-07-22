@@ -1,6 +1,5 @@
 import { Box, Card, Stack, Table, TableContainer } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
-import SearchArea from "components/dashboard/SearchArea";
 import TableHeader from "components/data-table/TableHeader";
 import TablePagination from "components/data-table/TablePagination";
 import VendorDashboardLayout from "components/layouts/vendor-dashboard";
@@ -9,7 +8,7 @@ import Scrollbar from "components/Scrollbar";
 import useMuiTable from "hooks/useMuiTable";
 import { SellerRow } from "pages-sections/admin";
 import { useState, useEffect } from "react";
-import CustomSearchArea from './CustomSearchArea';
+import SearchSeller from "../../../src/components/dashboard/SearchSeller";
 
 const tableHeading = [
   { id: "fullName", label: "Full Name", align: "left" },
@@ -62,10 +61,8 @@ export default function SellerList() {
   return getLayout(<Box py={4}>
     <H3 mb={2}>Sellers</H3>
 
-    <SearchArea
+    <SearchSeller
         handleSearch={() => {}}
-        buttonText=""
-        handleBtnClick={() => {}}
         searchPlaceholder="Search Seller..."
     />
 

@@ -61,9 +61,7 @@ const Login = () => {
                     password: password,
                 }
             );
-            console.log(response.data.data !== undefined);
             if (response.data.data !== "") {
-                console.log("successfully logged in");
                 nav.push("/otp");
             }
         } catch (e) {
@@ -101,7 +99,7 @@ const Login = () => {
                     onBlur={handleBlur}
                     value={values.email}
                     onChange={handleChange}
-                    label="Email or Phone Number"
+                    label="Username"
                     placeholder="exmple@mail.com"
                     error={!!touched.email && !!errors.email}
                     helperText={touched.email && errors.email}
@@ -144,28 +142,6 @@ const Login = () => {
                     Login
                 </Button>
             </form>
-
-            <FlexBox
-                justifyContent="center"
-                bgcolor="grey.200"
-                borderRadius="4px"
-                py={2.5}
-                mt="1.25rem"
-            >
-                Forgot your password?
-                <Link href="/reset-password" passHref legacyBehavior>
-                    <a>
-                        <H6
-                            ml={1}
-                            mt={0.3}
-                            borderBottom="1px solid"
-                            borderColor="grey.900"
-                        >
-                            Reset It
-                        </H6>
-                    </a>
-                </Link>
-            </FlexBox>
         </Wrapper>
     );
 };

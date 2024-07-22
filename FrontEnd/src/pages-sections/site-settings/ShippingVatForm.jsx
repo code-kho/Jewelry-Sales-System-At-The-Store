@@ -8,10 +8,6 @@ const ShippingVatForm = () => {
     shipping: 10,
   };
 
-  const handleFormSubmit = async (values) => {
-    // console.log(values);
-  };
-
   return (
     <Formik onSubmit={handleFormSubmit} initialValues={initialValues}>
       {({

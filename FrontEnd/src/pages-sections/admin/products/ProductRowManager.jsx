@@ -87,7 +87,6 @@ export const ProductRowManager = ({ product }) => {
     } else if (typeof sessionStorage !== "undefined") {
         token = sessionStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
     }
 
     const handleUpdateProduct = async () => {
@@ -116,7 +115,6 @@ export const ProductRowManager = ({ product }) => {
                     },
                 }
             );
-            console.log(response.data);
             setEdit(false);
         } catch (error) {
             console.error("There was an error!", error);

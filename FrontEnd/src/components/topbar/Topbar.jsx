@@ -1,13 +1,10 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { CallOutlined, ExpandMore, MailOutline } from "@mui/icons-material";
-import { Box, Container, MenuItem, styled } from "@mui/material";
-import TouchRipple from "@mui/material/ButtonBase";
+import { CallOutlined, MailOutline } from "@mui/icons-material";
+import { Box, Container, styled, Typography } from "@mui/material";
 import Image from "components/BazaarImage";
 import { Span } from "components/Typography";
 import { FlexBox } from "components/flex-box";
-import BazaarMenu from "components/BazaarMenu";
-import NavLink from "components/nav-link/NavLink";
 import { layoutConstant } from "utils/constants"; // styled component
 
 const TopbarWrapper = styled(Box, {
@@ -34,6 +31,8 @@ const TopbarWrapper = styled(Box, {
         },
     },
     "& .topbarRight": {
+        display: "flex",
+        alignItems: "center",
         "& .link": {
             paddingRight: 30,
             color: theme.palette.secondary.contrastText,
@@ -67,17 +66,9 @@ const TopbarWrapper = styled(Box, {
 
 // ===========================================
 const Topbar = ({ bgColor }) => {
-    const [currency, setCurrency] = useState(currencyList[0]);
-    const [language, setLanguage] = useState(languageList[0]);
-
-    const handleCurrencyClick = (curr) => () => setCurrency(curr);
-
-    const handleLanguageClick = (lang) => () => setLanguage(lang);
-
     useEffect(() => {
-        // get language from browser
-        // console.log(navigator.language);
     }, []);
+
     return (
         <TopbarWrapper bgColor={bgColor}>
             <Container
@@ -102,7 +93,7 @@ const Topbar = ({ bgColor }) => {
 
                     <FlexBox alignItems="center">
                         <CallOutlined fontSize="small" />
-                        <Span className="title">+84 902999777</Span>
+                        <Span className="title">0902 999 777</Span>
                     </FlexBox>
 
                     <FlexBox alignItems="center" ml={2.5}>
@@ -112,56 +103,9 @@ const Topbar = ({ bgColor }) => {
                 </FlexBox>
 
                 <FlexBox className="topbarRight" alignItems="center">
-                    {/* <NavLink className="link" href="/faq">
-            Theme FAQ&quot;s
-          </NavLink> */}
-
-                    <NavLink className="link" href="/help">
-                        Need Help?
-                    </NavLink>
-
-                    <BazaarMenu
-                        handler={
-                            <TouchRipple className="handler marginRight">
-                                <Span className="menuTitle">
-                                    {language.title}
-                                </Span>
-                                <ExpandMore fontSize="inherit" />
-                            </TouchRipple>
-                        }
-                    >
-                        {languageList.map((item) => (
-                            <MenuItem
-                                className="menuItem"
-                                key={item.title}
-                                onClick={handleLanguageClick(item)}
-                            >
-                                <Span className="menuTitle">{item.title}</Span>
-                            </MenuItem>
-                        ))}
-                    </BazaarMenu>
-
-                    <BazaarMenu
-                        direction="right"
-                        handler={
-                            <TouchRipple className="handler">
-                                <Span className="menuTitle">
-                                    {currency.title}
-                                </Span>
-                                <ExpandMore fontSize="inherit" />
-                            </TouchRipple>
-                        }
-                    >
-                        {currencyList.map((item) => (
-                            <MenuItem
-                                className="menuItem"
-                                key={item.title}
-                                onClick={handleCurrencyClick(item)}
-                            >
-                                <Span className="menuTitle">{item.title}</Span>
-                            </MenuItem>
-                        ))}
-                    </BazaarMenu>
+                    {/* <Typography sx={{ paddingRight: "15px" }}>Counter: {counterId}</Typography> */}
+                    <Typography sx={{ paddingRight: "15px" }}>EN</Typography>
+                    <Typography sx ={{mr:"3px"}}>USD</Typography>
                 </FlexBox>
             </Container>
         </TopbarWrapper>
@@ -173,31 +117,11 @@ const languageList = [
         title: "EN",
         imgUrl: "/assets/images/flags/usa.png",
     },
-    {
-        title: "BN",
-        imgUrl: "/assets/images/flags/bd.png",
-    },
-    {
-        title: "HN",
-        imgUrl: "/assets/images/flags/in.png",
-    },
 ];
 const currencyList = [
     {
         title: "USD",
         imgUrl: "/assets/images/flags/usa.png",
-    },
-    {
-        title: "EUR",
-        imgUrl: "/assets/images/flags/uk.png",
-    },
-    {
-        title: "BDT",
-        imgUrl: "/assets/images/flags/bd.png",
-    },
-    {
-        title: "INR",
-        imgUrl: "/assets/images/flags/in.png",
     },
 ];
 export default Topbar;

@@ -5,6 +5,7 @@ import Header from "../src/components/header/Header";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import { useAppContext } from "contexts/AppContext";
+import { jwtDecode } from "jwt-decode";
 
 const BarCodeTest = () => {
     const { enqueueSnackbar } = useSnackbar();
@@ -12,6 +13,15 @@ const BarCodeTest = () => {
     const [barCode, setBarcodeScan] = useState("No Product");
     const [getProductByBarCode, setGetProductByBarCode] = useState();
     const [isClient, setIsClient] = useState(false);
+
+    let token = "";
+    if (typeof localStorage !== "undefined") {
+        token = localStorage.getItem("token");
+    } else if (typeof sessionStorage !== "undefined") {
+        token = localStorage.getItem("token");
+    } else {
+        
+    }
 
     useEffect(() => {
         setIsClient(true);
@@ -50,9 +60,9 @@ const BarCodeTest = () => {
     }, [isClient]);
 
     useEffect(() => {
-        const counterId = localStorage.getItem("counterId");
         let token = localStorage.getItem("token");
-
+        const tokenDecoded = jwtDecode(token);
+        const counterId = tokenDecoded?.counterId;
         const fetchProByBarCode = async () => {
             if (barCode !== "No Product") {
                 try {
@@ -77,7 +87,9 @@ const BarCodeTest = () => {
     }, [barCode]);
 
     const handleAddToCart = (product) => {
-        const cartItem = state.cart.find((item) => item.id === product.productId);
+        const cartItem = state.cart.find(
+            (item) => item.id === product.productId
+        );
         const payload = {
             id: product.productId,
             name: product.productName,
@@ -93,15 +105,23 @@ const BarCodeTest = () => {
             variant: "success",
         });
     };
-
-    console.log(barCode);
     return (
         <div>
             <Topbar />
             <Header />
             <Navbar />
-            <h1 style={{ display: "flex", justifyContent: "center", height: "100vh" }}>
-                You have added a {getProductByBarCode ? getProductByBarCode.productName : "No product"} to the cart.
+            <h1
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    height: "100vh",
+                }}
+            >
+                You have added a{" "}
+                {getProductByBarCode
+                    ? getProductByBarCode.productName
+                    : "No product"}{" "}
+                to the cart.
             </h1>
         </div>
     );

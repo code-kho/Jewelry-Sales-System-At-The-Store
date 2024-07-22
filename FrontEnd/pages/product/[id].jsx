@@ -9,6 +9,7 @@ import ProductReview from "components/products/ProductReview";
 import ProductDescription from "components/products/ProductDescription";
 import CareAndMaintenance from "components/products/CareAndMaintenance";
 import axios from "axios"; // styled component
+import { jwtDecode } from "jwt-decode";
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
     minHeight: 0,
@@ -39,11 +40,11 @@ const ProductDetails = (props) => {
     } else if (typeof sessionStorage !== "undefined") {
         token = sessionStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
     }
     useEffect(() => {
         const fetchData = async () => {
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
                 if (token) {
                     const response = await axios.get(
@@ -55,7 +56,6 @@ const ProductDetails = (props) => {
                         }
                     );
                     setProduct(response.data.data);
-                    console.log(response.data.data);
                 } else {
                     console.warn(
                         "Token is missing. Please ensure it's properly set."
@@ -67,7 +67,6 @@ const ProductDetails = (props) => {
         };
         fetchData();
     }, [id]);
-    console.log(product);
     return (
         <ShopLayout1>
             <Container
@@ -82,37 +81,6 @@ const ProductDetails = (props) => {
                     <H2>Loading...</H2>
                 )}
 
-                {/* PRODUCT DESCRIPTION AND REVIEW */}
-                <div
-                    style={{
-                        backgroundColor: "#FFFFFF",
-                        paddingBottom: "1.5rem",
-                    }}
-                >
-                    <StyledTabs
-                        textColor="primary"
-                        value={selectedOption}
-                        indicatorColor="primary"
-                        onChange={handleOptionClick}
-                        centered
-                    >
-                        <Tab className="inner-tab" label="Description" />
-                        <Tab className="inner-tab" label="Review (50)" />
-                        <Tab className="inner-tab" label="Care & maintenance" />
-                    </StyledTabs>
-                    <Box
-                        mb={6}
-                        margin="0 10rem"
-                        fontFamily="Ubuntu"
-                        color="black"
-                    >
-                        {selectedOption === 0 && <ProductDescription />}
-                        {selectedOption === 1 && <ProductReview />}
-                        {selectedOption === 2 && <CareAndMaintenance />}
-                    </Box>
-                </div>
-
-                {/*{relatedProducts && <RelatedProducts productsData={relatedProducts} />}*/}
                 <div
                     style={{
                         display: "grid",

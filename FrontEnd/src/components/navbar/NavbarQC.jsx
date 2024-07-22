@@ -9,6 +9,7 @@ import MegaMenu2 from "./MegaMenu2";
 import useSettings from "hooks/useSettings";
 import navbarNavigations from "data/navbarNavigations"; // NavList props interface
 import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 // const common css style
 const navLinkStyle = {
@@ -79,7 +80,8 @@ const NavbarQC = ({ navListOpen, hideCategories, elevation, border }) => {
     const { settings } = useSettings();
     const [role, setRole] = useState("");
     useEffect(() => {
-        const role = localStorage.getItem("role");
+        const decoded = jwtDecode(token);
+        const role = decoded?.role;
         setRole(role);
     }, []);
     const renderNestedNav = (list = [], isRoot = false) => {

@@ -21,7 +21,6 @@ const OrderRow = ({ order }) => {
     } else if (typeof sessionStorage !== "undefined") {
         token = localStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
     }
     const handleConfirmUser = async () => {
         try {
@@ -34,19 +33,16 @@ const OrderRow = ({ order }) => {
                     },
                 }
             );
-            console.log(resConfirmUser.data.data);
         } catch (e) {
             console.log(e);
         }
     };
     const handleViewOrderDetail = async () => {
-        console.log(orderId);
         localStorage.setItem("orderId", orderId);
         router.push(`/admin/orders/${orderId}`);
     };
     const handleCancelUser = async () => {
         try {
-            console.log(orderId);
             const resCancelUser = await axios.put(
                 `https://four-gems-system-790aeec3afd8.herokuapp.com/order/cancel-order?id=${orderId}`,
                 orderId,
@@ -56,7 +52,6 @@ const OrderRow = ({ order }) => {
                     },
                 }
             );
-            console.log(resCancelUser.data.data);
         } catch (e) {
             console.log(e);
         }
@@ -85,11 +80,18 @@ const OrderRow = ({ order }) => {
 
             <StyledTableCell align="center">
                 {isProcess ? (
-                    <div>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                        <StyledIconButton
+                            onClick={() => handleViewOrderDetail()}
+                        >
+                            <RemoveRedEye />
+                        </StyledIconButton>
                         <Button
                             sx={{
                                 margin: "1px",
                                 borderRadius: "10px",
+                                minWidth: "30px", // Giảm kích thước nút
+                                padding: "5px 10px", // Điều chỉnh padding để nút nhỏ hơn
                             }}
                             variant="contained"
                             color="info"
@@ -100,8 +102,9 @@ const OrderRow = ({ order }) => {
                         <Button
                             sx={{
                                 margin: "1px",
-                                width: "89.28px",
                                 borderRadius: "10px",
+                                minWidth: "30px",
+                                padding: "5px 10px",
                             }}
                             variant="contained"
                             color="error"
@@ -116,10 +119,6 @@ const OrderRow = ({ order }) => {
                             onClick={() => handleViewOrderDetail()}
                         >
                             <RemoveRedEye />
-                        </StyledIconButton>
-
-                        <StyledIconButton>
-                            <Delete />
                         </StyledIconButton>
                     </>
                 )}

@@ -18,7 +18,6 @@ const Signup = () => {
   }, []);
 
   const handleFormSubmit = async (values) => {
-    // console.log(values);
   };
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =

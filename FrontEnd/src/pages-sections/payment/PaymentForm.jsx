@@ -6,20 +6,18 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import * as yup from "yup";
 import { Formik } from "formik";
 import Card1 from "components/Card1";
-import { FlexBox } from "components/flex-box";
 import { Paragraph } from "components/Typography";
 import useWindowSize from "hooks/useWindowSize";
 import axios from "axios";
 
 const PaymentForm = () => {
-    const [paymentMethod, setPaymentMethod] = useState("vn-pay");
+    const [paymentMethod, setPaymentMethod] = useState("paypal");
     const width = useWindowSize();
     const router = useRouter();
     const isMobile = width < 769;
     const orderId = parseInt(localStorage.getItem("orderId"));
     const totalPrice = parseInt(localStorage.getItem("totalPrice"), 10);
     const VNDPrice = totalPrice * 25000;
-    const [VNPayUrl, setVNPayUrl] = useState();
     const [PaypalUrl, setPaypalUrl] = useState();
     const [codData, setCodData] = useState();
     const handleFormSubmit = async (values) => router.push("/payment");
@@ -33,9 +31,7 @@ const PaymentForm = () => {
     } else if (typeof sessionStorage !== "undefined") {
         token = sessionStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
     }
-    console.log(VNDPrice);
     const VNPay = {
         amount: VNDPrice,
         bankCode: "NCB",
@@ -45,25 +41,7 @@ const PaymentForm = () => {
         amount: totalPrice,
         orderId: orderId,
     };
-    console.log(VNPay);
-    const handleVNPay = async () => {
-        try {
-            const createVNPay = await axios.post(
-                `https://four-gems-system-790aeec3afd8.herokuapp.com/payment/vn-pay?amount=${VNDPrice}&bankCode=NCB&orderId=${orderId}`,
-                VNPay,
-                {
-                    headers: {
-                        Authorization: "Bearer " + token,
-                    },
-                }
-            );
-            setVNPayUrl(createVNPay.data.data);
-            localStorage.removeItem("percentDiscount");
-            router.push(createVNPay.data.data.paymentUrl);
-        } catch (error) {
-            console.error("Failed to fetch VNPay:", error);
-        }
-    };
+
     const handlePaypal = async () => {
         try {
             const createOrder = await axios.post(
@@ -97,14 +75,12 @@ const PaymentForm = () => {
             localStorage.removeItem("percentDiscount");
             router.push("/order-success");
         } catch (error) {
-            console.error("Failed to fetch VNPay:", error);
+            console.error("Failed to fetch Cash:", error);
         }
     };
     // Add this function to handle the Review button click
     const handleReviewClick = () => {
-        if (paymentMethod === "vn-pay") {
-            handleVNPay();
-        } else if (paymentMethod === "paypal") {
+        if (paymentMethod === "paypal") {
             handlePaypal();
         } else if (paymentMethod === "cod") {
             handleCashod();
@@ -120,31 +96,6 @@ const PaymentForm = () => {
                     mb: 4,
                 }}
             >
-                <FormControlLabel
-                    name="vn-pay"
-                    sx={{
-                        mb: 3,
-                    }}
-                    onChange={handlePaymentMethodChange}
-                    label={
-                        <Paragraph fontWeight={600}>Pay with VN Pay</Paragraph>
-                    }
-                    control={
-                        <Radio
-                            checked={paymentMethod === "vn-pay"}
-                            color="primary"
-                            size="small"
-                        />
-                    }
-                />
-
-                <Divider
-                    sx={{
-                        mb: 3,
-                        mx: -4,
-                    }}
-                />
-
                 <FormControlLabel
                     name="paypal"
                     sx={{
@@ -181,40 +132,6 @@ const PaymentForm = () => {
                             size="small"
                         />
                     }
-                />
-
-                <Divider
-                    sx={{
-                        mb: 3,
-                        mx: -4,
-                    }}
-                />
-
-                <FormControlLabel
-                    sx={{
-                        mb: 3,
-                    }}
-                    name="credit-card"
-                    onChange={handlePaymentMethodChange}
-                    label={
-                        <Paragraph fontWeight={600}>
-                            Pay with credit card
-                        </Paragraph>
-                    }
-                    control={
-                        <Radio
-                            checked={paymentMethod === "credit-card"}
-                            color="primary"
-                            size="small"
-                        />
-                    }
-                />
-
-                <Divider
-                    sx={{
-                        mb: 3,
-                        mx: -4,
-                    }}
                 />
 
                 {paymentMethod === "credit-card" && (
@@ -337,7 +254,7 @@ const PaymentForm = () => {
                         fullWidth
                         onClick={handleReviewClick}
                     >
-                        Review
+                        Done
                     </Button>
                 </Grid>
             </Grid>

@@ -10,6 +10,7 @@ import api from "utils/__api__/dashboard";
 import { useGetDate, useYesterdayDate } from "../../src/hooks/useGetDate";
 import { useEffect, useState } from "react";
 import axios from "axios"; // =============================================================================
+import { jwtDecode } from "jwt-decode";
 
 VendorDashboard.getLayout = function getLayout(page) {
     return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
@@ -28,22 +29,20 @@ export default function VendorDashboard(props) {
         token = localStorage.getItem("token");
     } else {
         // If neither localStorage nor sessionStorage is supported
-        console.log("Web Storage is not supported in this environment.");
     }
     useEffect(() => {
         const fetchOrder = async () => {
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
-                //http://localhost:8080/user/get-user-information?userId=4
                 const resOrder = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-number-order-by-date?countId=${counterId}&startDate=${endDate}&endDate=${endDate}`,
                     {
                         headers: {
-                            Authorization: "Bearer " + token, //the token is a variable which holds the token
+                            Authorization: "Bearer " + token,
                         },
                     }
                 );
-                // console.log(resOrder.data)
                 setOrder(resOrder.data.data);
             } catch (e) {
                 console.log(e);
@@ -52,13 +51,12 @@ export default function VendorDashboard(props) {
         fetchOrder();
     }, []);
     const { yesStartDate, yesEndDate } = useYesterdayDate();
-    // console.log(yesStartDate, yesEndDate);
     const [orderY, setOrderY] = useState(); //Orders Yesterday
     useEffect(() => {
         const fetchOrderY = async () => {
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
-                //http://localhost:8080/user/get-user-information?userId=4
                 const resOrderY = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-number-order-by-date?countId=${counterId}&startDate=${yesStartDate}&endDate=${yesEndDate}`,
                     {
@@ -67,7 +65,6 @@ export default function VendorDashboard(props) {
                         },
                     }
                 );
-                // console.log(resOrderY.data)
                 setOrderY(resOrderY.data.data);
             } catch (e) {
                 console.log(e);
@@ -78,9 +75,9 @@ export default function VendorDashboard(props) {
     const [items, setItems] = useState(); //Items Today
     useEffect(() => {
         const fetchItem = async () => {
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
-                //http://localhost:8080/user/get-user-information?userId=4
                 const resItems = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-number-item-by-date?countId=${counterId}&startDate=${startDate}&endDate=${endDate}`,
                     {
@@ -89,7 +86,6 @@ export default function VendorDashboard(props) {
                         },
                     }
                 );
-                // console.log(resItems.data)
                 setItems(resItems.data.data);
             } catch (e) {
                 console.log(e);
@@ -100,9 +96,9 @@ export default function VendorDashboard(props) {
     const [outOfStock, setOutOfStock] = useState(); //Items Yesterday
     useEffect(() => {
         const fetchOutStock = async () => {
-            const counterId = localStorage.getItem("counterId");
             try {
-                const counterId = localStorage.getItem("counterId");
+                const decoded = jwtDecode(token);
+                const counterId = decoded?.counterId;
                 const resOutStock = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/product/get-product-out-of-stock?countId=${counterId}`,
                     {
@@ -111,7 +107,7 @@ export default function VendorDashboard(props) {
                         },
                     }
                 );
-                //console.log(resOutStock.data)
+
                 setOutOfStock(resOutStock.data.data);
             } catch (e) {
                 console.log(e);
@@ -122,9 +118,9 @@ export default function VendorDashboard(props) {
     const [itemsY, setItemsY] = useState(); //Items Yesterday
     useEffect(() => {
         const fetchItemY = async () => {
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
-                //http://localhost:8080/user/get-user-information?userId=4
                 const resItemsY = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/order/get-number-item-by-date?countId=${counterId}&startDate=${yesStartDate}&endDate=${yesEndDate}`,
                     {
@@ -133,7 +129,7 @@ export default function VendorDashboard(props) {
                         },
                     }
                 );
-                // console.log(resItemsY.data)
+
                 setItemsY(resItemsY.data.data);
             } catch (e) {
                 console.log(e);
@@ -144,7 +140,8 @@ export default function VendorDashboard(props) {
     const [kpiStaff, setKpiStaff] = useState();
     useEffect(() => {
         const fetchKpiStaff = async () => {
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
                 const resKpiStaff = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/user/get-top-5?countId=${counterId}`,

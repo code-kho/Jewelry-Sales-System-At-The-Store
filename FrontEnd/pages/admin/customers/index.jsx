@@ -24,6 +24,11 @@ const tableHeading = [
         align: "left",
     },
     {
+        id: "point",
+        label: "Point",
+        align: "left",
+    },
+    {
         id: "email",
         label: "Email",
         align: "left",
@@ -61,7 +66,7 @@ export default function SellerList({ sellers }) {
     } else if (typeof sessionStorage !== "undefined") {
         token = localStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
+        
     }
     const {
         order,
@@ -76,7 +81,6 @@ export default function SellerList({ sellers }) {
     } = useMuiTable({
         listData: customerInfo,
     });
-    console.log(customerInfo);
     useEffect(() => {
         const fetchDataCus = async () => {
             setLoading(true);
@@ -99,7 +103,6 @@ export default function SellerList({ sellers }) {
         fetchDataCus();
     }, []);
     useEffect(() => {
-        console.log(dataSearch);
         const fetchDataCusSearch = async () => {
             try {
                 const responeSearchCus = await axios.get(
@@ -111,7 +114,6 @@ export default function SellerList({ sellers }) {
                     }
                 );
                 setCustomerSearch(responeSearchCus.data.data);
-                console.log(responeSearchCus.data.data);
                 setCustomerInfo(responeSearchCus.data.data);
             } catch (error) {
                 console.error("Failed to search data customers:", error);

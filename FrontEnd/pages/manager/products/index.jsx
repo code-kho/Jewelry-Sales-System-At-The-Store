@@ -12,6 +12,7 @@ import api from "utils/__api__/dashboard";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 // TABLE HEADING DATA LIST
 const tableHeading = [
@@ -38,11 +39,6 @@ ProductList.getLayout = function getLayout(page) {
 export default function ProductList({ initialProducts }) {
     const [products, setProducts] = useState(initialProducts);
     const [loading, setLoading] = useState(false);
-    const router = useRouter();
-
-    const handleNav = () => {
-        router.push("/admin/products/create");
-    };
 
     let token = "";
     if (typeof localStorage !== "undefined") {
@@ -50,7 +46,6 @@ export default function ProductList({ initialProducts }) {
     } else if (typeof sessionStorage !== "undefined") {
         token = sessionStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
     }
 
     const {
@@ -70,7 +65,8 @@ export default function ProductList({ initialProducts }) {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
                 if (token) {
                     const response = await axios.get(
@@ -95,17 +91,9 @@ export default function ProductList({ initialProducts }) {
         };
         fetchData();
     }, [products]);
-    console.log(filteredList.length);
     return (
         <Box py={4}>
             <H3>Product List</H3>
-
-            {/* <SearchArea
-                handleSearch={() => {}}
-                buttonText="Add Product"
-                handleBtnClick={handleNav}
-                searchPlaceholder="Search Product..."
-            /> */}
             <Card>
                 <Scrollbar autoHide={false}>
                     <TableContainer

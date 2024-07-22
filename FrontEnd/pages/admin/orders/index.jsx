@@ -11,6 +11,7 @@ import { OrderRow } from "pages-sections/admin";
 import api from "utils/__api__/dashboard";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 // TABLE HEADING DATA LIST
 const tableHeading = [
     {
@@ -20,7 +21,7 @@ const tableHeading = [
     },
     {
         id: "customerName",
-        label: "Customer Id",
+        label: "Customer Name",
         align: "left",
     },
     {
@@ -60,12 +61,13 @@ export default function OrderList({ orders }) {
     } else if (typeof sessionStorage !== "undefined") {
         token = localStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
+
     }
     useEffect(() => {
         const fetchOrderInfo = async () => {
             setLoading(true);
-            const counterId = localStorage.getItem("counterId");
+            const decoded = jwtDecode(token);
+            const counterId = decoded?.counterId;
             try {
                 const responeOrderInfo = await axios.get(
                     `https://four-gems-system-790aeec3afd8.herokuapp.com/order?counterId=${counterId}`,
@@ -76,7 +78,6 @@ export default function OrderList({ orders }) {
                     }
                 );
                 setOrderInfo(responeOrderInfo.data.data);
-                console.log(responeOrderInfo.data.data);
             } catch (error) {
                 console.error("Failed to fetch order info:", error);
             } finally {
@@ -85,7 +86,6 @@ export default function OrderList({ orders }) {
         };
         fetchOrderInfo();
     }, [orderInfo]);
-    console.log(orderInfo);
     const filteredOrders = orderInfo?.map((order) => ({
         orderId: order?.orderId,
         customerName: order?.customerName,
@@ -93,7 +93,6 @@ export default function OrderList({ orders }) {
         totalAmount: order?.totalAmount,
         status: order?.status,
     }));
-    console.log(filteredOrders);
     const {
         order,
         orderBy,

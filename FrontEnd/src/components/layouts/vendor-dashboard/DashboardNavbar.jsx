@@ -73,11 +73,9 @@ const DashboardNavbar = ({ handleDrawerToggle }) => {
         token = localStorage.getItem("token");
     } else {
         // If neither localStorage nor sessionStorage is supported
-        console.log("Web Storage is not supported in this environment.");
     }
     useEffect(() => {
         const decoded = jwtDecode(token);
-        // console.log(decoded)
         const fetchDataName = async () => {
             try {
                 const resName = await axios.post(
@@ -89,7 +87,6 @@ const DashboardNavbar = ({ handleDrawerToggle }) => {
                         },
                     }
                 );
-                // console.log(resName.data)
                 setName(decoded.name);
             } catch (e) {
                 console.log(e);

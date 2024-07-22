@@ -18,7 +18,6 @@ const FooterForm = () => {
   };
 
   const handleFormSubmit = async (values) => {
-    // console.log(values);
   };
 
   return (

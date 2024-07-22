@@ -1,7 +1,15 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Delete, RemoveRedEye } from "@mui/icons-material";
-import { Box, Button, Grid, IconButton, Pagination, TextField, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    Grid,
+    IconButton,
+    Pagination,
+    TextField,
+    Typography,
+} from "@mui/material";
 import TableRow from "components/TableRow";
 import { FlexBox } from "components/flex-box";
 import CustomerDashboardLayout from "components/layouts/customer-dashboard";
@@ -25,7 +33,6 @@ const AddressList = () => {
     } else if (typeof sessionStorage !== "undefined") {
         token = localStorage.getItem("token");
     } else {
-        console.log("Web Storage is not supported in this environment.");
     }
 
     const fetchOrderBuyBack = async (phoneNumber) => {
@@ -40,7 +47,6 @@ const AddressList = () => {
                 }
             );
             setBuybackCus(responseOrderToBuyBack.data.data);
-            console.log(responseOrderToBuyBack.data.data);
         } catch (error) {
             console.error("Failed to fetch order buy back:", error);
         } finally {
@@ -54,15 +60,15 @@ const AddressList = () => {
                 `https://four-gems-system-790aeec3afd8.herokuapp.com/customers?phoneNumber=${phoneNumber}`,
                 {
                     headers: {
-                        Authorization: 'Bearer ' + token
-                    }
-                });
+                        Authorization: "Bearer " + token,
+                    },
+                }
+            );
             if (resCusInfo.data.data.length === 0) {
                 await router.push("/admin/customerInfo/create");
             } else {
                 setCustomerInfo(resCusInfo.data.data[0]);
             }
-            console.log(resCusInfo.data.data[0]);
         } catch (error) {
             console.error("Failed to fetch customer:", error);
         }
@@ -97,7 +103,10 @@ const AddressList = () => {
 
     return (
         <QCDashboardLayout>
-            <Box className="searchBox" sx={{ width: '100%', margin: '0 auto', mb: 3 }}>
+            <Box
+                className="searchBox"
+                sx={{ width: "100%", margin: "0 auto", mb: 3 }}
+            >
                 <TextField
                     placeholder="Searching customer by phone number"
                     fullWidth
@@ -122,32 +131,80 @@ const AddressList = () => {
 
             {customerInfo && (
                 <>
-                    <Card1 sx={{ width: '100%', margin: '0 auto', mb: 3 }}>
+                    <Card1 sx={{ width: "100%", margin: "0 auto", mb: 3 }}>
                         <Typography fontWeight="600" mb={2}>
                             Customer Information
                         </Typography>
                         <Grid container spacing={2}>
                             <Grid item xs={6}>
-                                <Grid sx={{ display: "flex", marginBottom: "7px" }}>
-                                    <H5 sx={{ marginRight: "10px", marginTop: "1px" }}>Full Name:</H5>
+                                <Grid
+                                    sx={{
+                                        display: "flex",
+                                        marginBottom: "7px",
+                                    }}
+                                >
+                                    <H5
+                                        sx={{
+                                            marginRight: "10px",
+                                            marginTop: "1px",
+                                        }}
+                                    >
+                                        Full Name:
+                                    </H5>
                                     {customerInfo.name}
                                 </Grid>
                             </Grid>
                             <Grid item xs={6}>
-                                <Grid sx={{ display: "flex", marginBottom: "7px" }}>
-                                    <H5 sx={{ marginRight: "10px", marginTop: "1px" }}>Phone Number:</H5>
+                                <Grid
+                                    sx={{
+                                        display: "flex",
+                                        marginBottom: "7px",
+                                    }}
+                                >
+                                    <H5
+                                        sx={{
+                                            marginRight: "10px",
+                                            marginTop: "1px",
+                                        }}
+                                    >
+                                        Phone Number:
+                                    </H5>
                                     {customerInfo.phoneNumber}
                                 </Grid>
                             </Grid>
                             <Grid item xs={6}>
-                                <Grid sx={{ display: "flex", marginBottom: "7px" }}>
-                                    <H5 sx={{ marginRight: "10px", marginTop: "1px" }}>Email:</H5>
+                                <Grid
+                                    sx={{
+                                        display: "flex",
+                                        marginBottom: "7px",
+                                    }}
+                                >
+                                    <H5
+                                        sx={{
+                                            marginRight: "10px",
+                                            marginTop: "1px",
+                                        }}
+                                    >
+                                        Email:
+                                    </H5>
                                     {customerInfo.email}
                                 </Grid>
                             </Grid>
                             <Grid item xs={6}>
-                                <Grid sx={{ display: "flex", marginBottom: "7px" }}>
-                                    <H5 sx={{ marginRight: "10px", marginTop: "1px" }}>Address:</H5>
+                                <Grid
+                                    sx={{
+                                        display: "flex",
+                                        marginBottom: "7px",
+                                    }}
+                                >
+                                    <H5
+                                        sx={{
+                                            marginRight: "10px",
+                                            marginTop: "1px",
+                                        }}
+                                    >
+                                        Address:
+                                    </H5>
                                     {customerInfo.address}
                                 </Grid>
                             </Grid>
@@ -162,29 +219,48 @@ const AddressList = () => {
                             }}
                             key={order.orderId}
                         >
-                            <Typography whiteSpace="pre" m={0.75} textAlign="left">
+                            <Typography
+                                whiteSpace="pre"
+                                m={0.75}
+                                textAlign="left"
+                            >
                                 {order.orderId}
                             </Typography>
 
-                            <Typography flex="1 1 260px !important" m={0.75} textAlign="left">
+                            <Typography
+                                flex="1 1 260px !important"
+                                m={0.75}
+                                textAlign="left"
+                            >
                                 {order.customerName}
                             </Typography>
 
-                            <Typography whiteSpace="pre" m={0.75} textAlign="left">
+                            <Typography
+                                whiteSpace="pre"
+                                m={0.75}
+                                textAlign="left"
+                            >
                                 {order.orderDate}
                             </Typography>
 
-                            <Typography whiteSpace="pre" textAlign="center" color="grey.600">
-                                <IconButton onClick={() => handleViewOrderDetail(order.orderId)}>
-                                    <RemoveRedEye fontSize="small" color="inherit" />
+                            <Typography
+                                whiteSpace="pre"
+                                textAlign="center"
+                                color="grey.600"
+                            >
+                                <IconButton
+                                    onClick={() =>
+                                        handleViewOrderDetail(order.orderId)
+                                    }
+                                >
+                                    <RemoveRedEye
+                                        fontSize="small"
+                                        color="inherit"
+                                    />
                                 </IconButton>
                             </Typography>
                         </TableRow>
                     ))}
-
-                    {/*<FlexBox justifyContent="center" mt={5}>*/}
-                    {/*    <Pagination count={5} onChange={(data) => console.log(data)} />*/}
-                    {/*</FlexBox>*/}
                 </>
             )}
         </QCDashboardLayout>
