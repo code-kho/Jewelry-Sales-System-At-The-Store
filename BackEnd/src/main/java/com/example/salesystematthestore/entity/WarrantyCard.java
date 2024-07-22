@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -34,4 +35,8 @@ public class WarrantyCard {
             @JoinColumn(name = "order_item_order_id", referencedColumnName = "order_id")
     })
     private OrderItem orderItem;
+
+    @OneToMany(mappedBy = "warrantyCard", fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<WarrantyHistory> warrantyHistories;
 }

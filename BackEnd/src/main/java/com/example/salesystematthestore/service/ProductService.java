@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -344,9 +345,11 @@ public class ProductService implements ProductServiceImp {
             }
 
             Warranty warranty = new Warranty();
-
+            warranty.setProduct(product);
             warrantyRepository.save(warranty);
             warranty.setTerms(productRequest.getWarrantyYear());
+
+            warrantyRepository.save(warranty);
 
             product.setWarranty(warranty);
             productRepository.save(product);
@@ -445,7 +448,7 @@ public class ProductService implements ProductServiceImp {
         productDTO.setLaborCost(product.getLaborCost());
         productDTO.setCostPrice(product.getCostPrice());
         productDTO.setStonePrice(product.getStonePrice());
-        productDTO.setRatioPrice(productDTO.getRatioPrice());
+        productDTO.setRatioPrice(product.getRatioPrice());
         productDTO.setGem(product.isGem());
         productDTO.setImage(product.getImage());
         productDTO.setQuantityInStock(quantityInStock);
@@ -458,10 +461,10 @@ public class ProductService implements ProductServiceImp {
         productDTO.setAvailableRotate(quantityInStock > 0);
         productDTO.setWarrantyYear(product.getWarranty().getTerms());
 
-        if(checkValidPromotion(product)){
+        if (checkValidPromotion(product)) {
             productDTO.setPromotion(true);
             productDTO.setDiscountPercent(product.getPromotion().getDiscount());
-        } else{
+        } else {
             productDTO.setPromotion(false);
             productDTO.setDiscountPercent(0);
         }
@@ -517,6 +520,7 @@ public class ProductService implements ProductServiceImp {
         List<ProductDTO> result = new ArrayList<>();
 
         for (ProductCounter productCounter : productList) {
+            System.out.println(productCounter.getProduct().getProductName());
             ProductDTO productDTO = transferProduct(productCounter.getProduct(), counterId);
             result.add(productDTO);
         }
@@ -700,42 +704,44 @@ public class ProductService implements ProductServiceImp {
 
 
     @Override
+    @Transactional
     public boolean importListProductFromWarehouse(@RequestBody TransferRequest transferRequest) {
-        boolean result = true;
 
         for (ProductTransferRequest productTransferRequest : transferRequest.getProductTransferRequestList()) {
-            try {
-                int productId = productTransferRequest.getProductId();
-                KeyProductCouter keyProductCouter = new KeyProductCouter();
 
-                keyProductCouter.setProductId(productId);
-                keyProductCouter.setCouterId(transferRequest.getToCounterId());
+            int productId = productTransferRequest.getProductId();
+            KeyProductCouter keyProductCouter = new KeyProductCouter();
 
-                ProductCounter productCounter;
-                Product product = productRepository.findByProductId(productId);
+            keyProductCouter.setProductId(productId);
+            keyProductCouter.setCouterId(transferRequest.getToCounterId());
 
-                if (productCounterRepository.existsByKeyProductCouter(keyProductCouter)) {
-                    productCounter = productCounterRepository.findByKeyProductCouter(keyProductCouter);
+            ProductCounter productCounter;
+            Product product = productRepository.findByProductId(productId);
 
-                    productCounter.setQuantity(productCounter.getQuantity() + productTransferRequest.getQuantity());
-
-                } else {
-                    productCounter = new ProductCounter();
-                    productCounter.setKeyProductCouter(keyProductCouter);
-                    productCounter.setQuantity(productTransferRequest.getQuantity());
-                }
-
-                product.setQuantityInStock(product.getQuantityInStock() - productTransferRequest.getQuantity());
-
-                productRepository.save(product);
-                productCounterRepository.save(productCounter);
-
-            } catch (Exception e) {
-                result = false;
+            if (productTransferRequest.getQuantity() > product.getQuantityInStock() || product.getQuantityInStock() == 0) {
+                throw new RuntimeException("Invalid quantity");
             }
+
+            if (productCounterRepository.existsByKeyProductCouter(keyProductCouter)) {
+                productCounter = productCounterRepository.findByKeyProductCouter(keyProductCouter);
+
+                productCounter.setQuantity(productCounter.getQuantity() + productTransferRequest.getQuantity());
+
+            } else {
+                productCounter = new ProductCounter();
+                productCounter.setKeyProductCouter(keyProductCouter);
+                productCounter.setQuantity(productTransferRequest.getQuantity());
+            }
+
+            product.setQuantityInStock(product.getQuantityInStock() - productTransferRequest.getQuantity());
+
+            productRepository.save(product);
+            productCounterRepository.save(productCounter);
+
+
         }
 
-        return result;
+        return true;
     }
 
 

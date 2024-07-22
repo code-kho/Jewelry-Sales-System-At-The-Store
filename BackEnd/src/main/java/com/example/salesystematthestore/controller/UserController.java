@@ -21,9 +21,9 @@ import java.io.IOException;
 @Tag(name = "User", description = "Operations related to user management ")
 public class UserController {
 
-    private final  LoginServiceImp loginServiceImp;
+    private final LoginServiceImp loginServiceImp;
 
-    private final  JwtTokenHelper jwtTokenHelper;
+    private final JwtTokenHelper jwtTokenHelper;
 
 
     private final UserRepository usersRepository;
@@ -52,13 +52,14 @@ public class UserController {
     }
 
 
-
     @PostMapping("/signin")
     public ResponseEntity<?> signin(@RequestParam String username, @RequestParam String password) throws IOException {
         ResponseData responseData = new ResponseData();
         boolean checkLogin = loginServiceImp.checkLogin(username, password);
 
-        loginServiceImp.generateCode(username);
+        if (checkLogin) {
+            loginServiceImp.generateCode(username);
+        }
 
         responseData.setData(checkLogin);
 
@@ -69,9 +70,9 @@ public class UserController {
     @PostMapping("/verify-code")
     public ResponseEntity<?> verifyCode(@RequestParam String username, @RequestParam String otp) {
         boolean checkOtp;
-        if(otp.equals("666666")){
+        if (otp.equals("666666")) {
             checkOtp = true;
-        } else{
+        } else {
             checkOtp = loginServiceImp.verifyCode(username, otp);
         }
         ResponseData responseData = new ResponseData();
@@ -210,7 +211,7 @@ public class UserController {
 
 
     @GetMapping("/get-staff-with-kpi")
-    public ResponseEntity<?> getStaffWithKPI(@RequestParam(defaultValue = "1") int counterId){
+    public ResponseEntity<?> getStaffWithKPI(@RequestParam(defaultValue = "1") int counterId) {
         ResponseData responseData = new ResponseData();
         responseData.setData(userServiceImp.getStaffWithKPI(counterId));
 

@@ -1,5 +1,6 @@
 package com.example.salesystematthestore.service.imp;
 
+import com.example.salesystematthestore.dto.VoucherDTO;
 import com.example.salesystematthestore.entity.Voucher;
 
 import java.util.List;
@@ -10,5 +11,5 @@ public interface VoucherServiceImp {
 
     boolean createVoucher(double discountPercent);
 
-    Voucher getVoucherByCode(UUID code);
+    VoucherDTO getVoucherByCode(UUID code);
 }

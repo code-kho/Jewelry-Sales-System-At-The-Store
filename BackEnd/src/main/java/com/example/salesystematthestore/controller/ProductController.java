@@ -162,10 +162,15 @@ public class ProductController {
 
     @PutMapping("/import-list-product-from-warehouse")
     public ResponseEntity<?> importListProductInWarehouse(@RequestBody TransferRequest transferRequest) {
-        ResponseData responseData = new ResponseData();
-        responseData.setData(productServiceImp.importListProductFromWarehouse(transferRequest));
+        try {
+            ResponseData responseData = new ResponseData();
+            responseData.setData(productServiceImp.importListProductFromWarehouse(transferRequest));
+            return new ResponseEntity<>(responseData, HttpStatus.OK);
+        }catch (RuntimeException e){
+            return new ResponseEntity<>("",HttpStatus.BAD_REQUEST);
+        }
 
-        return new ResponseEntity<>(responseData, HttpStatus.OK);
+
     }
 
     @GetMapping("/show-all-product-from-warehouse")
@@ -206,10 +211,10 @@ public class ProductController {
     }
 
     @GetMapping("/get-product-quantity-less-than")
-    public ResponseEntity<?> getProductQuantityLessThan(@RequestParam int counterid, @RequestParam int quantity) {
+    public ResponseEntity<?> getProductQuantityLessThan(@RequestParam int counterId, @RequestParam int quantity) {
         ResponseData responseData = new ResponseData();
 
-        responseData.setData(productServiceImp.getProductQuantityLessThan(counterid, quantity));
+        responseData.setData(productServiceImp.getProductQuantityLessThan(counterId, quantity));
 
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }

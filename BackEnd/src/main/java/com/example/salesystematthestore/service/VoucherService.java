@@ -1,5 +1,6 @@
 package com.example.salesystematthestore.service;
 
+import com.example.salesystematthestore.dto.VoucherDTO;
 import com.example.salesystematthestore.entity.Voucher;
 import com.example.salesystematthestore.repository.VoucherRepository;
 import com.example.salesystematthestore.service.imp.VoucherServiceImp;
@@ -35,8 +36,27 @@ public class VoucherService implements VoucherServiceImp {
     }
 
     @Override
-    public Voucher getVoucherByCode(UUID code) {
-
-        return voucherRepository.findByCode(code);
+    public VoucherDTO getVoucherByCode(UUID code) {
+        VoucherDTO voucherDTO = new VoucherDTO();
+        if(voucherRepository.findByCode(code) == null){
+            voucherDTO.setDiscountPercent(0);
+        } else{
+            voucherDTO = transferVoucher(voucherRepository.findByCode(code));
+        }
+        return voucherDTO;
     }
+
+    private VoucherDTO transferVoucher(Voucher voucher){
+        VoucherDTO voucherDTO = new VoucherDTO();
+        voucherDTO.setCode(voucher.getCode());
+        if(voucher.isUsed()) {
+            voucherDTO.setDiscountPercent(0);
+        } else{
+            voucherDTO.setDiscountPercent(voucher.getDiscountPercent());
+        }
+        voucherDTO.setUsed(voucher.isUsed());
+        return voucherDTO;
+    }
+
+
 }

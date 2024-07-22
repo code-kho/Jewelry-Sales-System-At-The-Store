@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -98,9 +99,12 @@ public class WarrantyCardService implements WarrantyCardServiceImp {
             warrantyCardDTO.setCode(warrantyCard.getId());
             warrantyCardDTO.setOrderDate(warrantyCard.getOrderDate().toString());
             warrantyCardDTO.setExpiredDate(warrantyCard.getExpiredDate().toString());
-            warrantyCardDTO.setExpired(warrantyCard.getExpiredDate().after(warrantyCard.getOrderDate()));
+            warrantyCardDTO.setExpired(!warrantyCard.getExpiredDate().after(new Date()));
             warrantyCardDTO.setUrl(warrantyCard.getUrlCard());
 
+            ProductDTO productDTO = new ProductDTO();
+            productDTO.setProductName(warrantyCard.getOrderItem().getProduct().getProductName());
+            warrantyCardDTO.setProduct(productDTO);
             warrantyCardDTOList.add(warrantyCardDTO);
         }
 
@@ -113,7 +117,7 @@ public class WarrantyCardService implements WarrantyCardServiceImp {
         result.setCode(warrantyCard.getId());
         result.setOrderDate(warrantyCard.getOrderDate().toString());
         result.setExpiredDate(warrantyCard.getExpiredDate().toString());
-        result.setExpired(warrantyCard.getExpiredDate().after(warrantyCard.getOrderDate()));
+        result.setExpired(!warrantyCard.getExpiredDate().after(new Date()));
 
         OrderDTO orderDTO = orderServiceImp.transferOrder(warrantyCard.getOrderItem().getOrder());
         ProductDTO productDTO = productServiceImp.getProductInWarehouseById(warrantyCard.getOrderItem().getProduct().getProductId());
