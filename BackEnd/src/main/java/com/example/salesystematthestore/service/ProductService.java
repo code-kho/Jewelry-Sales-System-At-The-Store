@@ -558,6 +558,12 @@ public class ProductService implements ProductServiceImp {
         List<Product> productList = productRepository.findByProductIdNotIn(idProductCouterList);
         List<ProductDTO> result = new ArrayList<>();
 
+        for (ProductCounter productCounter : productCounterList) {
+            if(productCounter.getQuantity()==0){
+                productList.add(productCounter.getProduct());
+            }
+        }
+
         for (Product product : productList) {
             ProductDTO productDTO = getProductInWarehouseById(product.getProductId());
             result.add(productDTO);

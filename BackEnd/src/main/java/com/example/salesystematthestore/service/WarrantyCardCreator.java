@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Service
 public class WarrantyCardCreator {
@@ -136,11 +138,14 @@ public class WarrantyCardCreator {
         String url = "";
         Order order = warrantyCard.getOrderItem().getOrder();
         Product product = warrantyCard.getOrderItem().getProduct();
+        String orderDate = transferDate(order.getOrderDate());
+        String expiredDate = transferDate(warrantyCard.getExpiredDate());
+
         try {
             WarrantyCardCreator creator = new WarrantyCardCreator(warrantyCard.getId() + ".pdf");
             creator.createDocument();
             creator.createHeader("Warranty Card");
-            creator.createWarrantyDetails(order.getCustomer().getName(), product.getProductName(), product.getWarranty().getTerms() + " Years", warrantyCard.getId() + "", order.getOrderDate().toString(), warrantyCard.getExpiredDate().toString(),""+order.getId());
+            creator.createWarrantyDetails(order.getCustomer().getName(), product.getProductName(), product.getWarranty().getTerms() + " Years", warrantyCard.getId() + "", orderDate, expiredDate,""+order.getId());
             creator.createFooter("### Warranty Terms and Conditions\n" +
                     "1. **Warranty Coverage:** This product is warranted free from manufacturing defects for a period of [number of years] years from the date of purchase.\n" +
                     "2. **Warranty Conditions:** The warranty applies only to products that are intact, with no signs of external or third-party tampering. The product must be used properly according to the usage instructions.\n" +
@@ -168,5 +173,15 @@ public class WarrantyCardCreator {
             System.out.println("An error occurred while generating or saving the PDF");
         }
         return url;
+    }
+
+
+    private String transferDate(Date date){
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String orderDateFormatted = dateFormat.format(date);
+
+        return orderDateFormatted;
+
     }
 }

@@ -56,7 +56,7 @@ public class PaymentController {
         this.warrantyCardServiceImp = warrantyCardServiceImp;
     }
 
-    private final String successUrl = "http://localhost:3000/order-success";
+    private final String successUrl = "https://b16b-118-69-182-144.ngrok-free.app/order-success";
 
     private final String failureUrl = "https://www.facebook.com/";
 

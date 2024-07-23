@@ -130,8 +130,8 @@ public class PdfService implements PdfServiceImp {
                 .setBillingName(order.getCustomer().getName())
                 .setBillingAddress(order.getCustomer().getAddress())
                 .setBillingEmail(order.getCustomer().getEmail())
-                .setShippingName("Customer Name \n")
-                .setShippingAddress(order.getCustomer().getName()+"\n")
+                .setShippingName(order.getCustomer().getName())
+                .setShippingAddress(order.getCustomer().getAddress()+"\n")
                 .build();
 
         cepdf.createAddress(addressDetails);
@@ -191,8 +191,8 @@ public class PdfService implements PdfServiceImp {
 
         Table priceAfterVoucher = new Table(threeColumnWidth);
         priceAfterVoucher.addCell(new Cell().add("").setBorder(Border.NO_BORDER)).setMarginLeft(10f);
-        priceAfterVoucher.addCell(new Cell().add("Price After Voucher: ").setTextAlignment(TextAlignment.CENTER).setBorder(Border.NO_BORDER));
-        priceAfterVoucher.addCell(new Cell().add("$"+(totalSum-(totalSum*order.getVoucherPercent())/100)).setTextAlignment(TextAlignment.RIGHT).setBorder(Border.NO_BORDER)).setMarginRight(15f);
+        priceAfterVoucher.addCell(new Cell().add("Member Ship Discount: ").setTextAlignment(TextAlignment.CENTER).setBorder(Border.NO_BORDER));
+        priceAfterVoucher.addCell(new Cell().add(order.getCustomer().getMemberShipTier().getDiscountPercent() + "%").setTextAlignment(TextAlignment.RIGHT).setBorder(Border.NO_BORDER)).setMarginRight(15f);
         document.add(priceAfterVoucher);
 
         Table taxTable = new Table(threeColumnWidth);
@@ -235,35 +235,33 @@ public class PdfService implements PdfServiceImp {
     }
 
     public void createAddress(AddressDetails addressDetails) {
-        Table twoColTable = new Table(twocolumnWidth);
-        twoColTable.addCell(getBillingandShippingCell(addressDetails.getBillingInfoText()));
-        twoColTable.addCell(getBillingandShippingCell(addressDetails.getShippingInfoText()));
-        document.add(twoColTable.setMarginBottom(12f));
-        //iNFO FIRST ROW
-        Table twoColTable2 = new Table(twocolumnWidth);
-        twoColTable2.addCell(getCell10fLeft(addressDetails.getBillingCompanyText(), true));
-        twoColTable2.addCell(getCell10fLeft(addressDetails.getShippingNameText(), true));
-        twoColTable2.addCell(getCell10fLeft(addressDetails.getBillingCompany(), false));
-        twoColTable2.addCell(getCell10fLeft(addressDetails.getShippingName(), false));
-        document.add(twoColTable2);
+        float fullwidth[] = {twocol + twocol};
+        Table addressTable = new Table(fullwidth);
 
+        // Thêm thông tin thanh toán (Billing Information)
+        addressTable.addCell(new Cell().add(addressDetails.getBillingInfoText()).setBold().setFontSize(12f).setBorder(Border.NO_BORDER));
+        addressTable.addCell(new Cell().add("").setBorder(Border.NO_BORDER)); // ô trống để cân bằng bảng
 
-        Table twoColTable3 = new Table(twocolumnWidth);
-        twoColTable3.addCell(getCell10fLeft(addressDetails.getBillingNameText(), true));
-        twoColTable3.addCell(getCell10fLeft(addressDetails.getShippingAddressText(), true));
-        twoColTable3.addCell(getCell10fLeft(addressDetails.getBillingName(), false));
-        twoColTable3.addCell(getCell10fLeft(addressDetails.getShippingAddress(), false));
-        document.add(twoColTable3);
-        float oneColoumnwidth[] = {twocol150};
+        // Thêm tên công ty
+        addressTable.addCell(new Cell().add(addressDetails.getBillingCompanyText()).setFontSize(10f).setBorder(Border.NO_BORDER));
+        addressTable.addCell(new Cell().add(addressDetails.getBillingCompany()).setFontSize(10f).setBorder(Border.NO_BORDER));
 
-        Table oneColTable1 = new Table(oneColoumnwidth);
-        oneColTable1.addCell(getCell10fLeft(addressDetails.getBillingAddressText(), true));
-        oneColTable1.addCell(getCell10fLeft(addressDetails.getBillingAddress(), false));
-        oneColTable1.addCell(getCell10fLeft(addressDetails.getBillingEmailText(), true));
-        oneColTable1.addCell(getCell10fLeft(addressDetails.getBillingEmail(), false));
-        document.add(oneColTable1.setMarginBottom(10f));
+        // Thêm tên người thanh toán
+        addressTable.addCell(new Cell().add(addressDetails.getBillingNameText()).setFontSize(10f).setBorder(Border.NO_BORDER));
+        addressTable.addCell(new Cell().add(addressDetails.getBillingName()).setFontSize(10f).setBorder(Border.NO_BORDER));
+
+        // Thêm địa chỉ thanh toán
+        addressTable.addCell(new Cell().add(addressDetails.getBillingAddressText()).setFontSize(10f).setBorder(Border.NO_BORDER));
+        addressTable.addCell(new Cell().add(addressDetails.getBillingAddress()).setFontSize(10f).setBorder(Border.NO_BORDER));
+
+        // Thêm email thanh toán
+        addressTable.addCell(new Cell().add(addressDetails.getBillingEmailText()).setFontSize(10f).setBorder(Border.NO_BORDER));
+        addressTable.addCell(new Cell().add(addressDetails.getBillingEmail()).setFontSize(10f).setBorder(Border.NO_BORDER));
+
+        document.add(addressTable.setMarginBottom(10f));
         document.add(fullwidthDashedBorder(fullwidth));
     }
+
 
     public void createHeader(HeaderDetails header) {
         Table table = new Table(twocolumnWidth);
