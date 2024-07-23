@@ -1,6 +1,7 @@
 package com.example.salesystematthestore.service.imp;
 
 import com.example.salesystematthestore.dto.WarrantyCardDTO;
+import com.example.salesystematthestore.dto.WarrantyHistoryDTO;
 import com.example.salesystematthestore.entity.Order;
 import com.example.salesystematthestore.entity.WarrantyHistory;
 
@@ -16,6 +17,6 @@ public interface WarrantyCardServiceImp {
 
     public boolean makeWarranty(int userId, UUID warrantyCardCode);
 
-    public List<WarrantyHistory> viewAllWarrantyHistory(int userId, UUID cardCode);
+    public List<WarrantyHistoryDTO> viewAllWarrantyHistory(int userId, UUID cardCode);
 
 }

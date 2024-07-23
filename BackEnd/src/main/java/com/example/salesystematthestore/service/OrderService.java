@@ -200,7 +200,9 @@ public class OrderService implements OrderServiceImp {
         for (String date : dates) {
             for (Order order : orderList) {
                 if (order.getOrderDate().toString().split(" ")[0].equals(date)) {
-                    totalOfItem += order.getOrderItemList().size();
+                    for(OrderItem orderItem : order.getOrderItemList()){
+                        totalOfItem+=orderItem.getQuantity();
+                    }
                 }
             }
         }
@@ -506,7 +508,7 @@ public class OrderService implements OrderServiceImp {
         Users user = userRepository.findById(orderRequest.getUserId());
         order.setUser(user);
         order.setTotalPrice(orderRequest.getAmount());
-        order.setTax(8);
+        order.setTax(10);
         order.setOrderDate(new Date());
 
         if (voucherRepository.findByCode(orderRequest.getCode()) != null) {
@@ -620,7 +622,8 @@ public class OrderService implements OrderServiceImp {
         values.put("customerEmail", customerEmail);
         values.put("subtotal", subtotal);
         values.put("discountPercent", order.getVoucherPercent());
-        values.put("memberShipDiscount",order.getCustomer().getMemberShipTier());
+        values.put("amount",order.getTotalPrice());
+        values.put("memberShipDiscount",order.getCustomer().getMemberShipTier().getDiscountPercent());
         values.put("invoice", pdfServiceImp.createPdfAndUpload(order));
 
 

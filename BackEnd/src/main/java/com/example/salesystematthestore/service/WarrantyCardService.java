@@ -3,6 +3,7 @@ package com.example.salesystematthestore.service;
 import com.example.salesystematthestore.dto.OrderDTO;
 import com.example.salesystematthestore.dto.ProductDTO;
 import com.example.salesystematthestore.dto.WarrantyCardDTO;
+import com.example.salesystematthestore.dto.WarrantyHistoryDTO;
 import com.example.salesystematthestore.entity.*;
 import com.example.salesystematthestore.repository.OrderRepository;
 import com.example.salesystematthestore.repository.UserRepository;
@@ -112,10 +113,18 @@ public class WarrantyCardService implements WarrantyCardServiceImp {
     }
 
     @Override
-    public List<WarrantyHistory> viewAllWarrantyHistory(int userId, UUID cardCode) {
+    public List<WarrantyHistoryDTO> viewAllWarrantyHistory(int userId, UUID cardCode) {
         List<WarrantyHistory> warrantyHistories = warrantyHistoryRepository.findByUser_IdAndWarrantyCard_Id(userId, cardCode);
+        List<WarrantyHistoryDTO> warrantyHistoryDTOS = new ArrayList<>();
 
-        return warrantyHistories;
+        for(WarrantyHistory warrantyHistory : warrantyHistories){
+            WarrantyHistoryDTO warrantyHistoryDTO = new WarrantyHistoryDTO();
+            warrantyHistoryDTO.setDate(warrantyHistory.getWarrantyDate());
+            warrantyHistoryDTO.setId(warrantyHistory.getId());
+
+            warrantyHistoryDTOS.add(warrantyHistoryDTO);
+        }
+        return warrantyHistoryDTOS;
     }
 
     @Override
